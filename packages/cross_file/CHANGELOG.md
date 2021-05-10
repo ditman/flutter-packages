@@ -1,3 +1,7 @@
+## 0.3.2
+
+* [web] Open downloads in a new tab, if the browser doesn't support the "download" attribute.
+
 ## 0.3.1+1
 
 * Rehomed to `flutter/packages` repository.

@@ -79,6 +79,14 @@ class XFile extends XFileBase {
 
   bool get _hasTestOverrides => _overrides != null;
 
+  // // Returns the Data URL representation of this cross_file.
+  // Future<String> get _dataUrl async {
+  //   assert(mimeType != null, 'MIME-type for this cross_file should not be null');
+
+  //   final String encodedBytes = base64Encode(await _bytes);
+  //   return 'data:$mimeType;base64,$encodedBytes';
+  // }
+
   @override
   Future<DateTime> lastModified() async =>
       Future<DateTime>.value(_lastModified);
@@ -120,11 +128,22 @@ class XFile extends XFileBase {
     // Create a DOM container where we can host the anchor.
     _target = ensureInitialized('__x_file_dom_element');
 
+    late bool openInNewTab;
+    late AnchorElementBuilder buildAnchor;
+
+    if (_hasTestOverrides) {
+      // Use the overrides
+      openInNewTab = _overrides!.openInNewTab;
+      buildAnchor = _overrides!.createAnchorElement;
+    } else {
+      // Use the normal code path...
+      openInNewTab = isChromeIos();
+      buildAnchor = createAnchorElement;
+    }
+
     // Create an <a> tag with the appropriate download attributes and click it
     // May be overridden with CrossFileTestOverrides
-    final AnchorElement element = _hasTestOverrides
-        ? _overrides!.createAnchorElement(this.path, name) as AnchorElement
-        : createAnchorElement(this.path, name);
+    final AnchorElement element = buildAnchor(this.path, name, openInNewTab: openInNewTab,);
 
     // Clear the children in our container so we can add an element to click
     _target.children.clear();
@@ -136,8 +155,11 @@ class XFile extends XFileBase {
 @visibleForTesting
 class CrossFileTestOverrides {
   /// Default constructor for overrides
-  CrossFileTestOverrides({required this.createAnchorElement});
+  CrossFileTestOverrides({required this.createAnchorElement, this.openInNewTab = false});
+
+  /// Override to simulate the different behavior of saveAs in Chrome for iOS.
+  bool openInNewTab;
 
   /// For overriding the creation of the file input element.
-  Element Function(String href, String suggestedName) createAnchorElement;
+  AnchorElementBuilder createAnchorElement;
 }

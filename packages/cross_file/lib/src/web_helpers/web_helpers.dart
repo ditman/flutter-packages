@@ -4,14 +4,29 @@
 
 import 'dart:html';
 
-/// Create anchor element with download attribute
-AnchorElement createAnchorElement(String href, String? suggestedName) {
+/// Signature for a function that creates an [AnchorElement] suitable to download a file.
+typedef AnchorElementBuilder = AnchorElement Function(String href, String? suggestedName, { bool openInNewTab, });
+
+/// Create anchor element with download attribute.
+///
+/// openInNewTab is used for Chrome iOS, which has some bugs regarding the
+/// download attribute:
+/// * https://bugs.chromium.org/p/chromium/issues/detail?id=709986
+/// * https://bugs.chromium.org/p/chromium/issues/detail?id=1150258
+AnchorElement createAnchorElement(String href, String? suggestedName, {
+  bool openInNewTab = false,
+}) {
   final AnchorElement element = AnchorElement(href: href);
 
-  if (suggestedName == null) {
-    element.download = 'download';
+  if (openInNewTab) {
+    element.target = '_blank';
+    element.rel = 'noopener noreferrer';
   } else {
-    element.download = suggestedName;
+    if (suggestedName == null) {
+      element.download = 'download';
+    } else {
+      element.download = suggestedName;
+    }
   }
 
   return element;
@@ -35,4 +50,14 @@ Element ensureInitialized(String id) {
     target = targetElement;
   }
   return target;
+}
+
+final RegExp _chromeRegex = RegExp(r'CriOS', caseSensitive: false);
+final RegExp _iDeviceRegex = RegExp(r'iphone|ipod|ipad', caseSensitive: false);
+
+/// Detect if we're running in Chrome on iOs.
+bool isChromeIos([String? userAgent]) {
+  final String agent = userAgent ?? window.navigator.userAgent;
+
+  return _chromeRegex.hasMatch(agent) && _iDeviceRegex.hasMatch(agent);
 }
