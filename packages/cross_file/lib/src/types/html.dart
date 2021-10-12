@@ -7,11 +7,11 @@ import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:js/js_util.dart' as js_util;
 import 'package:meta/meta.dart';
 
 import './base.dart';
 import '../web_helpers/web_helpers.dart';
+import 'html_backend/html_backend.dart';
 
 /// A CrossFile that works on web.
 ///
@@ -40,8 +40,19 @@ class XFile extends XFileBase {
         _name = name ?? '',
         super(path) {
     // Cache `bytes` as Blob, if passed.
+    // TODO(dit): This should be deprecated. What's the point of `fromData` then?
     if (bytes != null) {
-      _browserBlob = _initBlobFromBytes(bytes, mimeType);
+      if (isSafari()) {
+        _storage = ArrayBufferHtmlBackend.fromData(bytes);
+      } else {
+        _storage = BlobHtmlBackend.fromData(bytes);
+      }
+    } else {
+      if (isSafari()) {
+        _storage = ArrayBufferHtmlBackend.fromUrl(path);
+      } else {
+        _storage = BlobHtmlBackend.fromUrl(path);
+      }
     }
   }
 
@@ -60,15 +71,12 @@ class XFile extends XFileBase {
         _lastModified = lastModified ?? DateTime.fromMillisecondsSinceEpoch(0),
         _name = name ?? '',
         super(path) {
-    _browserBlob = _initBlobFromBytes(bytes, mimeType);
-    _path = path ?? Url.createObjectUrl(_browserBlob);
-  }
-
-  // Initializes a Blob from a bunch of `bytes` and an optional `mimeType`.
-  Blob _initBlobFromBytes(Uint8List bytes, String? mimeType) {
-    return (mimeType == null)
-        ? Blob(<dynamic>[bytes])
-        : Blob(<dynamic>[bytes], mimeType);
+    if (isSafari()) {
+      _storage = ArrayBufferHtmlBackend.fromData(bytes);
+    } else {
+      _storage = BlobHtmlBackend.fromData(bytes);
+    }
+    _path = path ?? _storage.url ?? '';
   }
 
   // Overridable (meta) data that can be specified by the constructors.
@@ -84,11 +92,8 @@ class XFile extends XFileBase {
   // The time the file was last modified.
   final DateTime _lastModified;
 
-  // The link to the binary object in the browser memory (Blob).
-  // This can be passed in (as `bytes` in the constructor) or derived from
-  // [_path] with a fetch request.
-  // (Similar to a (read-only) dart:io File.)
-  Blob? _browserBlob;
+  // The actual storage for the current file.
+  late HtmlBackend _storage;
 
   // An html Element that will be used to trigger a "save as" dialog later.
   // TODO(dit): https://github.com/flutter/flutter/issues/91400 Remove this _target.
@@ -113,55 +118,19 @@ class XFile extends XFileBase {
   @override
   Future<DateTime> lastModified() async => _lastModified;
 
-  Future<Blob> get _blob async {
-    if (_browserBlob != null) {
-      return _browserBlob!;
-    }
-    // Attempt to re-hydrate the blob from the `path` via a (local) HttpRequest.
-    _browserBlob =
-        (await HttpRequest.request(path, responseType: 'blob')).response;
-    assert(_browserBlob != null, 'The Blob backing this XFile cannot be null!');
-
-    return _browserBlob!;
-  }
+  @override
+  Future<Uint8List> readAsBytes() async => _storage.readAsBytes();
 
   @override
-  Future<Uint8List> readAsBytes() async {
-    return _blob.then(_blobToByteBuffer);
-  }
+  Future<int> length() async => _length ?? await _storage.length();
 
   @override
-  Future<int> length() async => _length ?? (await _blob).size;
+  Future<String> readAsString({Encoding encoding = utf8}) async =>
+      _storage.readAsString(encoding: encoding);
 
   @override
-  Future<String> readAsString({Encoding encoding = utf8}) async {
-    return readAsBytes().then(encoding.decode);
-  }
-
-  @override
-  Stream<Uint8List> openRead([int? start, int? end]) async* {
-    final Blob blob = await _blob;
-
-    final Blob slice = blob.slice(start ?? 0, end ?? blob.size, blob.type);
-
-    final Uint8List convertedSlice = await _blobToByteBuffer(slice);
-
-    yield convertedSlice;
-  }
-
-  // Converts an html Blob object to a Uint8List, through a FileReader.
-  Future<Uint8List> _blobToByteBuffer(Blob blob) async {
-    final FileReader reader = FileReader();
-    reader.readAsArrayBuffer(blob); // This line crashes safari!
-
-    await reader.onLoadEnd.first;
-
-    final Uint8List? result = reader.result as Uint8List?;
-
-    assert(result != null, 'Cannot convert Blob to bytes!');
-
-    return result!;
-  }
+  Stream<Uint8List> openRead([int? start, int? end]) =>
+      _storage.openRead(start, end);
 
   /// Saves the data of this CrossFile at the location indicated by path.
   /// For the web implementation, the path variable is ignored.

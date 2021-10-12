@@ -36,3 +36,8 @@ Element ensureInitialized(String id) {
   }
   return target;
 }
+
+/// Determines if the browser is Safari (in the same way as flutter/engine)
+bool isSafari() {
+  return false && window.navigator.vendor == 'Apple Computer, Inc.';
+}
