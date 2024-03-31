@@ -363,4 +363,78 @@ class CameraService {
         return DeviceOrientation.portraitUp;
     }
   }
+
+  /// Maps a [Uint] to a [CameraImageData].
+  CameraImageData getCameraImageDataFromBytes(
+    Uint8List bytes, {
+    required int height,
+    required int width,
+  }) {
+    return CameraImageData(
+      format: const CameraImageFormat(
+        ImageFormatGroup.jpeg,
+        raw: '',
+      ),
+      planes: <CameraImagePlane>[
+        CameraImagePlane(
+          bytes: bytes,
+          bytesPerRow: 0,
+        ),
+      ],
+      height: height,
+      width: width,
+    );
+  }
+
+  ///Returns frame at a specific time using video element
+  Future<CameraImageData?> takeFrame(web.HTMLVideoElement videoElement) async {
+    if (!videoElement.isConnected) {
+      return null;
+    }
+
+    final int videoWidth = videoElement.videoWidth;
+    final int videoHeight = videoElement.videoHeight;
+    final List<String> widthPx = videoElement.style.width.split('px');
+    final List<String> heightPx = videoElement.style.height.split('px');
+    final String widthString =
+        widthPx.isNotEmpty ? widthPx.first : '$videoWidth';
+    final String heightString =
+        heightPx.isNotEmpty ? heightPx.first : '$videoHeight';
+    final int width = int.tryParse(widthString) ?? videoWidth;
+    final int height = int.tryParse(heightString) ?? videoHeight;
+
+    final bool canUseOffscreenCanvas =
+        JsUtil().hasProperty(web.window, 'OffscreenCanvas'.toJS);
+    late web.ImageData imageData;
+    if (canUseOffscreenCanvas) {
+      final web.OffscreenCanvas canvas = web.OffscreenCanvas(width, height);
+      final web.OffscreenCanvasRenderingContext2D context =
+          canvas.getContext('2d')! as web.OffscreenCanvasRenderingContext2D;
+      context.drawImage(videoElement, 0, 0, width, height);
+      imageData = context.getImageData(0, 0, width, height);
+    } else {
+      final web.HTMLCanvasElement canvas = web.HTMLCanvasElement()
+        ..width = width
+        ..height = height;
+      final web.CanvasRenderingContext2D context = canvas.context2D;
+      context.drawImageScaled(videoElement, 0, 0, width.toDouble(), height.toDouble());
+      imageData = context.getImageData(0, 0, width, height);
+      canvas.remove();
+    }
+
+    return CameraImageData(
+      format: const CameraImageFormat(
+        ImageFormatGroup.jpeg,
+        raw: '',
+      ),
+      planes: <CameraImagePlane>[
+        CameraImagePlane(
+          bytes: imageData.data.toDart.buffer.asUint8List(),
+          bytesPerRow: 0,
+        ),
+      ],
+      height: imageData.height,
+      width: imageData.width,
+    );
+  }
 }

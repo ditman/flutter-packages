@@ -1,5 +1,6 @@
-## NEXT
+## 0.3.6
 
+* Adds support for camera stream on web.
 * Updates minimum supported SDK version to Flutter 3.22/Dart 3.4.
 
 ## 0.3.5
