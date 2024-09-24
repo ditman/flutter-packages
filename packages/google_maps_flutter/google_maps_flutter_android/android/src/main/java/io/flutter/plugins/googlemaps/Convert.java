@@ -20,6 +20,7 @@ import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.ButtCap;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.PinConfig;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.SquareCap;
 import com.google.android.gms.maps.model.Tile;
@@ -182,6 +184,65 @@ class Convert {
       return bitmapDescriptorFactory.fromBitmap(bitmap);
     } catch (Exception e) {
       throw new IllegalArgumentException("Unable to interpret bytes as a valid image.", e);
+    }
+  }
+
+  public static BitmapDescriptor getBitmapFromPinConfig(
+      Map<?, ?> byteData,
+      AssetManager assetManager,
+      float density,
+      BitmapDescriptorFactoryWrapper bitmapDescriptorFactory
+  ) {
+    try {
+      final String backgroundColorKey = "backgroundColor";
+      final String borderColorKey = "borderColor";
+      final String glyphTextKey = "glyphText";
+      final String glyphTextColorKey = "glyphTextColor";
+      final String glyphColorKey = "glyphColor";
+      final String glyphBitmapDescriptorKey = "glyphBitmapDescriptor";
+
+      final Integer backgroundColor =
+          byteData.containsKey(backgroundColorKey) ? toInt(byteData.get(backgroundColorKey)) : null;
+      final Integer borderColor =
+          byteData.containsKey(borderColorKey) ? toInt(byteData.get(borderColorKey)) : null;
+      final String glyphText =
+          byteData.containsKey(glyphTextKey) ? toString(byteData.get(glyphTextKey)) : null;
+      final Integer glyphTextColor =
+          byteData.containsKey(glyphTextColorKey) ? toInt(byteData.get(glyphTextColorKey)) : null;
+      final Integer glyphColor =
+          byteData.containsKey(glyphColorKey) ? toInt(byteData.get(glyphColorKey)) : null;
+      final BitmapDescriptor glyphBitmapDescriptor = byteData.containsKey(glyphBitmapDescriptorKey)
+          ? toBitmapDescriptor(byteData.get(glyphBitmapDescriptorKey), assetManager, density)
+          : null;
+
+      final PinConfig.Builder pinConfigBuilder = PinConfig.builder();
+      if (backgroundColor != null) {
+        pinConfigBuilder.setBackgroundColor(backgroundColor);
+      }
+
+      if (borderColor != null) {
+        pinConfigBuilder.setBorderColor(borderColor);
+      }
+
+      PinConfig.Glyph glyph = null;
+      if (glyphText != null) {
+        glyph = glyphTextColor != null
+            ? new PinConfig.Glyph(glyphText, glyphTextColor)
+            : new PinConfig.Glyph(glyphText);
+      } else if (glyphBitmapDescriptor != null) {
+        glyph = new PinConfig.Glyph(glyphBitmapDescriptor);
+      } else if (glyphColor != null) {
+        glyph = new PinConfig.Glyph(glyphColor);
+      }
+
+      if (glyph != null) {
+        pinConfigBuilder.setGlyph(glyph);
+      }
+
+      final PinConfig pinConfig = pinConfigBuilder.build();
+      return bitmapDescriptorFactory.fromPinConfig(pinConfig);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Unable to interpret pin config as a valid image.", e);
     }
   }
 
@@ -600,6 +661,7 @@ class Convert {
     sink.setRotation(marker.getRotation().floatValue());
     sink.setVisible(marker.getVisible());
     sink.setZIndex(marker.getZIndex().floatValue());
+    sink.setCollisionBehavior(collisionBehaviorFromPigeon(marker.getCollisionBehavior()));
   }
 
   private static void interpretInfoWindowOptions(
@@ -636,6 +698,19 @@ class Convert {
         return JointType.ROUND;
     }
     return JointType.DEFAULT;
+  }
+
+  static int collisionBehaviorFromPigeon(
+      Messages.PlatformMarkerCollisionBehavior collisionBehavior) {
+    switch (collisionBehavior) {
+      case REQUIRED:
+        return AdvancedMarkerOptions.CollisionBehavior.REQUIRED;
+      case OPTIONAL_AND_HIDES_LOWER_PRIORITY:
+        return AdvancedMarkerOptions.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY;
+      case REQUIRED_AND_HIDES_OPTIONAL:
+        return AdvancedMarkerOptions.CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL;
+    }
+    return AdvancedMarkerOptions.CollisionBehavior.REQUIRED;
   }
 
   static String interpretPolylineOptions(
@@ -878,6 +953,11 @@ class Convert {
     @VisibleForTesting
     public BitmapDescriptor fromBitmap(Bitmap bitmap) {
       return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    @VisibleForTesting
+    public BitmapDescriptor fromPinConfig(PinConfig pinConfig) {
+      return BitmapDescriptorFactory.fromPinConfig(pinConfig);
     }
   }
 

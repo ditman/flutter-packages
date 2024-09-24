@@ -143,6 +143,10 @@ class MarkerController implements MarkerOptionsSink {
     marker.setZIndex(zIndex);
   }
 
+  @Override
+  public void setCollisionBehavior(int collisionBehavior) {
+  }
+
   String getGoogleMapsMarkerId() {
     return googleMapsMarkerId;
   }

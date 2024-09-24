@@ -5,7 +5,9 @@
 package io.flutter.plugins.googlemaps;
 
 import android.content.res.AssetManager;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -174,7 +176,8 @@ class MarkersController {
   private void addMarker(@NonNull Messages.PlatformMarker marker) {
     String markerId = marker.getMarkerId();
     String clusterManagerId = marker.getClusterManagerId();
-    MarkerBuilder markerBuilder = new MarkerBuilder(markerId, clusterManagerId);
+    MarkerBuilder markerBuilder = new MarkerBuilder(markerId, clusterManagerId,
+        marker.getIsAdvanced());
     Convert.interpretMarkerOptions(
         marker, markerBuilder, assetManager, density, bitmapDescriptorFactoryWrapper);
     addMarker(markerBuilder);

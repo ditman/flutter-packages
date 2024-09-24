@@ -456,6 +456,11 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
         : _setStyleFailureMessage;
   }
 
+  @override
+  Future<bool> isAdvancedMarkersAvailable({required int mapId}) async {
+    return _hostApi(mapId).isAdvancedMarkersAvailable();
+  }
+
   /// Set [GoogleMapsFlutterPlatform] to use [AndroidViewSurface] to build the
   /// Google Maps widget.
   ///
@@ -746,6 +751,12 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
       zIndex: marker.zIndex,
       markerId: marker.markerId.value,
       clusterManagerId: marker.clusterManagerId?.value,
+      isAdvanced: marker is AdvancedMarker,
+      collisionBehavior: marker is AdvancedMarker
+          ? _platformPlatformMarkerCollisionBehaviorFromMarkerCollisionBehavior(
+              marker.collisionBehavior,
+            )
+          : PlatformMarkerCollisionBehavior.required,
     );
   }
 
@@ -1341,6 +1352,21 @@ PlatformPatternItem platformPatternItemFromPatternItem(PatternItem item) {
   // switch as needing an update.
   // ignore: dead_code
   return PlatformPatternItem(type: PlatformPatternItemType.dot);
+}
+
+@visibleForTesting
+PlatformMarkerCollisionBehavior
+    _platformPlatformMarkerCollisionBehaviorFromMarkerCollisionBehavior(
+  MarkerCollisionBehavior markerCollisionBehavior,
+) {
+  switch (markerCollisionBehavior) {
+    case MarkerCollisionBehavior.required:
+      return PlatformMarkerCollisionBehavior.required;
+    case MarkerCollisionBehavior.optionalAndHidesLowerPriority:
+      return PlatformMarkerCollisionBehavior.optionalAndHidesLowerPriority;
+    case MarkerCollisionBehavior.requiredAndHidesOptional:
+      return PlatformMarkerCollisionBehavior.requiredAndHidesOptional;
+  }
 }
 
 /// Update specification for a set of [TileOverlay]s.

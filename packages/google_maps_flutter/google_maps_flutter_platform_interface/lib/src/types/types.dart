@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 // All the public types exposed by this package.
+export 'advanced_marker.dart';
 export 'bitmap.dart';
 export 'callbacks.dart';
 export 'camera.dart';
@@ -24,6 +25,7 @@ export 'maps_object_updates.dart';
 export 'marker.dart';
 export 'marker_updates.dart';
 export 'pattern_item.dart';
+export 'pin_config.dart';
 export 'polygon.dart';
 export 'polygon_updates.dart';
 export 'polyline.dart';

@@ -184,6 +184,7 @@ class PlatformMarker {
     this.visible = true,
     this.zIndex = 0.0,
     this.clusterManagerId,
+    this.collisionBehavior = PlatformMarkerCollisionBehavior.required,
   });
 
   final double alpha;
@@ -200,6 +201,15 @@ class PlatformMarker {
   final double zIndex;
   final String markerId;
   final String? clusterManagerId;
+
+  final bool isAdvanced;
+  final PlatformMarkerCollisionBehavior collisionBehavior;
+}
+
+enum PlatformMarkerCollisionBehavior {
+  required,
+  optionalAndHidesLowerPriority,
+  requiredAndHidesOptional,
 }
 
 /// Pigeon equivalent of the Polygon class.
@@ -673,6 +683,8 @@ abstract class MapsApi {
   /// This allows checking asynchronously for initial style failures, as there
   /// is no way to return failures from map initialization.
   bool didLastStyleSucceed();
+
+  bool isAdvancedMarkersAvailable();
 
   /// Clears the cache of tiles previously requseted from the tile provider.
   void clearTileCache(String tileOverlayId);

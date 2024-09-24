@@ -4,6 +4,7 @@
 
 package io.flutter.plugins.googlemaps;
 
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -15,8 +16,8 @@ class MarkerBuilder implements MarkerOptionsSink, ClusterItem {
   private String markerId;
   private boolean consumeTapEvents;
 
-  MarkerBuilder(String markerId, String clusterManagerId) {
-    this.markerOptions = new MarkerOptions();
+  MarkerBuilder(String markerId, String clusterManagerId, boolean isAdvanced) {
+    this.markerOptions = isAdvanced ? new AdvancedMarkerOptions() : new MarkerOptions();
     this.markerId = markerId;
     this.clusterManagerId = clusterManagerId;
   }
@@ -113,6 +114,13 @@ class MarkerBuilder implements MarkerOptionsSink, ClusterItem {
   @Override
   public void setZIndex(float zIndex) {
     markerOptions.zIndex(zIndex);
+  }
+
+  @Override
+  public void setCollisionBehavior(int collisionBehavior) {
+    if (markerOptions.getClass() == AdvancedMarkerOptions.class) {
+      ((AdvancedMarkerOptions) markerOptions).collisionBehavior(collisionBehavior);
+    }
   }
 
   @Override

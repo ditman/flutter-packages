@@ -33,6 +33,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapCapabilities;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
@@ -978,6 +979,18 @@ class GoogleMapController
   @Override
   public @NonNull Boolean didLastStyleSucceed() {
     return lastSetStyleSucceeded;
+  }
+
+  @Override
+  public @NonNull Boolean isAdvancedMarkersAvailable() {
+    if (googleMap == null) {
+      throw new FlutterError(
+          "GoogleMap uninitialized", "getMapCapabilities() called prior to map initialization",
+          null
+      );
+    }
+    final MapCapabilities mapCapabilities = googleMap.getMapCapabilities();
+    return mapCapabilities.isAdvancedMarkersAvailable();
   }
 
   @Override

@@ -16,6 +16,8 @@ import 'package:flutter/material.dart'
         createLocalImageConfiguration;
 import 'package:flutter/services.dart' show AssetBundle;
 
+import 'pin_config.dart';
+
 /// Type of bitmap scaling to use on BitmapDescriptor creation.
 enum MapBitmapScaling {
   /// Automatically scale image with devices pixel ratio or to given size,
@@ -328,6 +330,10 @@ abstract class BitmapDescriptor {
       height: height,
       bitmapScaling: bitmapScaling,
     );
+  }
+
+  static BitmapDescriptor pinConfig(PinConfig pinConfig) {
+    return PinConfigBitmap(pinConfig);
   }
 
   /// Convert the object to a Json format.
@@ -951,6 +957,44 @@ class BytesMapBitmap extends MapBitmap {
           'imagePixelRatio': imagePixelRatio,
           if (width != null) 'width': width,
           if (height != null) 'height': height,
+        }
+      ];
+}
+
+class PinConfigBitmap extends MapBitmap {
+  PinConfigBitmap(
+    this.pinConfig, {
+    super.bitmapScaling = MapBitmapScaling.auto,
+    super.width,
+    super.height,
+    double? imagePixelRatio,
+  }) : super._(imagePixelRatio: imagePixelRatio ?? _naturalPixelRatio);
+
+  final PinConfig pinConfig;
+
+  /// The type of the MapBitmap object, used for the JSON serialization.
+  static const String type = 'pinConfig';
+
+  @override
+  Object toJson() => <Object>[
+        type,
+        <String, Object?>{
+          'bitmapScaling': bitmapScaling.name,
+          'imagePixelRatio': imagePixelRatio,
+          if (width != null) 'width': width,
+          if (height != null) 'height': height,
+          if (pinConfig.backgroundColor != null)
+            'backgroundColor': pinConfig.backgroundColor?.value,
+          if (pinConfig.borderColor != null)
+            'borderColor': pinConfig.borderColor?.value,
+          if (pinConfig.glyph?.text != null) 'glyphText': pinConfig.glyph?.text,
+          if (pinConfig.glyph?.textColor != null)
+            'glyphTextColor': pinConfig.glyph?.textColor?.value,
+          if (pinConfig.glyph?.color != null)
+            'glyphColor': pinConfig.glyph?.color?.value,
+          if (pinConfig.glyph?.bitmapDescriptor != null)
+            'glyphBitmapDescriptor':
+                pinConfig.glyph?.bitmapDescriptor?.toJson(),
         }
       ];
 }

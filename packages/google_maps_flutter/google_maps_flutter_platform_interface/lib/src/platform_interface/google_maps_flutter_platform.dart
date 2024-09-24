@@ -400,6 +400,12 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     return null;
   }
 
+  Future<bool> isAdvancedMarkersAvailable({required int mapId}) async {
+    throw UnimplementedError(
+      'isAdvancedMarkersAvailable() has not been implemented.',
+    );
+  }
+
   /// Returns a widget displaying the map view.
   @Deprecated('Use buildViewWithConfiguration instead.')
   Widget buildView(
