@@ -8,11 +8,14 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.ClusterRenderer;
+import com.google.maps.android.clustering.view.DefaultAdvancedMarkersClusterRenderer;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.collections.MarkerManager;
 import io.flutter.plugins.googlemaps.Messages.MapsCallbackApi;
@@ -89,11 +92,34 @@ class ClusterManagersController
   void addClusterManager(String clusterManagerId) {
     ClusterManager<MarkerBuilder> clusterManager =
         new ClusterManager<MarkerBuilder>(context, googleMap, markerManager);
-    ClusterRenderer<MarkerBuilder> clusterRenderer =
-        new ClusterRenderer<MarkerBuilder>(context, googleMap, clusterManager, this);
+    clusterManagerIdToManager.put(clusterManagerId, clusterManager);
+  }
+
+  /**
+   * Initialize cluster renderer if it hasn't been initialized before.
+   * ClusterManager uses default renderer which should be changed to (legacy) renderer or
+   * advanced renderer
+   **/
+  void initializeRenderer(String clusterManagerId, boolean isAdvanced) {
+    final ClusterManager<MarkerBuilder> clusterManager = clusterManagerIdToManager.get(
+        clusterManagerId);
+    if (clusterManager == null) {
+      return;
+    }
+
+    final ClusterRenderer<MarkerBuilder> renderer = clusterManager.getRenderer();
+    if (renderer.getClass() == MarkerClusterRenderer.class
+        || renderer.getClass() == AdvancedMarkerClusterRenderer.class) {
+      // Renderer has already been initialized
+      return;
+    }
+
+    final ClusterRenderer<MarkerBuilder> clusterRenderer =
+        isAdvanced
+            ? new AdvancedMarkerClusterRenderer<>(context, googleMap, clusterManager, this)
+            : new MarkerClusterRenderer<>(context, googleMap, clusterManager, this);
     clusterManager.setRenderer(clusterRenderer);
     initListenersForClusterManager(clusterManager, this, clusterItemClickListener);
-    clusterManagerIdToManager.put(clusterManagerId, clusterManager);
   }
 
   /** Removes ClusterManagers by given cluster manager IDs from the controller. */
@@ -122,6 +148,8 @@ class ClusterManagersController
 
   /** Adds item to the ClusterManager it belongs to. */
   public void addItem(MarkerBuilder item) {
+    initializeRenderer(item.clusterManagerId(), item.isAdvanced);
+
     ClusterManager<MarkerBuilder> clusterManager =
         clusterManagerIdToManager.get(item.clusterManagerId());
     if (clusterManager != null) {
@@ -195,13 +223,13 @@ class ClusterManagersController
   }
 
   /**
-   * ClusterRenderer builds marker options for new markers to be rendered to the map. After cluster
-   * item (marker) is rendered, it is sent to the listeners for control.
+   * MarkerClusterRenderer builds marker options for new markers to be rendered to the map. After
+   * cluster item (marker) is rendered, it is sent to the listeners for control.
    */
-  private static class ClusterRenderer<T extends MarkerBuilder> extends DefaultClusterRenderer<T> {
+  private static class MarkerClusterRenderer<T extends MarkerBuilder> extends DefaultClusterRenderer<T> {
     private final ClusterManagersController clusterManagersController;
 
-    public ClusterRenderer(
+    public MarkerClusterRenderer(
         Context context,
         GoogleMap map,
         ClusterManager<T> clusterManager,
@@ -215,6 +243,35 @@ class ClusterManagersController
         @NonNull T item, @NonNull MarkerOptions markerOptions) {
       // Builds new markerOptions for new marker created by the ClusterRenderer under
       // ClusterManager.
+      item.update(markerOptions);
+    }
+
+    @Override
+    protected void onClusterItemRendered(@NonNull T item, @NonNull Marker marker) {
+      super.onClusterItemRendered(item, marker);
+      clusterManagersController.onClusterItemRendered(item, marker);
+    }
+  }
+
+  /** AdvancedMarkerClusterRenderer is a ClusterRenderer that supports AdvancedMarkers */
+  private static class AdvancedMarkerClusterRenderer<T extends MarkerBuilder> extends
+      DefaultAdvancedMarkersClusterRenderer<T> {
+
+    private final ClusterManagersController clusterManagersController;
+
+    public AdvancedMarkerClusterRenderer(
+        Context context,
+        GoogleMap map,
+        ClusterManager<T> clusterManager,
+        ClusterManagersController clusterManagersController
+    ) {
+      super(context, map, clusterManager);
+      this.clusterManagersController = clusterManagersController;
+    }
+
+    @Override
+    protected void onBeforeClusterItemRendered(
+        @NonNull T item, @NonNull AdvancedMarkerOptions markerOptions) {
       item.update(markerOptions);
     }
 
