@@ -4,19 +4,6 @@ import 'package:flutter/material.dart' show Color;
 import '../../google_maps_flutter_platform_interface.dart';
 
 @immutable
-class PinConfig {
-  const PinConfig({
-    this.backgroundColor,
-    this.borderColor,
-    this.glyph,
-  });
-
-  final Color? backgroundColor;
-  final Color? borderColor;
-  final Glyph? glyph;
-}
-
-@immutable
 class Glyph {
   factory Glyph.color(Color color) {
     return Glyph._(color: color);
