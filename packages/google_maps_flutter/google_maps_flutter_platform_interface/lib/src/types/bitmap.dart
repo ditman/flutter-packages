@@ -970,8 +970,57 @@ class BytesMapBitmap extends MapBitmap {
       ];
 }
 
+/// Represents a [BitmapDescriptor] that is created from a pin configuration.
+///
+/// The [backgroundColor] and [borderColor] are used to define the color of the
+/// standard pin marker.
+///
+/// The [glyph] parameter is used to define the glyph that is displayed on the
+/// pin marker (default glyph is a circle).
+///
+/// The following example demonstrates how to change colors of the default map
+/// pin to white and blue:
+///
+/// ```dart
+/// PinConfig(
+///   backgroundColor: Colors.blue,
+///   borderColor: Colors.white,
+///   glyph: Glyph.color(Colors.blue)
+/// )
+/// ```
+///
+/// The following example demonstrates how to customize a marker pin by showing
+/// a short text on the pin:
+///
+/// ```dart
+/// PinConfig(
+///   backgroundColor: Colors.blue,
+///   glyph: Glyph.text('Pin', Colors.white)
+/// )
+/// ```
+///
+/// The following example demonstrates how to customize a marker pin by showing
+/// a custom image on the pin:
+///
+/// ```dart
+/// PinConfig(
+///   glyph: Glyph.bitmapDescriptor(
+///     BitmapDescriptor.asset(
+///       ImageConfiguration(size: Size(12, 12)),
+///       'assets/cat.png'
+///    )
+/// )
+/// ```
+///
 class PinConfig extends BitmapDescriptor {
-  PinConfig({
+  /// Constructs a [PinConfig] that is created from a pin configuration.
+  ///
+  /// The [backgroundColor] and [borderColor] are used to define the color of
+  /// the standard pin marker.
+  ///
+  /// The [glyph] parameter is used to define the glyph that is displayed on the
+  /// pin marker.
+  const PinConfig({
     this.backgroundColor,
     this.borderColor,
     this.glyph,
@@ -980,8 +1029,13 @@ class PinConfig extends BitmapDescriptor {
   /// The type of the MapBitmap object, used for the JSON serialization.
   static const String type = 'pinConfig';
 
+  /// The background color of the pin
   final Color? backgroundColor;
+
+  /// The border color of the pin
   final Color? borderColor;
+
+  /// The glyph that is displayed on the pin marker
   final Glyph? glyph;
 
   @override
