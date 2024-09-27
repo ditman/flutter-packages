@@ -3,9 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
-import 'example_google_map.dart';
 import 'page.dart';
 
 /// Map Id is required to use advanced markers
@@ -44,7 +44,7 @@ class _AdvancedMarkersBodyState extends State<_AdvancedMarkersBody> {
   /// is in progress
   bool? _isAdvancedMarkersAvailable;
 
-  ExampleGoogleMapController? controller;
+  GoogleMapController? controller;
   final Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   @override
@@ -85,7 +85,7 @@ class _AdvancedMarkersBodyState extends State<_AdvancedMarkersBody> {
             ),
           ),
           Expanded(
-            child: ExampleGoogleMap(
+            child: GoogleMap(
               // ignore: avoid_redundant_argument_values
               cloudMapId: _cloudMapId,
               initialCameraPosition: const CameraPosition(
@@ -113,7 +113,7 @@ class _AdvancedMarkersBodyState extends State<_AdvancedMarkersBody> {
     );
   }
 
-  void _onMapCreated(ExampleGoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) {
     setState(() {
       this.controller = controller;
     });
@@ -163,7 +163,7 @@ class _AdvancedMarkersBodyState extends State<_AdvancedMarkersBody> {
       icon: BitmapDescriptor.pinConfig(
         backgroundColor: Colors.yellow,
         borderColor: Colors.red,
-        glyph: Glyph.text(text: 'Hey', textColor: Colors.red),
+        glyph: Glyph.text('Hey', textColor: Colors.red),
       ),
     );
 
