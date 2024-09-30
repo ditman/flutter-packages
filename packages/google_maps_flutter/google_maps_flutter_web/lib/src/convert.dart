@@ -272,7 +272,13 @@ gmaps.InfoWindowOptions? _infoWindowOptionsFromMarker(Marker marker) {
 }
 
 // Attempts to extract a [gmaps.Size] from `iconConfig[sizeIndex]`.
-Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
+gmaps.Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
+  final Size? size = _sizeFromIconConfig(iconConfig, sizeIndex);
+  return size != null ? gmaps.Size(size.width, size.height) : null;
+}
+
+// Attempts to extract a [Size] from `iconConfig[sizeIndex]`.
+Size? _sizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
   Size? size;
   if (iconConfig.length >= sizeIndex + 1) {
     final List<Object?>? rawIconSize = iconConfig[sizeIndex] as List<Object?>?;
@@ -286,15 +292,34 @@ Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
   return size;
 }
 
-/// Sets the size of the Google Maps icon element.
-void _setIconSize({
-  required Size size,
+/// Sets the size and style of the [icon] element
+void _setIconStyle({
   required web.Element icon,
+  required Size? size,
+  required double? opacity,
+  required bool? isVisible,
 }) {
   icon.setAttribute(
     'style',
-    'width: ${size.width}px; height: ${size.height}px;',
+    <String>[
+      if (size != null) ...<String>[
+        'width: ${size.width}px;',
+        'height: ${size.height}px;',
+      ],
+      if (opacity != null) 'opacity: $opacity;',
+      if (isVisible != null) 'visibility: ${isVisible ? 'visible' : 'hidden'};',
+    ].join(' '),
   );
+}
+
+/// Sets the size of the Google Maps icon.
+void _setIconSize({
+  required Size size,
+  required gmaps.Icon icon,
+}) {
+  final gmaps.Size gmapsSize = gmaps.Size(size.width, size.height);
+  icon.size = gmapsSize;
+  icon.scaledSize = gmapsSize;
 }
 
 /// Determines the appropriate size for a bitmap based on its descriptor.
@@ -370,40 +395,13 @@ void _cleanUpBitmapConversionCaches() {
   _bitmapBlobUrlCache.clear();
 }
 
-// Converts a [BitmapDescriptor] into a [gmaps.Icon] that can be used in Markers.
-Future<Node?> _gmIconFromBitmapDescriptor(
-  BitmapDescriptor bitmapDescriptor,
-) async {
-  web.Element? icon;
-
-  if (bitmapDescriptor is MapBitmap) {
-    final String url = switch (bitmapDescriptor) {
-      (final BytesMapBitmap bytesMapBitmap) =>
-        _bitmapBlobUrlCache.putIfAbsent(bytesMapBitmap.byteData.hashCode, () {
-          final Blob blob =
-              Blob(<JSUint8Array>[bytesMapBitmap.byteData.toJS].toJS);
-          return URL.createObjectURL(blob as JSObject);
-        }),
-      (final AssetMapBitmap assetMapBitmap) =>
-        ui_web.assetManager.getAssetUrl(assetMapBitmap.assetName),
-      _ => throw UnimplementedError(),
-    };
-
-    icon = document.createElement('img')..setAttribute('src', url);
-
-    switch (bitmapDescriptor.bitmapScaling) {
-      case MapBitmapScaling.auto:
-        final Size? size = await _getBitmapSize(bitmapDescriptor, url);
-        if (size != null) {
-          _setIconSize(size: size, icon: icon);
-        }
-      case MapBitmapScaling.none:
-        break;
-    }
-
-    return icon;
-  }
-
+/// Converts a [BitmapDescriptor] into a [Node] that can be used as Advanced
+/// Marker icon
+Future<Node?> _advancedMarkerIconFromBitmapDescriptor(
+  BitmapDescriptor bitmapDescriptor, {
+  required double? opacity,
+  required bool isVisible,
+}) async {
   if (bitmapDescriptor is PinConfig) {
     final gmaps.PinElementOptions options = gmaps.PinElementOptions()
       ..background = bitmapDescriptor.backgroundColor != null
@@ -432,13 +430,49 @@ Future<Node?> _gmIconFromBitmapDescriptor(
         options.glyph = element;
       } else if (glyph.bitmapDescriptor != null) {
         // Create glyph from bitmap
-        final Node? glyphBitmap =
-            await _gmIconFromBitmapDescriptor(glyph.bitmapDescriptor!);
+        final Node? glyphBitmap = await _advancedMarkerIconFromBitmapDescriptor(
+          glyph.bitmapDescriptor!,
+          // Always opaque, opacity is handled by the parent marker
+          opacity: 1.0,
+          // Always visible, as the visibility is handled by the parent marker
+          isVisible: true,
+        );
         options.glyph = glyphBitmap;
       }
     }
 
-    return gmaps.PinElement(options).element;
+    final gmaps.PinElement pinElement = gmaps.PinElement(options);
+    final HTMLElement htmlElement = pinElement.element;
+    htmlElement.style
+      ..visibility = isVisible ? 'visible' : 'hidden'
+      ..opacity = opacity?.toString() ?? '1.0';
+    return htmlElement;
+  }
+
+  if (bitmapDescriptor is MapBitmap) {
+    final String url = switch (bitmapDescriptor) {
+      (final BytesMapBitmap bytesMapBitmap) =>
+        _bitmapBlobUrlCache.putIfAbsent(bytesMapBitmap.byteData.hashCode, () {
+          final Blob blob =
+              Blob(<JSUint8Array>[bytesMapBitmap.byteData.toJS].toJS);
+          return URL.createObjectURL(blob as JSObject);
+        }),
+      (final AssetMapBitmap assetMapBitmap) =>
+        ui_web.assetManager.getAssetUrl(assetMapBitmap.assetName),
+      _ => throw UnimplementedError(),
+    };
+
+    final web.Element icon = document.createElement('img')
+      ..setAttribute('src', url);
+
+    final Size? size = switch (bitmapDescriptor.bitmapScaling) {
+      MapBitmapScaling.auto => await _getBitmapSize(bitmapDescriptor, url),
+      MapBitmapScaling.none => null,
+    };
+    _setIconStyle(
+        icon: icon, size: size, opacity: opacity, isVisible: isVisible);
+
+    return icon;
   }
 
   // The following code is for the deprecated BitmapDescriptor.fromBytes
@@ -448,15 +482,91 @@ Future<Node?> _gmIconFromBitmapDescriptor(
     assert(iconConfig.length >= 2);
     // iconConfig[2] contains the DPIs of the screen, but that information is
     // already encoded in the iconConfig[1]
-    icon = document.createElement('img')
+    final web.Element icon = document.createElement('img')
       ..setAttribute(
         'src',
         ui_web.assetManager.getAssetUrl(iconConfig[1]! as String),
       );
 
-    final Size? size = _gmSizeFromIconConfig(iconConfig, 3);
+    final Size? size = _sizeFromIconConfig(iconConfig, 3);
+    _setIconStyle(
+        icon: icon, size: size, opacity: opacity, isVisible: isVisible);
+    return icon;
+  } else if (iconConfig[0] == 'fromBytes') {
+    // Grab the bytes, and put them into a blob
+    final List<int> bytes = iconConfig[1]! as List<int>;
+    // Create a Blob from bytes, but let the browser figure out the encoding
+    final Blob blob;
+
+    assert(
+      bytes is Uint8List,
+      'The bytes for a BitmapDescriptor icon must be a Uint8List',
+    );
+
+    // TODO(ditman): Improve this conversion
+    // See https://github.com/dart-lang/web/issues/180
+    blob = Blob(<JSUint8Array>[(bytes as Uint8List).toJS].toJS);
+
+    final web.Element icon = document.createElement('img')
+      ..setAttribute('src', URL.createObjectURL(blob as JSObject));
+
+    final Size? size = _sizeFromIconConfig(iconConfig, 2);
+    _setIconStyle(
+        size: size, icon: icon, opacity: opacity, isVisible: isVisible);
+    return icon;
+  }
+
+  return null;
+}
+
+// Converts a [BitmapDescriptor] into a [gmaps.Icon] that can be used in Markers.
+Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
+    BitmapDescriptor bitmapDescriptor) async {
+  gmaps.Icon? icon;
+
+  if (bitmapDescriptor is MapBitmap) {
+    final String url = switch (bitmapDescriptor) {
+      (final BytesMapBitmap bytesMapBitmap) =>
+        _bitmapBlobUrlCache.putIfAbsent(bytesMapBitmap.byteData.hashCode, () {
+          final Blob blob =
+              Blob(<JSUint8Array>[bytesMapBitmap.byteData.toJS].toJS);
+          return URL.createObjectURL(blob as JSObject);
+        }),
+      (final AssetMapBitmap assetMapBitmap) =>
+        ui_web.assetManager.getAssetUrl(assetMapBitmap.assetName),
+      _ => throw UnimplementedError(),
+    };
+
+    icon = gmaps.Icon()..url = url;
+
+    switch (bitmapDescriptor.bitmapScaling) {
+      case MapBitmapScaling.auto:
+        final Size? size = await _getBitmapSize(bitmapDescriptor, url);
+        if (size != null) {
+          _setIconSize(size: size, icon: icon);
+        }
+      case MapBitmapScaling.none:
+        break;
+    }
+
+    return icon;
+  }
+
+  // The following code is for the deprecated BitmapDescriptor.fromBytes
+  // and BitmapDescriptor.fromAssetImage.
+  final List<Object?> iconConfig = bitmapDescriptor.toJson() as List<Object?>;
+  if (iconConfig[0] == 'fromAssetImage') {
+    assert(iconConfig.length >= 2);
+    // iconConfig[2] contains the DPIs of the screen, but that information is
+    // already encoded in the iconConfig[1]
+    icon = gmaps.Icon()
+      ..url = ui_web.assetManager.getAssetUrl(iconConfig[1]! as String);
+
+    final gmaps.Size? size = _gmSizeFromIconConfig(iconConfig, 3);
     if (size != null) {
-      _setIconSize(size: size, icon: icon);
+      icon
+        ..size = size
+        ..scaledSize = size;
     }
   } else if (iconConfig[0] == 'fromBytes') {
     // Grab the bytes, and put them into a blob
@@ -473,12 +583,13 @@ Future<Node?> _gmIconFromBitmapDescriptor(
     // See https://github.com/dart-lang/web/issues/180
     blob = Blob(<JSUint8Array>[(bytes as Uint8List).toJS].toJS);
 
-    icon = document.createElement('img')
-      ..setAttribute('src', URL.createObjectURL(blob as JSObject));
+    icon = gmaps.Icon()..url = URL.createObjectURL(blob as JSObject);
 
-    final Size? size = _gmSizeFromIconConfig(iconConfig, 2);
+    final gmaps.Size? size = _gmSizeFromIconConfig(iconConfig, 2);
     if (size != null) {
-      _setIconSize(size: size, icon: icon);
+      icon
+        ..size = size
+        ..scaledSize = size;
     }
   }
   return icon;
@@ -496,14 +607,17 @@ Future<O> _markerOptionsFromMarker<T, O>(
           ..collisionBehavior = _markerCollisionBehaviorToGmCollisionBehavior(
             marker.collisionBehavior,
           )
-          ..content = await _gmIconFromBitmapDescriptor(marker.icon)
+          ..content = await _advancedMarkerIconFromBitmapDescriptor(
+            marker.icon,
+            opacity: marker.alpha,
+            isVisible: marker.visible,
+          )
           ..position = gmaps.LatLng(
             marker.position.latitude,
             marker.position.longitude,
           )
           ..title = sanitizeHtml(marker.infoWindow.title ?? '')
           ..zIndex = marker.zIndex;
-    // FIXME alpha and visibility
     return options as O;
   } else {
     final gmaps.MarkerOptions options = gmaps.MarkerOptions()
