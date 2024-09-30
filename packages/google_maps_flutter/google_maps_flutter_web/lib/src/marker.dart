@@ -107,7 +107,10 @@ class MarkerController<T, O> {
       _doOnMarkerType(
         marker: marker,
         legacy: (gmaps.Marker marker) => marker.map = null,
-        advanced: (gmaps.AdvancedMarkerElement marker) => marker.map = null,
+        advanced: (gmaps.AdvancedMarkerElement marker) {
+          marker.remove();
+          marker.map = null;
+        },
       );
 
       _marker = null;

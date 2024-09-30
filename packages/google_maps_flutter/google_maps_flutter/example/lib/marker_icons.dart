@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
 import 'custom_marker_icon.dart';
 import 'page.dart';
@@ -44,7 +45,7 @@ enum _MarkerSizeOption {
 class MarkerIconsBodyState extends State<MarkerIconsBody> {
   final Size _markerAssetImageSize = const Size(48, 48);
   _MarkerSizeOption _currentSizeOption = _MarkerSizeOption.original;
-  Set<Marker> _markers = <Marker>{};
+  Set<AdvancedMarker> _markers = <AdvancedMarker>{};
   bool _scalingEnabled = true;
   bool _mipMapsEnabled = true;
   GoogleMapController? controller;
@@ -205,22 +206,22 @@ class MarkerIconsBodyState extends State<MarkerIconsBody> {
     _updateMarkers();
   }
 
-  Marker _createAssetMarker(int index) {
+  AdvancedMarker _createAssetMarker(int index) {
     final LatLng position =
         LatLng(_kMapCenter.latitude - (index * 0.5), _kMapCenter.longitude - 1);
 
-    return Marker(
+    return AdvancedMarker(
       markerId: MarkerId('marker_asset_$index'),
       position: position,
       icon: _markerIconAsset!,
     );
   }
 
-  Marker _createBytesMarker(int index) {
+  AdvancedMarker _createBytesMarker(int index) {
     final LatLng position =
         LatLng(_kMapCenter.latitude - (index * 0.5), _kMapCenter.longitude + 1);
 
-    return Marker(
+    return AdvancedMarker(
       markerId: MarkerId('marker_bytes_$index'),
       position: position,
       icon: _markerIconBytes!,
@@ -228,7 +229,7 @@ class MarkerIconsBodyState extends State<MarkerIconsBody> {
   }
 
   void _updateMarkers() {
-    final Set<Marker> markers = <Marker>{};
+    final Set<AdvancedMarker> markers = <AdvancedMarker>{};
     for (int i = 0; i < _markersAmountPerType; i++) {
       if (_markerIconAsset != null) {
         markers.add(_createAssetMarker(i));

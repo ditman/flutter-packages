@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
-import 'advanced_markers.dart';
 import 'animate_camera.dart';
 import 'clustering.dart';
 import 'heatmap.dart';
+import 'legacy_markers.dart';
 import 'lite_mode.dart';
 import 'map_click.dart';
 import 'map_coordinates.dart';
@@ -29,6 +29,10 @@ import 'scrolling_map.dart';
 import 'snapshot.dart';
 import 'tile_overlay.dart';
 
+/// Map Id is required for some examples to use advanced markers
+// ignore: unreachable_from_main
+const String? cloudMapId = null;
+
 final List<GoogleMapExampleAppPage> _allPages = <GoogleMapExampleAppPage>[
   const MapUiPage(),
   const MapCoordinatesPage(),
@@ -37,7 +41,7 @@ final List<GoogleMapExampleAppPage> _allPages = <GoogleMapExampleAppPage>[
   const MoveCameraPage(),
   const PlaceMarkerPage(),
   const MarkerIconsPage(),
-  const AdvancedMarkersPage(),
+  const LegacyMarkersPage(),
   const ScrollingMapPage(),
   const PlacePolylinePage(),
   const PlacePolygonPage(),

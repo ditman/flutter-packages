@@ -6,7 +6,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
+import 'main.dart';
 import 'page.dart';
 
 /// Page for demonstrating marker clustering support.
@@ -64,7 +66,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
       <ClusterManagerId, ClusterManager>{};
 
   /// Map of markers with identifier as the key.
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  Map<MarkerId, AdvancedMarker> markers = <MarkerId, AdvancedMarker>{};
 
   /// Id of the currently selected marker.
   MarkerId? selectedMarker;
@@ -90,17 +92,17 @@ class ClusteringBodyState extends State<ClusteringBody> {
   }
 
   void _onMarkerTapped(MarkerId markerId) {
-    final Marker? tappedMarker = markers[markerId];
+    final AdvancedMarker? tappedMarker = markers[markerId];
     if (tappedMarker != null) {
       setState(() {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
-          final Marker resetOld = markers[previousMarkerId]!
+          final AdvancedMarker resetOld = markers[previousMarkerId]!
               .copyWith(iconParam: BitmapDescriptor.defaultMarker);
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
-        final Marker newMarker = tappedMarker.copyWith(
+        final AdvancedMarker newMarker = tappedMarker.copyWith(
           iconParam: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueGreen,
           ),
@@ -159,7 +161,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
       final double clusterManagerLongitudeOffset =
           clusterManagerIndex * _clusterManagerLongitudeOffset;
 
-      final Marker marker = Marker(
+      final AdvancedMarker marker = AdvancedMarker(
         clusterManagerId: clusterManager.clusterManagerId,
         markerId: markerId,
         position: LatLng(
@@ -168,6 +170,11 @@ class ClusteringBodyState extends State<ClusteringBody> {
         ),
         infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
         onTap: () => _onMarkerTapped(markerId),
+        icon: BitmapDescriptor.pinConfig(
+          backgroundColor: Colors.white,
+          borderColor: Colors.blue,
+          glyph: Glyph.color(Colors.blue),
+        ),
       );
       markers[markerId] = marker;
     }
@@ -188,7 +195,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
 
   void _changeMarkersAlpha() {
     for (final MarkerId markerId in markers.keys) {
-      final Marker marker = markers[markerId]!;
+      final AdvancedMarker marker = markers[markerId]!;
       final double current = marker.alpha;
       markers[markerId] = marker.copyWith(
         alphaParam: current == _fullyVisibleAlpha
@@ -208,6 +215,8 @@ class ClusteringBodyState extends State<ClusteringBody> {
         SizedBox(
           height: 300.0,
           child: GoogleMap(
+            // ignore: avoid_redundant_argument_values
+            cloudMapId: cloudMapId,
             onMapCreated: _onMapCreated,
             initialCameraPosition: const CameraPosition(
               target: LatLng(-33.852, 151.25),
