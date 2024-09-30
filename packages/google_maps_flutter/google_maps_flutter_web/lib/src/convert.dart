@@ -193,7 +193,7 @@ LatLng gmLatLngToLatLng(gmaps.LatLng latLng) {
 }
 
 /// Converts a [gmaps.LatLngBounds] into a [LatLngBounds].
-LatLngBounds gmLatLngBoundsTolatLngBounds(gmaps.LatLngBounds latLngBounds) {
+LatLngBounds gmLatLngBoundsToLatLngBounds(gmaps.LatLngBounds latLngBounds) {
   return LatLngBounds(
     southwest: gmLatLngToLatLng(latLngBounds.southWest),
     northeast: gmLatLngToLatLng(latLngBounds.northEast),
@@ -272,12 +272,12 @@ gmaps.InfoWindowOptions? _infoWindowOptionsFromMarker(Marker marker) {
 }
 
 // Attempts to extract a [gmaps.Size] from `iconConfig[sizeIndex]`.
-gmaps.Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
-  gmaps.Size? size;
+Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
+  Size? size;
   if (iconConfig.length >= sizeIndex + 1) {
     final List<Object?>? rawIconSize = iconConfig[sizeIndex] as List<Object?>?;
     if (rawIconSize != null) {
-      size = gmaps.Size(
+      size = Size(
         rawIconSize[0]! as double,
         rawIconSize[1]! as double,
       );
@@ -286,14 +286,15 @@ gmaps.Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
   return size;
 }
 
-/// Sets the size of the Google Maps icon.
+/// Sets the size of the Google Maps icon element.
 void _setIconSize({
   required Size size,
-  required gmaps.Icon icon,
+  required web.Element icon,
 }) {
-  final gmaps.Size gmapsSize = gmaps.Size(size.width, size.height);
-  icon.size = gmapsSize;
-  icon.scaledSize = gmapsSize;
+  icon.setAttribute(
+    'style',
+    'width: ${size.width}px; height: ${size.height}px;',
+  );
 }
 
 /// Determines the appropriate size for a bitmap based on its descriptor.
@@ -370,9 +371,10 @@ void _cleanUpBitmapConversionCaches() {
 }
 
 // Converts a [BitmapDescriptor] into a [gmaps.Icon] that can be used in Markers.
-Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
-    BitmapDescriptor bitmapDescriptor) async {
-  gmaps.Icon? icon;
+Future<Node?> _gmIconFromBitmapDescriptor(
+  BitmapDescriptor bitmapDescriptor,
+) async {
+  web.Element? icon;
 
   if (bitmapDescriptor is MapBitmap) {
     final String url = switch (bitmapDescriptor) {
@@ -387,7 +389,7 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
       _ => throw UnimplementedError(),
     };
 
-    icon = gmaps.Icon()..url = url;
+    icon = document.createElement('img')..setAttribute('src', url);
 
     switch (bitmapDescriptor.bitmapScaling) {
       case MapBitmapScaling.auto:
@@ -398,7 +400,45 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
       case MapBitmapScaling.none:
         break;
     }
+
     return icon;
+  }
+
+  if (bitmapDescriptor is PinConfig) {
+    final gmaps.PinElementOptions options = gmaps.PinElementOptions()
+      ..background = bitmapDescriptor.backgroundColor != null
+          ? _getCssColor(bitmapDescriptor.backgroundColor!)
+          : null
+      ..borderColor = bitmapDescriptor.borderColor != null
+          ? _getCssColor(bitmapDescriptor.borderColor!)
+          : null
+      ..glyphColor = bitmapDescriptor.glyph?.color != null
+          ? _getCssColor(bitmapDescriptor.glyph!.color!)
+          : null;
+
+    final Glyph? glyph = bitmapDescriptor.glyph;
+    if (glyph != null) {
+      if (glyph.text != null) {
+        // Set glyph text and text color
+        final web.Element element = document.createElement('p');
+        element.innerHTML = glyph.text!.toJS;
+        if (glyph.textColor != null) {
+          element.setAttribute(
+            'style',
+            'color: ${_getCssColor(bitmapDescriptor.glyph!.textColor!)}',
+          );
+        }
+
+        options.glyph = element;
+      } else if (glyph.bitmapDescriptor != null) {
+        // Create glyph from bitmap
+        final Node? glyphBitmap =
+            await _gmIconFromBitmapDescriptor(glyph.bitmapDescriptor!);
+        options.glyph = glyphBitmap;
+      }
+    }
+
+    return gmaps.PinElement(options).element;
   }
 
   // The following code is for the deprecated BitmapDescriptor.fromBytes
@@ -408,14 +448,15 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
     assert(iconConfig.length >= 2);
     // iconConfig[2] contains the DPIs of the screen, but that information is
     // already encoded in the iconConfig[1]
-    icon = gmaps.Icon()
-      ..url = ui_web.assetManager.getAssetUrl(iconConfig[1]! as String);
+    icon = document.createElement('img')
+      ..setAttribute(
+        'src',
+        ui_web.assetManager.getAssetUrl(iconConfig[1]! as String),
+      );
 
-    final gmaps.Size? size = _gmSizeFromIconConfig(iconConfig, 3);
+    final Size? size = _gmSizeFromIconConfig(iconConfig, 3);
     if (size != null) {
-      icon
-        ..size = size
-        ..scaledSize = size;
+      _setIconSize(size: size, icon: icon);
     }
   } else if (iconConfig[0] == 'fromBytes') {
     // Grab the bytes, and put them into a blob
@@ -432,13 +473,12 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
     // See https://github.com/dart-lang/web/issues/180
     blob = Blob(<JSUint8Array>[(bytes as Uint8List).toJS].toJS);
 
-    icon = gmaps.Icon()..url = URL.createObjectURL(blob as JSObject);
+    icon = document.createElement('img')
+      ..setAttribute('src', URL.createObjectURL(blob as JSObject));
 
-    final gmaps.Size? size = _gmSizeFromIconConfig(iconConfig, 2);
+    final Size? size = _gmSizeFromIconConfig(iconConfig, 2);
     if (size != null) {
-      icon
-        ..size = size
-        ..scaledSize = size;
+      _setIconSize(size: size, icon: icon);
     }
   }
   return icon;
@@ -446,21 +486,40 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
 
 // Computes the options for a new [gmaps.Marker] from an incoming set of options
 // [marker], and the existing marker registered with the map: [currentMarker].
-Future<gmaps.MarkerOptions> _markerOptionsFromMarker(
+Future<O> _markerOptionsFromMarker<T, O>(
   Marker marker,
-  gmaps.Marker? currentMarker,
+  T? currentMarker,
 ) async {
-  return gmaps.MarkerOptions()
-    ..position = gmaps.LatLng(
-      marker.position.latitude,
-      marker.position.longitude,
-    )
-    ..title = sanitizeHtml(marker.infoWindow.title ?? '')
-    ..zIndex = marker.zIndex
-    ..visible = marker.visible
-    ..opacity = marker.alpha
-    ..draggable = marker.draggable
-    ..icon = await _gmIconFromBitmapDescriptor(marker.icon);
+  if (marker is AdvancedMarker) {
+    final gmaps.AdvancedMarkerElementOptions options =
+        gmaps.AdvancedMarkerElementOptions()
+          ..collisionBehavior = _markerCollisionBehaviorToGmCollisionBehavior(
+            marker.collisionBehavior,
+          )
+          ..content = await _gmIconFromBitmapDescriptor(marker.icon)
+          ..position = gmaps.LatLng(
+            marker.position.latitude,
+            marker.position.longitude,
+          )
+          ..title = sanitizeHtml(marker.infoWindow.title ?? '')
+          ..zIndex = marker.zIndex;
+    // FIXME alpha and visibility
+    return options as O;
+  } else {
+    final gmaps.MarkerOptions options = gmaps.MarkerOptions()
+      ..position = gmaps.LatLng(
+        marker.position.latitude,
+        marker.position.longitude,
+      )
+      ..icon = await _gmIconFromBitmapDescriptor(marker.icon)
+      ..title = sanitizeHtml(marker.infoWindow.title ?? '')
+      ..zIndex = marker.zIndex
+      ..visible = marker.visible
+      ..opacity = marker.alpha
+      ..draggable = marker.draggable;
+    return options as O;
+  }
+
   // TODO(ditman): Compute anchor properly, otherwise infowindows attach to the wrong spot.
   // Flat and Rotation are not supported directly on the web.
 }
@@ -704,4 +763,16 @@ gmaps.LatLng _pixelToLatLng(gmaps.Map map, int x, int y) {
       gmaps.Point((x / scale) + bottomLeft.x, (y / scale) + topRight.y);
 
   return projection.fromPointToLatLng(point)!;
+}
+
+gmaps.CollisionBehavior _markerCollisionBehaviorToGmCollisionBehavior(
+  MarkerCollisionBehavior markerCollisionBehavior,
+) {
+  return switch (markerCollisionBehavior) {
+    MarkerCollisionBehavior.required => gmaps.CollisionBehavior.REQUIRED,
+    MarkerCollisionBehavior.optionalAndHidesLowerPriority =>
+      gmaps.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY,
+    MarkerCollisionBehavior.requiredAndHidesOptional =>
+      gmaps.CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL,
+  };
 }

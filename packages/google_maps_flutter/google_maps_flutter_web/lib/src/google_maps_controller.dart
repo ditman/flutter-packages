@@ -37,11 +37,33 @@ class GoogleMapController {
     _heatmapsController = HeatmapsController();
     _polygonsController = PolygonsController(stream: _streamController);
     _polylinesController = PolylinesController(stream: _streamController);
-    _clusterManagersController =
-        ClusterManagersController(stream: _streamController);
-    _markersController = MarkersController(
-        stream: _streamController,
-        clusterManagersController: _clusterManagersController!);
+    _clusterManagersController = _markers is Set<AdvancedMarker>
+        ? ClusterManagersController<gmaps.AdvancedMarkerElement>(
+            stream: _streamController)
+        : ClusterManagersController<gmaps.Marker>(stream: _streamController);
+
+    // Check if all markers are of the same type. Mixing marker types is not
+    // allowed
+    final int markerType =
+        _markers.map((Marker e) => e.runtimeType).toSet().length;
+    if (markerType > 1) {
+      throw ArgumentError(
+        'All markers must be of the same type (e.g. AdvancedMarker or Marker).',
+      );
+    }
+
+    _markersController = _markers is Set<AdvancedMarker>
+        ? MarkersController<gmaps.AdvancedMarkerElement,
+            gmaps.AdvancedMarkerElementOptions>(
+            stream: _streamController,
+            clusterManagersController: _clusterManagersController!
+                as ClusterManagersController<gmaps.AdvancedMarkerElement>,
+          )
+        : MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
+            stream: _streamController,
+            clusterManagersController: _clusterManagersController!
+                as ClusterManagersController<gmaps.Marker>,
+          );
     _tileOverlaysController = TileOverlaysController();
     _updateStylesFromConfiguration(mapConfiguration);
 
@@ -128,8 +150,8 @@ class GoogleMapController {
   HeatmapsController? _heatmapsController;
   PolygonsController? _polygonsController;
   PolylinesController? _polylinesController;
-  MarkersController? _markersController;
-  ClusterManagersController? _clusterManagersController;
+  MarkersController<dynamic, dynamic>? _markersController;
+  ClusterManagersController<dynamic>? _clusterManagersController;
   TileOverlaysController? _tileOverlaysController;
 
   // Keeps track if _attachGeometryControllers has been called or not.
@@ -140,7 +162,7 @@ class GoogleMapController {
 
   /// The ClusterManagersController of this Map. Only for integration testing.
   @visibleForTesting
-  ClusterManagersController? get clusterManagersController =>
+  ClusterManagersController<dynamic>? get clusterManagersController =>
       _clusterManagersController;
 
   /// Overrides certain properties to install mocks defined during testing.
@@ -148,12 +170,12 @@ class GoogleMapController {
   void debugSetOverrides({
     DebugCreateMapFunction? createMap,
     DebugSetOptionsFunction? setOptions,
-    MarkersController? markers,
+    MarkersController<dynamic, dynamic>? markers,
     CirclesController? circles,
     HeatmapsController? heatmaps,
     PolygonsController? polygons,
     PolylinesController? polylines,
-    ClusterManagersController? clusterManagers,
+    ClusterManagersController<dynamic>? clusterManagers,
     TileOverlaysController? tileOverlays,
   }) {
     _overrideCreateMap = createMap;
@@ -405,7 +427,7 @@ class GoogleMapController {
         await Future<gmaps.LatLngBounds?>.value(_googleMap!.bounds) ??
             _nullGmapsLatLngBounds;
 
-    return gmLatLngBoundsTolatLngBounds(bounds);
+    return gmLatLngBoundsToLatLngBounds(bounds);
   }
 
   /// Returns the [ScreenCoordinate] for a given viewport [LatLng].

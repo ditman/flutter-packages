@@ -306,6 +306,13 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
     return _map(mapId).lastStyleError;
   }
 
+  @override
+  Future<bool> isAdvancedMarkersAvailable({required int mapId}) async {
+    // The web implementation of the plugin always supports advanced markers.
+    // Legacy markers are deprecated
+    return true;
+  }
+
   /// Disposes of the current map. It can't be used afterwards!
   @override
   void dispose({required int mapId}) {
