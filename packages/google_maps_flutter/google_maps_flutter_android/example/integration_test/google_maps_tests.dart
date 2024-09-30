@@ -1274,7 +1274,7 @@ void googleMapsTests() {
             onMapCreated: (ExampleGoogleMapController controller) {
               mapIdCompleter.complete(controller.mapId);
             },
-            cloudMapId: _kCloudMapId,
+            mapId: _kCloudMapId,
           ),
         ),
       );

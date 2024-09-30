@@ -35,7 +35,7 @@ class MapConfiguration {
     this.indoorViewEnabled,
     this.trafficEnabled,
     this.buildingsEnabled,
-    this.cloudMapId,
+    this.mapId,
     this.style,
   });
 
@@ -112,7 +112,7 @@ class MapConfiguration {
   ///
   /// See https://developers.google.com/maps/documentation/get-map-id
   /// for more details.
-  final String? cloudMapId;
+  final String? mapId;
 
   /// Locally configured JSON style.
   ///
@@ -179,7 +179,7 @@ class MapConfiguration {
           trafficEnabled != other.trafficEnabled ? trafficEnabled : null,
       buildingsEnabled:
           buildingsEnabled != other.buildingsEnabled ? buildingsEnabled : null,
-      cloudMapId: cloudMapId != other.cloudMapId ? cloudMapId : null,
+      mapId: mapId != other.mapId ? mapId : null,
       style: style != other.style ? style : null,
     );
   }
@@ -212,7 +212,7 @@ class MapConfiguration {
       indoorViewEnabled: diff.indoorViewEnabled ?? indoorViewEnabled,
       trafficEnabled: diff.trafficEnabled ?? trafficEnabled,
       buildingsEnabled: diff.buildingsEnabled ?? buildingsEnabled,
-      cloudMapId: diff.cloudMapId ?? cloudMapId,
+      mapId: diff.mapId ?? mapId,
       style: diff.style ?? style,
     );
   }
@@ -239,7 +239,7 @@ class MapConfiguration {
       indoorViewEnabled == null &&
       trafficEnabled == null &&
       buildingsEnabled == null &&
-      cloudMapId == null &&
+      mapId == null &&
       style == null;
 
   @override
@@ -271,7 +271,7 @@ class MapConfiguration {
         indoorViewEnabled == other.indoorViewEnabled &&
         trafficEnabled == other.trafficEnabled &&
         buildingsEnabled == other.buildingsEnabled &&
-        cloudMapId == other.cloudMapId &&
+        mapId == other.mapId &&
         style == other.style;
   }
 
@@ -297,7 +297,7 @@ class MapConfiguration {
         indoorViewEnabled,
         trafficEnabled,
         buildingsEnabled,
-        cloudMapId,
+        mapId,
         style,
       ]);
 }

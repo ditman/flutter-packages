@@ -335,7 +335,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
           Expanded(
             child: GoogleMap(
               // ignore: avoid_redundant_argument_values
-              cloudMapId: cloudMapId,
+              mapId: mapId,
               onMapCreated: _onMapCreated,
               initialCameraPosition: const CameraPosition(
                 target: LatLng(-33.852, 151.211),

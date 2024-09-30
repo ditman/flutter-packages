@@ -58,7 +58,7 @@ void main() {
       expect(updated.liteModeEnabled, isNot(null));
       expect(updated.padding, isNot(null));
       expect(updated.trafficEnabled, isNot(null));
-      expect(updated.cloudMapId, null);
+      expect(updated.mapId, null);
     });
 
     test('handle webGestureHandling', () async {
@@ -395,7 +395,7 @@ void main() {
     });
 
     test('handle cloudMapId', () async {
-      const MapConfiguration diff = MapConfiguration(cloudMapId: _kCloudMapId);
+      const MapConfiguration diff = MapConfiguration(mapId: _kCloudMapId);
 
       const MapConfiguration empty = MapConfiguration();
       final MapConfiguration updated = diffBase.applyDiff(diff);
@@ -405,7 +405,7 @@ void main() {
       // The diff from empty options should be the diff itself.
       expect(diff.diffFrom(empty), diff);
       // A diff applied to non-empty options should update that field.
-      expect(updated.cloudMapId, _kCloudMapId);
+      expect(updated.mapId, _kCloudMapId);
       // The hash code should change.
       expect(empty.hashCode, isNot(diff.hashCode));
     });
@@ -555,7 +555,7 @@ void main() {
     });
 
     test('is false with cloudMapId', () async {
-      const MapConfiguration diff = MapConfiguration(cloudMapId: _kCloudMapId);
+      const MapConfiguration diff = MapConfiguration(mapId: _kCloudMapId);
 
       expect(diff.isEmpty, false);
     });

@@ -39,7 +39,7 @@ void main() {
         indoorViewEnabled: false,
         trafficEnabled: false,
         buildingsEnabled: false,
-        cloudMapId: _kCloudMapId);
+        mapId: _kCloudMapId);
 
     final Map<String, Object> json = jsonForMapConfiguration(config);
 
