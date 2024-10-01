@@ -27,6 +27,10 @@ import 'scrolling_map.dart';
 import 'snapshot.dart';
 import 'tile_overlay.dart';
 
+/// Map Id is required for some examples to use advanced markers
+// ignore: unnecessary_nullable_for_final_variable_declarations, unreachable_from_main
+const String? mapId = null;
+
 final List<GoogleMapExampleAppPage> _allPages = <GoogleMapExampleAppPage>[
   const MapUiPage(),
   const MapCoordinatesPage(),

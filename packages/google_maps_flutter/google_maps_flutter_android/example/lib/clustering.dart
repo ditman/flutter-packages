@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
 import 'example_google_map.dart';
+import 'main.dart';
 import 'page.dart';
 
 /// Page for demonstrating marker clustering support.
@@ -71,7 +72,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
       <ClusterManagerId, ClusterManager>{};
 
   /// Map of markers with identifier as the key.
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  Map<MarkerId, AdvancedMarker> markers = <MarkerId, AdvancedMarker>{};
 
   /// Id of the currently selected marker.
   MarkerId? selectedMarker;
@@ -96,17 +97,17 @@ class ClusteringBodyState extends State<ClusteringBody> {
   }
 
   void _onMarkerTapped(MarkerId markerId) {
-    final Marker? tappedMarker = markers[markerId];
+    final AdvancedMarker? tappedMarker = markers[markerId];
     if (tappedMarker != null) {
       setState(() {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
-          final Marker resetOld = markers[previousMarkerId]!
+          final AdvancedMarker resetOld = markers[previousMarkerId]!
               .copyWith(iconParam: BitmapDescriptor.defaultMarker);
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
-        final Marker newMarker = tappedMarker.copyWith(
+        final AdvancedMarker newMarker = tappedMarker.copyWith(
           iconParam: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueGreen,
           ),
@@ -143,7 +144,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
   void _removeClusterManager(ClusterManager clusterManager) {
     setState(() {
       // Remove markers managed by cluster manager to be removed.
-      markers.removeWhere((MarkerId key, Marker marker) =>
+      markers.removeWhere((MarkerId key, AdvancedMarker marker) =>
           marker.clusterManagerId == clusterManager.clusterManagerId);
       // Remove cluster manager.
       clusterManagers.remove(clusterManager.clusterManagerId);
@@ -165,7 +166,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
       final double clusterManagerLongitudeOffset =
           clusterManagerIndex * _clusterManagerLongitudeOffset;
 
-      final Marker marker = Marker(
+      final AdvancedMarker marker = AdvancedMarker(
         clusterManagerId: clusterManager.clusterManagerId,
         markerId: markerId,
         position: LatLng(
@@ -194,7 +195,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
 
   void _changeMarkersAlpha() {
     for (final MarkerId markerId in markers.keys) {
-      final Marker marker = markers[markerId]!;
+      final AdvancedMarker marker = markers[markerId]!;
       final double current = marker.alpha;
       markers[markerId] = marker.copyWith(
         alphaParam: current == _fullyVisibleAlpha
@@ -214,9 +215,11 @@ class ClusteringBodyState extends State<ClusteringBody> {
       children: <Widget>[
         Expanded(
           child: ExampleGoogleMap(
+            // ignore: avoid_redundant_argument_values
+            mapId: mapId,
             onMapCreated: _onMapCreated,
             initialCameraPosition: initialCameraPosition,
-            markers: Set<Marker>.of(markers.values),
+            markers: Set<AdvancedMarker>.of(markers.values),
             clusterManagers: Set<ClusterManager>.of(clusterManagers.values),
           ),
         ),
