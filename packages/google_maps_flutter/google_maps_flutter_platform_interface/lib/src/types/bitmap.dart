@@ -333,6 +333,18 @@ abstract class BitmapDescriptor {
     );
   }
 
+  /// Creates a [BitmapDescriptor] from a pin configuration.
+  ///
+  /// This methods helps customizing default marker pins. Works with
+  /// [AdvancedMarker]s.
+  ///
+  /// [backgroundColor] is the color of the pin's background.
+  /// [borderColor] is the color of the pin's border.
+  /// [glyph] is the pin's glyph to be displayed on the pin.
+  ///
+  /// See [PinConfig] for more information on the parameters.
+  ///
+  /// Returns a new [PinConfig] instance.
   static BitmapDescriptor pinConfig({
     Color? backgroundColor,
     Color? borderColor,

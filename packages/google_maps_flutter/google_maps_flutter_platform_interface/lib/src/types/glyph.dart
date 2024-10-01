@@ -18,7 +18,7 @@ class Glyph {
     return Glyph._(bitmapDescriptor: bitmapDescriptor);
   }
 
-  /// Create a glyph with a text
+  /// Create a glyph with a [text] of the specified [textColor]
   factory Glyph.text(String text, {Color? textColor}) {
     return Glyph._(
       text: text,
