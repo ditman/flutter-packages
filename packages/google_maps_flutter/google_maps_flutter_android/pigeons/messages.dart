@@ -451,7 +451,7 @@ class PlatformMapConfiguration {
     required this.trafficEnabled,
     required this.buildingsEnabled,
     required this.liteModeEnabled,
-    required this.cloudMapId,
+    required this.mapId,
     required this.style,
   });
 
@@ -473,7 +473,7 @@ class PlatformMapConfiguration {
   final bool? trafficEnabled;
   final bool? buildingsEnabled;
   final bool? liteModeEnabled;
-  final String? cloudMapId;
+  final String? mapId;
   final String? style;
 }
 
