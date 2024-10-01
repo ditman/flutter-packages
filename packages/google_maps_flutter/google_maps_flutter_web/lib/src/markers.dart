@@ -137,15 +137,14 @@ class MarkersController<T, O> extends GeometryController {
         _removeMarker(marker.markerId);
         await _addMarker(marker);
       } else {
-        final gmaps.AdvancedMarkerElementOptions markerOptions =
-            await _markerOptionsFromMarker(
+        final O markerOptions = await _markerOptionsFromMarker(
           marker,
           markerController.marker,
         );
         final gmaps.InfoWindowOptions? infoWindow =
             _infoWindowOptionsFromMarker(marker);
         markerController.update(
-          markerOptions as O,
+          markerOptions,
           newInfoWindowContent: infoWindow?.content as HTMLElement?,
         );
       }

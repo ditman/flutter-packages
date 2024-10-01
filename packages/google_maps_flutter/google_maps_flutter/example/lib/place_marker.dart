@@ -68,14 +68,12 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
           final AdvancedMarker resetOld = markers[previousMarkerId]!
-              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
+              .copyWith(iconParam: _getDefaultMarkerIcon(isSelected: false));
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
         final AdvancedMarker newMarker = tappedMarker.copyWith(
-          iconParam: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueGreen,
-          ),
+          iconParam: _getDefaultMarkerIcon(isSelected: true),
         );
         markers[markerId] = newMarker;
 
@@ -130,8 +128,6 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
 
-    final Color markerColor =
-        _markerIdCounter.isEven ? Colors.green : Colors.red;
     final AdvancedMarker marker = AdvancedMarker(
       markerId: markerId,
       position: LatLng(
@@ -146,15 +142,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
       collisionBehavior: _markerIdCounter.isEven
           ? MarkerCollisionBehavior.required
           : MarkerCollisionBehavior.optionalAndHidesLowerPriority,
-      alpha: _markerIdCounter.isEven ? 1.0 : 0.7,
-      icon: BitmapDescriptor.pinConfig(
-        backgroundColor: markerColor,
-        borderColor: Colors.white,
-        glyph: Glyph.text(
-          _markerIdCounter.isEven ? 'A' : 'B',
-          textColor: Colors.white,
-        ),
-      ),
+      icon: _getDefaultMarkerIcon(isSelected: false),
     );
 
     setState(() {
@@ -293,6 +281,17 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     const Size canvasSize = Size(48, 48);
     final ByteData bytes = await createCustomMarkerIconImage(size: canvasSize);
     return BytesMapBitmap(bytes.buffer.asUint8List());
+  }
+
+  BitmapDescriptor _getDefaultMarkerIcon({required bool isSelected}) {
+    return BitmapDescriptor.pinConfig(
+      backgroundColor: isSelected ? Colors.blue : Colors.green,
+      borderColor: Colors.white,
+      glyph: Glyph.text(
+        'Hey',
+        textColor: Colors.white,
+      ),
+    );
   }
 
   @override

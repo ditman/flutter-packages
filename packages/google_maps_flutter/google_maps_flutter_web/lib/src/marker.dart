@@ -78,21 +78,24 @@ class MarkerController<T, O> {
   }) {
     assert(_marker != null, 'Cannot `update` Marker after calling `remove`.');
 
-    if (O is gmaps.MarkerOptions) {
-      (_marker! as gmaps.Marker).options = options as gmaps.MarkerOptions;
-    } else if (O is gmaps.AdvancedMarkerElementOptions) {
-      options as gmaps.AdvancedMarkerElementOptions;
-      final gmaps.AdvancedMarkerElement marker =
-          _marker! as gmaps.AdvancedMarkerElement;
-      marker.collisionBehavior = options.collisionBehavior;
-      marker.content = options.content;
-      marker.gmpClickable = options.gmpClickable;
-      marker.gmpDraggable = options.gmpDraggable;
-      marker.map = options.map;
-      marker.position = options.position;
-      marker.title = options.title ?? '';
-      marker.zIndex = options.zIndex;
-    }
+    _doOnMarkerType(
+      marker: _marker,
+      legacy: (gmaps.Marker marker) {
+        marker.options = options as gmaps.MarkerOptions;
+      },
+      advanced: (gmaps.AdvancedMarkerElement marker) {
+        options as gmaps.AdvancedMarkerElementOptions;
+        final gmaps.AdvancedMarkerElement marker =
+            _marker! as gmaps.AdvancedMarkerElement;
+        marker.collisionBehavior = options.collisionBehavior;
+        marker.content = options.content;
+        marker.gmpClickable = options.gmpClickable;
+        marker.gmpDraggable = options.gmpDraggable;
+        marker.position = options.position;
+        marker.title = options.title ?? '';
+        marker.zIndex = options.zIndex;
+      },
+    );
 
     if (_infoWindow != null && newInfoWindowContent != null) {
       _infoWindow.content = newInfoWindowContent;
