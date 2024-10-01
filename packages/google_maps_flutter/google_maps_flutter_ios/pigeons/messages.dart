@@ -400,7 +400,7 @@ class PlatformMapConfiguration {
     required this.indoorViewEnabled,
     required this.trafficEnabled,
     required this.buildingsEnabled,
-    required this.cloudMapId,
+    required this.mapId,
     required this.style,
   });
 
@@ -419,7 +419,7 @@ class PlatformMapConfiguration {
   final bool? indoorViewEnabled;
   final bool? trafficEnabled;
   final bool? buildingsEnabled;
-  final String? cloudMapId;
+  final String? mapId;
   final String? style;
 }
 

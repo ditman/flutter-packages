@@ -1047,7 +1047,7 @@ PlatformMapConfiguration _platformMapConfigurationFromMapConfiguration(
     indoorViewEnabled: config.indoorViewEnabled,
     trafficEnabled: config.trafficEnabled,
     buildingsEnabled: config.buildingsEnabled,
-    cloudMapId: config.cloudMapId,
+    mapId: config.mapId,
     style: config.style,
   );
 }
@@ -1085,7 +1085,7 @@ PlatformMapConfiguration _platformMapConfigurationFromOptionsJson(
     indoorViewEnabled: options['indoorEnabled'] as bool?,
     trafficEnabled: options['trafficEnabled'] as bool?,
     buildingsEnabled: options['buildingsEnabled'] as bool?,
-    cloudMapId: options['cloudMapId'] as String?,
+    mapId: options['mapId'] as String?,
     style: options['style'] as String?,
   );
 }

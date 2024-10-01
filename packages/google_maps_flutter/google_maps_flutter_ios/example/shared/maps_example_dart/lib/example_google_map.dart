@@ -252,7 +252,8 @@ class ExampleGoogleMap extends StatefulWidget {
     this.onCameraIdle,
     this.onTap,
     this.onLongPress,
-    this.cloudMapId,
+    this.mapId,
+    @Deprecated('cloudMapId is deprecated. Use mapId instead') this.cloudMapId,
     this.style,
   });
 
@@ -357,6 +358,13 @@ class ExampleGoogleMap extends StatefulWidget {
   ///
   /// See https://developers.google.com/maps/documentation/get-map-id
   /// for more details.
+  final String? mapId;
+
+  /// Identifier that's associated with a specific cloud-based map style.
+  ///
+  /// See https://developers.google.com/maps/documentation/get-map-id
+  /// for more details.
+  @Deprecated('cloudMapId is deprecated. Use mapId instead')
   final String? cloudMapId;
 
   /// The locally configured style for the map.
@@ -563,7 +571,7 @@ MapConfiguration _configurationFromMapWidget(ExampleGoogleMap map) {
     indoorViewEnabled: map.indoorViewEnabled,
     trafficEnabled: map.trafficEnabled,
     buildingsEnabled: map.buildingsEnabled,
-    cloudMapId: map.cloudMapId,
+    mapId: map.mapId ?? map.cloudMapId,
     style: map.style,
   );
 }

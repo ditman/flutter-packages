@@ -977,8 +977,7 @@ void main() {
                 MapsApi.pigeonChannelCodec.decodeMessage(byteData)
                     as PlatformMapViewCreationParams?;
             if (creationParams != null) {
-              final String? passedMapId =
-                  creationParams.mapConfiguration.cloudMapId;
+              final String? passedMapId = creationParams.mapConfiguration.mapId;
               if (passedMapId != null) {
                 passedCloudMapIdCompleter.complete(passedMapId);
               }
@@ -998,7 +997,7 @@ void main() {
                 initialCameraPosition:
                     CameraPosition(target: LatLng(0, 0), zoom: 1),
                 textDirection: TextDirection.ltr),
-            mapConfiguration: const MapConfiguration(cloudMapId: cloudMapId))));
+            mapConfiguration: const MapConfiguration(mapId: cloudMapId))));
 
     expect(
       await passedCloudMapIdCompleter.future,

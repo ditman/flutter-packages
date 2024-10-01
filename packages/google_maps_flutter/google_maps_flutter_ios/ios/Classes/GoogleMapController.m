@@ -153,9 +153,9 @@
   GMSMapViewOptions *options = [[GMSMapViewOptions alloc] init];
   options.frame = frame;
   options.camera = camera;
-  NSString *cloudMapId = creationParameters.mapConfiguration.cloudMapId;
-  if (cloudMapId) {
-    options.mapID = [GMSMapID mapIDWithIdentifier:cloudMapId];
+  NSString *mapId = creationParameters.mapConfiguration.mapId;
+  if (mapId) {
+    options.mapID = [GMSMapID mapIDWithIdentifier:mapId];
   }
 
   GMSMapView *mapView = [[GMSMapView alloc] initWithOptions:options];
