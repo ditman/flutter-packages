@@ -567,6 +567,13 @@ class GoogleMapController {
     return _markersController?.isInfoWindowShown(markerId) ?? false;
   }
 
+  /// Returns true if this map supports [AdvancedMarker]s
+  bool isAdvancedMarkersAvailable() {
+    assert(_googleMap != null, 'Cannot get map capabilities of a null map.');
+
+    return _googleMap!.mapCapabilities.isAdvancedMarkersAvailable ?? false;
+  }
+
   // Cleanup
 
   /// Disposes of this controller and its resources.
