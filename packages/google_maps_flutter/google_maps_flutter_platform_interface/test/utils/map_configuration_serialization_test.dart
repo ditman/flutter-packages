@@ -72,7 +72,7 @@ void main() {
       'indoorEnabled': false,
       'trafficEnabled': false,
       'buildingsEnabled': false,
-      'cloudMapId': _kCloudMapId
+      'mapId': _kCloudMapId
     });
   });
 }
