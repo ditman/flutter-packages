@@ -97,6 +97,72 @@ class AdvancedMarker extends Marker {
       collisionBehavior: collisionBehaviorParam ?? collisionBehavior,
     );
   }
+
+  /// Converts this object to something serializable in JSON.
+  @override
+  Object toJson() {
+    final Map<String, Object> json = <String, Object>{};
+
+    void addIfPresent(String fieldName, Object? value) {
+      if (value != null) {
+        json[fieldName] = value;
+      }
+    }
+
+    addIfPresent('markerId', markerId.value);
+    addIfPresent('alpha', alpha);
+    addIfPresent('anchor', offsetToJson(anchor));
+    addIfPresent('consumeTapEvents', consumeTapEvents);
+    addIfPresent('draggable', draggable);
+    addIfPresent('flat', flat);
+    addIfPresent('icon', icon.toJson());
+    addIfPresent('infoWindow', infoWindow.toJson());
+    addIfPresent('position', position.toJson());
+    addIfPresent('rotation', rotation);
+    addIfPresent('visible', visible);
+    addIfPresent('zIndex', zIndex);
+    addIfPresent('clusterManagerId', clusterManagerId?.value);
+    addIfPresent('collisionBehavior', collisionBehavior.index);
+    return json;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is AdvancedMarker &&
+        markerId == other.markerId &&
+        alpha == other.alpha &&
+        anchor == other.anchor &&
+        consumeTapEvents == other.consumeTapEvents &&
+        draggable == other.draggable &&
+        flat == other.flat &&
+        icon == other.icon &&
+        infoWindow == other.infoWindow &&
+        position == other.position &&
+        rotation == other.rotation &&
+        visible == other.visible &&
+        zIndex == other.zIndex &&
+        clusterManagerId == other.clusterManagerId &&
+        collisionBehavior == other.collisionBehavior;
+  }
+
+  @override
+  int get hashCode => markerId.hashCode;
+
+  @override
+  String toString() {
+    return 'Marker{markerId: $markerId, alpha: $alpha, anchor: $anchor, '
+        'consumeTapEvents: $consumeTapEvents, draggable: $draggable, flat: $flat, '
+        'icon: $icon, infoWindow: $infoWindow, position: $position, rotation: $rotation, '
+        'visible: $visible, zIndex: $zIndex, onTap: $onTap, onDragStart: $onDragStart, '
+        'onDrag: $onDrag, onDragEnd: $onDragEnd, clusterManagerId: $clusterManagerId, '
+        'collisionBehavior: $collisionBehavior}';
+  }
 }
 
 /// Indicates how the marker behaves when it collides with other markers

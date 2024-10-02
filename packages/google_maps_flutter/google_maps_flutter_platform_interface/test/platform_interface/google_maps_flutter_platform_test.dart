@@ -121,6 +121,16 @@ void main() {
         expect(await platform.getStyleError(mapId: 0), null);
       },
     );
+
+    test(
+      'default implementation of isAdvancedMarkersAvailable throws Unimplemented Error',
+      () async {
+        final GoogleMapsFlutterPlatform platform =
+            BuildViewGoogleMapsFlutterPlatform();
+        expect(() => platform.isAdvancedMarkersAvailable(mapId: 0),
+            throwsUnimplementedError);
+      },
+    );
   });
 }
 
