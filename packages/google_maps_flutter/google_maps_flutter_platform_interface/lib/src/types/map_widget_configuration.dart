@@ -19,6 +19,7 @@ class MapWidgetConfiguration {
     required this.initialCameraPosition,
     required this.textDirection,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
+    this.markerType = MarkerType.legacy,
   });
 
   /// The initial camera position to display.
@@ -29,4 +30,20 @@ class MapWidgetConfiguration {
 
   /// Gesture recognizers to add to the widget.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+
+  /// The type of marker that map should use.
+  ///
+  /// Advanced and legacy markers could be handled differently by platform
+  /// implementations. This property indicates which type of marker should be
+  /// used.
+  final MarkerType markerType;
+}
+
+/// Indicates the type of marker that map should use
+enum MarkerType {
+  /// Represents the default marker type, [Marker]
+  legacy,
+
+  /// Represents the advanced marker type, [AdvancedMarker]
+  advanced,
 }

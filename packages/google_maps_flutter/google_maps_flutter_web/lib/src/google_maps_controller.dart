@@ -37,33 +37,54 @@ class GoogleMapController {
     _heatmapsController = HeatmapsController();
     _polygonsController = PolygonsController(stream: _streamController);
     _polylinesController = PolylinesController(stream: _streamController);
-    _clusterManagersController = _markers is Set<AdvancedMarker>
-        ? ClusterManagersController<gmaps.AdvancedMarkerElement>(
-            stream: _streamController)
-        : ClusterManagersController<gmaps.Marker>(stream: _streamController);
 
     // Check if all markers are of the same type. Mixing marker types is not
     // allowed
-    final int markerType =
-        _markers.map((Marker e) => e.runtimeType).toSet().length;
-    if (markerType > 1) {
-      throw ArgumentError(
-        'All markers must be of the same type (e.g. AdvancedMarker or Marker).',
-      );
+    final Set<Type> markerTypes =
+        _markers.map((Marker e) => e.runtimeType).toSet();
+    if (markerTypes.isNotEmpty) {
+      assert(markerTypes.length == 1, 'All markers must be of the same type.');
+
+      switch (widgetConfiguration.markerType) {
+        case MarkerType.legacy:
+          assert(
+            markerTypes.first is Marker,
+            'All markers must be of type Marker because '
+            'widgetConfiguration.markerType is MarkerType.legacy',
+          );
+        case MarkerType.advanced:
+          assert(
+            markerTypes.first is AdvancedMarker,
+            'All markers must be of type AdvancedMarker because '
+            'widgetConfiguration.markerType is MarkerType.advanced',
+          );
+      }
     }
 
-    _markersController = _markers is Set<AdvancedMarker>
-        ? MarkersController<gmaps.AdvancedMarkerElement,
+    // Advanced and legacy markers are handled differently so markers controller
+    // and cluster manager need be initialized with the correct marker type
+    _clusterManagersController = switch (widgetConfiguration.markerType) {
+      MarkerType.legacy =>
+        ClusterManagersController<gmaps.Marker>(stream: _streamController),
+      MarkerType.advanced =>
+        ClusterManagersController<gmaps.AdvancedMarkerElement>(
+            stream: _streamController),
+    };
+
+    _markersController = switch (widgetConfiguration.markerType) {
+      MarkerType.legacy => MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
+          stream: _streamController,
+          clusterManagersController: _clusterManagersController!
+              as ClusterManagersController<gmaps.Marker>,
+        ),
+      MarkerType.advanced => MarkersController<gmaps.AdvancedMarkerElement,
             gmaps.AdvancedMarkerElementOptions>(
-            stream: _streamController,
-            clusterManagersController: _clusterManagersController!
-                as ClusterManagersController<gmaps.AdvancedMarkerElement>,
-          )
-        : MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
-            stream: _streamController,
-            clusterManagersController: _clusterManagersController!
-                as ClusterManagersController<gmaps.Marker>,
-          );
+          stream: _streamController,
+          clusterManagersController: _clusterManagersController!
+              as ClusterManagersController<gmaps.AdvancedMarkerElement>,
+        ),
+    };
+
     _tileOverlaysController = TileOverlaysController();
     _updateStylesFromConfiguration(mapConfiguration);
 
