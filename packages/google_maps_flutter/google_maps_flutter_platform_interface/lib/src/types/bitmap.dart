@@ -983,6 +983,7 @@ class BytesMapBitmap extends MapBitmap {
 }
 
 /// Represents a [BitmapDescriptor] that is created from a pin configuration.
+/// Can only be used with [AdvancedMarker]s.
 ///
 /// The [backgroundColor] and [borderColor] are used to define the color of the
 /// standard pin marker.

@@ -766,11 +766,15 @@ void main() {
     () async {
       final GoogleMapsFlutterAndroid maps = GoogleMapsFlutterAndroid();
       maps.useAndroidViewSurface = false;
-      final Widget widget = maps.buildViewWithConfiguration(1, (int _) {},
-          widgetConfiguration: const MapWidgetConfiguration(
-              initialCameraPosition:
-                  CameraPosition(target: LatLng(0, 0), zoom: 1),
-              textDirection: TextDirection.ltr));
+      final Widget widget = maps.buildViewWithConfiguration(
+        1,
+        (int _) {},
+        widgetConfiguration: const MapWidgetConfiguration(
+          initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.legacy,
+        ),
+      );
 
       expect(widget, isA<AndroidView>());
     },
@@ -1010,9 +1014,10 @@ void main() {
 
     final Widget widget = maps.buildViewWithConfiguration(1, (int _) {},
         widgetConfiguration: const MapWidgetConfiguration(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(0, 0), zoom: 1),
-            textDirection: TextDirection.ltr));
+          initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.legacy,
+        ));
 
     expect(widget, isA<PlatformViewLink>());
   });
@@ -1020,11 +1025,15 @@ void main() {
   testWidgets('Defaults to AndroidView', (WidgetTester tester) async {
     final GoogleMapsFlutterAndroid maps = GoogleMapsFlutterAndroid();
 
-    final Widget widget = maps.buildViewWithConfiguration(1, (int _) {},
-        widgetConfiguration: const MapWidgetConfiguration(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(0, 0), zoom: 1),
-            textDirection: TextDirection.ltr));
+    final Widget widget = maps.buildViewWithConfiguration(
+      1,
+      (int _) {},
+      widgetConfiguration: const MapWidgetConfiguration(
+        initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+        textDirection: TextDirection.ltr,
+        markerType: MarkerType.legacy,
+      ),
+    );
 
     expect(widget, isA<AndroidView>());
   });
@@ -1062,9 +1071,10 @@ void main() {
 
     await tester.pumpWidget(maps.buildViewWithConfiguration(1, (int id) {},
         widgetConfiguration: const MapWidgetConfiguration(
-            initialCameraPosition:
-                CameraPosition(target: LatLng(0, 0), zoom: 1),
-            textDirection: TextDirection.ltr),
+          initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.legacy,
+        ),
         mapConfiguration: const MapConfiguration(mapId: cloudMapId)));
 
     expect(

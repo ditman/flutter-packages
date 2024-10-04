@@ -77,6 +77,7 @@ void main() {
             widgetConfiguration: const MapWidgetConfiguration(
               initialCameraPosition: CameraPosition(target: LatLng(0.0, 0.0)),
               textDirection: TextDirection.ltr,
+              markerType: MarkerType.legacy,
             ),
           ),
           isA<Text>(),
@@ -158,6 +159,7 @@ class BuildViewGoogleMapsFlutterPlatform extends GoogleMapsFlutterPlatform {
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers =
         const <Factory<OneSequenceGestureRecognizer>>{},
     Map<String, dynamic> mapOptions = const <String, dynamic>{},
+    MarkerType markerType = MarkerType.legacy,
   }) {
     return const Text('');
   }

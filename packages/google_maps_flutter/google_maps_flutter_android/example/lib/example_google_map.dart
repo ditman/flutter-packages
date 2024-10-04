@@ -250,6 +250,7 @@ class ExampleGoogleMap extends StatefulWidget {
     this.clusterManagers = const <ClusterManager>{},
     this.onCameraMoveStarted,
     this.tileOverlays = const <TileOverlay>{},
+    this.markerType = MarkerType.legacy,
     this.onCameraMove,
     this.onCameraIdle,
     this.onTap,
@@ -370,6 +371,9 @@ class ExampleGoogleMap extends StatefulWidget {
   /// The locally configured style for the map.
   final String? style;
 
+  /// The type of marker to use (legacy or advanced)
+  final MarkerType markerType;
+
   /// Creates a [State] for this [ExampleGoogleMap].
   @override
   State createState() => _ExampleGoogleMapState();
@@ -400,6 +404,7 @@ class _ExampleGoogleMapState extends State<ExampleGoogleMap> {
             TextDirection.ltr,
         initialCameraPosition: widget.initialCameraPosition,
         gestureRecognizers: widget.gestureRecognizers,
+        markerType: widget.markerType,
       ),
       mapObjects: MapObjects(
         markers: widget.markers,

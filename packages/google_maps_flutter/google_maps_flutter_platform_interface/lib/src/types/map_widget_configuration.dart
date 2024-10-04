@@ -18,8 +18,8 @@ class MapWidgetConfiguration {
   const MapWidgetConfiguration({
     required this.initialCameraPosition,
     required this.textDirection,
+    required this.markerType,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-    this.markerType = MarkerType.legacy,
   });
 
   /// The initial camera position to display.

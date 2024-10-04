@@ -31,13 +31,13 @@ class ClusteringBody extends StatefulWidget {
   State<StatefulWidget> createState() => ClusteringBodyState();
 
   /// Create a marker that is later added to a cluster
-  Marker createMarker(
-    MarkerId markerId,
-    ClusterManagerId clusterManagerId,
-    LatLng position,
-    InfoWindow infoWindow,
-    VoidCallback onTap,
-  ) {
+  Marker createMarker({
+    required MarkerId markerId,
+    required ClusterManagerId clusterManagerId,
+    required LatLng position,
+    required InfoWindow infoWindow,
+    required VoidCallback onTap,
+  }) {
     return Marker(
       markerId: markerId,
       clusterManagerId: clusterManagerId,
@@ -186,14 +186,14 @@ class ClusteringBodyState extends State<ClusteringBody> {
           clusterManagerIndex * _clusterManagerLongitudeOffset;
 
       final Marker marker = widget.createMarker(
-        markerId,
-        clusterManager.clusterManagerId,
-        LatLng(
+        markerId: markerId,
+        clusterManagerId: clusterManager.clusterManagerId,
+        position: LatLng(
           center.latitude + _getRandomOffset(),
           center.longitude + _getRandomOffset() + clusterManagerLongitudeOffset,
         ),
-        InfoWindow(title: markerIdVal, snippet: '*'),
-        () => _onMarkerTapped(markerId),
+        infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+        onTap: () => _onMarkerTapped(markerId),
       );
       markers[markerId] = marker;
     }

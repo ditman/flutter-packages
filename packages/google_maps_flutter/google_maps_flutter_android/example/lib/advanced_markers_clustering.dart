@@ -30,13 +30,13 @@ class _AdvancedMarkerClusteringBody extends ClusteringBody {
   String? get mapId => main.mapId;
 
   @override
-  Marker createMarker({
-    required MarkerId markerId,
-    required ClusterManagerId clusterManagerId,
-    required LatLng position,
-    required InfoWindow infoWindow,
-    required VoidCallback onTap,
-  }) {
+  Marker createMarker(
+    MarkerId markerId,
+    ClusterManagerId clusterManagerId,
+    LatLng position,
+    InfoWindow infoWindow,
+    VoidCallback onTap,
+  ) {
     return AdvancedMarker(
       markerId: markerId,
       clusterManagerId: clusterManagerId,

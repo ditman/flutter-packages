@@ -30,37 +30,6 @@ class PlaceMarkerBody extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => PlaceMarkerBodyState();
-
-  /// Return the mapId to use for the GoogleMap
-  String? get mapId => null;
-
-  /// Create a marker with given parameters
-  Marker createMarker(
-    MarkerId markerId,
-    LatLng position,
-    InfoWindow infoWindow,
-    VoidCallback onTap,
-    ValueChanged<LatLng>? onDragEnd,
-    ValueChanged<LatLng>? onDrag,
-  ) {
-    return Marker(
-      markerId: markerId,
-      position: position,
-      infoWindow: infoWindow,
-      onTap: onTap,
-      onDrag: onDrag,
-      onDragEnd: onDragEnd,
-    );
-  }
-
-  /// Perform customizations of the [marker] to mark it as selected or not
-  Marker getSelectedMarker(Marker marker, bool isSelected) {
-    return marker.copyWith(
-      iconParam: isSelected
-          ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
-          : BitmapDescriptor.defaultMarker,
-    );
-  }
 }
 
 typedef MarkerUpdateAction = Marker Function(Marker marker);
@@ -75,9 +44,10 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
   int _markerIdCounter = 1;
   LatLng? markerPosition;
 
-  // ignore: use_setters_to_change_properties
   void _onMapCreated(GoogleMapController controller) {
-    this.controller = controller;
+    setState(() {
+      this.controller = controller;
+    });
   }
 
   @override
@@ -92,11 +62,11 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
           final Marker resetOld =
-              widget.getSelectedMarker(markers[previousMarkerId]!, false);
+              getSelectedMarker(markers[previousMarkerId]!, false);
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
-        final Marker newMarker = widget.getSelectedMarker(tappedMarker, true);
+        final Marker newMarker = getSelectedMarker(tappedMarker, true);
         markers[markerId] = newMarker;
 
         markerPosition = null;
@@ -150,16 +120,16 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
 
-    final Marker marker = widget.createMarker(
-      markerId,
-      LatLng(
+    final Marker marker = createMarker(
+      markerId: markerId,
+      position: LatLng(
         center.latitude + sin(_markerIdCounter * pi / 6.0) / 20.0,
         center.longitude + cos(_markerIdCounter * pi / 6.0) / 20.0,
       ),
-      InfoWindow(title: markerIdVal, snippet: '*'),
-      () => _onMarkerTapped(markerId),
-      (LatLng position) => _onMarkerDrag(markerId, position),
-      (LatLng position) => _onMarkerDragEnd(markerId, position),
+      infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      onTap: () => _onMarkerTapped(markerId),
+      onDrag: (LatLng position) => _onMarkerDrag(markerId, position),
+      onDragEnd: (LatLng position) => _onMarkerDragEnd(markerId, position),
     );
 
     setState(() {
@@ -300,6 +270,40 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     return BytesMapBitmap(bytes.buffer.asUint8List());
   }
 
+  /// Return the mapId to use for the GoogleMap
+  String? get mapId => null;
+
+  /// Create a marker with given parameters
+  Marker createMarker({
+    required MarkerId markerId,
+    required LatLng position,
+    required InfoWindow infoWindow,
+    required VoidCallback onTap,
+    required ValueChanged<LatLng>? onDragEnd,
+    required ValueChanged<LatLng>? onDrag,
+  }) {
+    return Marker(
+      markerId: markerId,
+      position: position,
+      infoWindow: infoWindow,
+      onTap: onTap,
+      onDrag: onDrag,
+      onDragEnd: onDragEnd,
+    );
+  }
+
+  /// Perform customizations of the [marker] to mark it as selected or not
+  Marker getSelectedMarker(Marker marker, bool isSelected) {
+    return marker.copyWith(
+      iconParam: isSelected
+          ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
+          : BitmapDescriptor.defaultMarker,
+    );
+  }
+
+  /// Optional header to be displayed above the map
+  Widget getHeader() => const SizedBox.shrink();
+
   @override
   Widget build(BuildContext context) {
     final MarkerId? selectedId = selectedMarker;
@@ -308,12 +312,12 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          getHeader(),
           Expanded(
             child: GoogleMap(
-              mapId: widget.mapId,
-              markerType: widget.mapId != null
-                  ? MarkerType.advanced
-                  : MarkerType.legacy,
+              mapId: mapId,
+              markerType:
+                  mapId != null ? MarkerType.advanced : MarkerType.legacy,
               onMapCreated: _onMapCreated,
               initialCameraPosition: const CameraPosition(
                 target: LatLng(-33.852, 151.211),
