@@ -726,10 +726,12 @@
   return imageData ? [FlutterStandardTypedData typedDataWithBytes:imageData] : nil;
 }
 
-- (nullable NSNumber *)isAdvancedMarkersAvailable:(FlutterError *_Nullable __autoreleasing *_Nonnull) error {
-    NSUInteger advancedMarkerFlag = self.controller.mapView.mapCapabilities & GMSMapCapabilityFlagsAdvancedMarkers;
-    BOOL boolValue = advancedMarkerFlag != 0;
-    return [NSNumber numberWithBool:boolValue];
+- (nullable NSNumber *)isAdvancedMarkersAvailable:
+    (FlutterError *_Nullable __autoreleasing *_Nonnull)error {
+  NSUInteger advancedMarkerFlag =
+      self.controller.mapView.mapCapabilities & GMSMapCapabilityFlagsAdvancedMarkers;
+  BOOL boolValue = advancedMarkerFlag != 0;
+  return [NSNumber numberWithBool:boolValue];
 }
 
 @end
