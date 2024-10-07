@@ -994,9 +994,11 @@ void main() {
         textDirection: TextDirection.ltr,
         child: maps.buildViewWithConfiguration(1, (int id) {},
             widgetConfiguration: const MapWidgetConfiguration(
-                initialCameraPosition:
-                    CameraPosition(target: LatLng(0, 0), zoom: 1),
-                textDirection: TextDirection.ltr),
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(0, 0), zoom: 1),
+              textDirection: TextDirection.ltr,
+              markerType: MarkerType.legacy,
+            ),
             mapConfiguration: const MapConfiguration(mapId: cloudMapId))));
 
     expect(

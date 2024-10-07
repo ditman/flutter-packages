@@ -474,7 +474,7 @@ typedef NS_ENUM(NSUInteger, FGMPlatformMapBitmapScaling) {
                      indoorViewEnabled:(nullable NSNumber *)indoorViewEnabled
                         trafficEnabled:(nullable NSNumber *)trafficEnabled
                       buildingsEnabled:(nullable NSNumber *)buildingsEnabled
-                            cloudMapId:(nullable NSString *)cloudMapId
+                                 mapId:(nullable NSString *)mapId
                                  style:(nullable NSString *)style;
 @property(nonatomic, strong, nullable) NSNumber *compassEnabled;
 @property(nonatomic, strong, nullable) FGMPlatformCameraTargetBounds *cameraTargetBounds;
@@ -491,7 +491,7 @@ typedef NS_ENUM(NSUInteger, FGMPlatformMapBitmapScaling) {
 @property(nonatomic, strong, nullable) NSNumber *indoorViewEnabled;
 @property(nonatomic, strong, nullable) NSNumber *trafficEnabled;
 @property(nonatomic, strong, nullable) NSNumber *buildingsEnabled;
-@property(nonatomic, copy, nullable) NSString *cloudMapId;
+@property(nonatomic, copy, nullable) NSString *mapId;
 @property(nonatomic, copy, nullable) NSString *style;
 @end
 
@@ -731,6 +731,10 @@ NSObject<FlutterMessageCodec> *FGMGetMessagesCodec(void);
 /// Takes a snapshot of the map and returns its image data.
 - (nullable FlutterStandardTypedData *)takeSnapshotWithError:
     (FlutterError *_Nullable *_Nonnull)error;
+/// Returns true if the map supports advanced markers
+///
+/// @return `nil` only when `error != nil`.
+- (nullable NSNumber *)isAdvancedMarkersAvailable:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void SetUpFGMMapsApi(id<FlutterBinaryMessenger> binaryMessenger,

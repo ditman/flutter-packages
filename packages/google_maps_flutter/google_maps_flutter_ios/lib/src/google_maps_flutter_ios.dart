@@ -441,6 +441,11 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
     return _hostApi(mapId).getLastStyleError();
   }
 
+  @override
+  Future<bool> isAdvancedMarkersAvailable({required int mapId}) {
+    return _hostApi(mapId).isAdvancedMarkersAvailable();
+  }
+
   Widget _buildView(
     int creationId,
     PlatformViewCreatedCallback onPlatformViewCreated, {
@@ -511,13 +516,16 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
     Set<TileOverlay> tileOverlays = const <TileOverlay>{},
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
     Map<String, dynamic> mapOptions = const <String, dynamic>{},
+    MarkerType markerType = MarkerType.legacy,
   }) {
     return _buildView(
       creationId,
       onPlatformViewCreated,
       widgetConfiguration: MapWidgetConfiguration(
-          initialCameraPosition: initialCameraPosition,
-          textDirection: textDirection),
+        initialCameraPosition: initialCameraPosition,
+        textDirection: textDirection,
+        markerType: markerType,
+      ),
       mapObjects: MapObjects(
           markers: markers,
           polygons: polygons,
@@ -540,6 +548,7 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
     Set<TileOverlay> tileOverlays = const <TileOverlay>{},
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
     Map<String, dynamic> mapOptions = const <String, dynamic>{},
+    MarkerType markerType = MarkerType.legacy,
   }) {
     return buildViewWithTextDirection(
       creationId,
@@ -553,6 +562,7 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
       tileOverlays: tileOverlays,
       gestureRecognizers: gestureRecognizers,
       mapOptions: mapOptions,
+      markerType: markerType,
     );
   }
 
