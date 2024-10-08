@@ -239,9 +239,58 @@
                                      reason:@"Unable to interpret bytes as a valid image."
                                    userInfo:nil];
     }
+  } else if ([iconData.firstObject isEqualToString:@"pinConfig"]) {
+    NSDictionary *byteData = iconData[1];
+    if (![byteData isKindOfClass:[NSDictionary class]]) {
+      NSException *exception = [NSException
+          exceptionWithName:@"InvalidByteDescriptor"
+                     reason:@"Unable to interpret pin config, expected a dictionary as the "
+                            @"second parameter."
+                   userInfo:nil];
+      @throw exception;
+    }
+      
+    GMSPinImageOptions *options = [[GMSPinImageOptions alloc] init];
+    NSNumber *backgroundColor = FGMGetValueOrNilFromDict(byteData, @"backgroundColor");
+    if (backgroundColor) {
+      options.backgroundColor = [self UIColorFromRGB:[backgroundColor intValue]];
+    }
+
+    NSNumber *borderColor = FGMGetValueOrNilFromDict(byteData, @"borderColor");
+    if (borderColor) {
+      options.borderColor = [self UIColorFromRGB:[borderColor intValue]];
+    }
+
+    GMSPinImageGlyph *glyph;
+    NSString *glyphText = FGMGetValueOrNilFromDict(byteData, @"glyphText");
+    NSNumber *glyphColor = FGMGetValueOrNilFromDict(byteData, @"glyphColor");
+    if (glyphText) {
+      NSNumber *glyphTextColorInt = FGMGetValueOrNilFromDict(byteData, @"glyphTextColor");
+      UIColor *glyphTextColor = glyphTextColorInt
+                                    ? [self UIColorFromRGB:[glyphTextColorInt intValue]]
+                                    : [UIColor blackColor];
+      glyph = [[GMSPinImageGlyph alloc] initWithText:glyphText textColor:glyphTextColor];
+    } else if (glyphColor) {
+      UIColor *color = [self UIColorFromRGB:[glyphColor intValue]];
+      glyph = [[GMSPinImageGlyph alloc] initWithGlyphColor:color];
+    }
+    // TODO bitmap descriptor
+
+    if (glyph) {
+      options.glyph = glyph;
+    }
+
+      image = [GMSPinImage pinImageWithOptions:options];
   }
 
   return image;
+}
+
+- (UIColor *)UIColorFromRGB:(NSInteger)rgbValue {
+  return [UIColor colorWithRed:((float)((rgbValue & 0x00FF0000) >> 16)) / 255.0
+                         green:((float)((rgbValue & 0x0000FF00) >> 8)) / 255.0
+                          blue:((float)(rgbValue & 0x000000FF)) / 255.0
+                         alpha:((float)((rgbValue & 0xFF000000) >> 24)) / 255.0];
 }
 
 /// This method is deprecated within the context of `BitmapDescriptor.fromBytes` handling in the
