@@ -49,6 +49,7 @@ import io.flutter.plugins.googlemaps.Messages.FlutterError;
 import io.flutter.plugins.googlemaps.Messages.MapsApi;
 import io.flutter.plugins.googlemaps.Messages.MapsCallbackApi;
 import io.flutter.plugins.googlemaps.Messages.MapsInspectorApi;
+import io.flutter.plugins.googlemaps.Messages.PlatformMarkerType;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +114,8 @@ class GoogleMapController
       Context context,
       BinaryMessenger binaryMessenger,
       LifecycleProvider lifecycleProvider,
-      GoogleMapOptions options) {
+      GoogleMapOptions options,
+      PlatformMarkerType markerType) {
     this.id = id;
     this.context = context;
     this.options = options;
@@ -132,7 +134,8 @@ class GoogleMapController
             clusterManagersController,
             assetManager,
             density,
-            new Convert.BitmapDescriptorFactoryWrapper());
+            new Convert.BitmapDescriptorFactoryWrapper(),
+            markerType);
     this.polygonsController = new PolygonsController(flutterApi, density);
     this.polylinesController = new PolylinesController(flutterApi, assetManager, density);
     this.circlesController = new CirclesController(flutterApi, density);

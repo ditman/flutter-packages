@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.collections.MarkerManager;
 import io.flutter.plugins.googlemaps.Messages.MapsCallbackApi;
+import io.flutter.plugins.googlemaps.Messages.PlatformMarkerType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -27,13 +28,15 @@ class MarkersController {
   private final AssetManager assetManager;
   private final float density;
   private final Convert.BitmapDescriptorFactoryWrapper bitmapDescriptorFactoryWrapper;
+  private PlatformMarkerType markerType;
 
   MarkersController(
       @NonNull MapsCallbackApi flutterApi,
       ClusterManagersController clusterManagersController,
       AssetManager assetManager,
       float density,
-      Convert.BitmapDescriptorFactoryWrapper bitmapDescriptorFactoryWrapper) {
+      Convert.BitmapDescriptorFactoryWrapper bitmapDescriptorFactoryWrapper,
+      @NonNull PlatformMarkerType markerType) {
     this.markerIdToMarkerBuilder = new HashMap<>();
     this.markerIdToController = new HashMap<>();
     this.googleMapsMarkerIdToDartMarkerId = new HashMap<>();
@@ -42,6 +45,7 @@ class MarkersController {
     this.assetManager = assetManager;
     this.density = density;
     this.bitmapDescriptorFactoryWrapper = bitmapDescriptorFactoryWrapper;
+    this.markerType = markerType;
   }
 
   void setCollection(MarkerManager.Collection markerCollection) {
@@ -176,8 +180,9 @@ class MarkersController {
   private void addMarker(@NonNull Messages.PlatformMarker marker) {
     String markerId = marker.getMarkerId();
     String clusterManagerId = marker.getClusterManagerId();
+    boolean isAdvancedMarker = markerType == PlatformMarkerType.ADVANCED;
     MarkerBuilder markerBuilder = new MarkerBuilder(markerId, clusterManagerId,
-        marker.getIsAdvanced());
+        isAdvancedMarker);
     Convert.interpretMarkerOptions(
         marker, markerBuilder, assetManager, density, bitmapDescriptorFactoryWrapper);
     addMarker(markerBuilder);

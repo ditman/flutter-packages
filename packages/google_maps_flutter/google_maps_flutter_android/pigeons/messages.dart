@@ -202,7 +202,6 @@ class PlatformMarker {
   final String markerId;
   final String? clusterManagerId;
 
-  final bool isAdvanced;
   final PlatformMarkerCollisionBehavior collisionBehavior;
 }
 
@@ -417,6 +416,7 @@ class PlatformMapViewCreationParams {
     required this.initialHeatmaps,
     required this.initialTileOverlays,
     required this.initialClusterManagers,
+    required this.markerType,
   });
 
   final PlatformCameraPosition initialCameraPosition;
@@ -428,6 +428,12 @@ class PlatformMapViewCreationParams {
   final List<PlatformHeatmap> initialHeatmaps;
   final List<PlatformTileOverlay> initialTileOverlays;
   final List<PlatformClusterManager> initialClusterManagers;
+  final PlatformMarkerType markerType;
+}
+
+enum PlatformMarkerType {
+  legacy,
+  advanced,
 }
 
 /// Pigeon equivalent of MapConfiguration.

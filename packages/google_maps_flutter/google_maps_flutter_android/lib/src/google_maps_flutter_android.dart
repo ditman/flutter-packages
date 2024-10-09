@@ -509,8 +509,8 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
     PlatformViewCreatedCallback onPlatformViewCreated, {
     required PlatformMapConfiguration mapConfiguration,
     required MapWidgetConfiguration widgetConfiguration,
+    required MarkerType markerType,
     MapObjects mapObjects = const MapObjects(),
-    MarkerType markerType = MarkerType.legacy,
   }) {
     final PlatformMapViewCreationParams creationParams =
         PlatformMapViewCreationParams(
@@ -533,6 +533,7 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
       initialClusterManagers: mapObjects.clusterManagers
           .map(_platformClusterManagerFromClusterManager)
           .toList(),
+      markerType: _platformMarkerTypeFromMarkerType(markerType),
     );
 
     const String viewType = 'plugins.flutter.dev/google_maps_android';
@@ -589,7 +590,6 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
     required MapWidgetConfiguration widgetConfiguration,
     MapConfiguration mapConfiguration = const MapConfiguration(),
     MapObjects mapObjects = const MapObjects(),
-    MarkerType markerType = MarkerType.legacy,
   }) {
     return _buildView(
       creationId,
@@ -598,6 +598,7 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
       mapObjects: mapObjects,
       mapConfiguration:
           _platformMapConfigurationFromMapConfiguration(mapConfiguration),
+      markerType: widgetConfiguration.markerType,
     );
   }
 
@@ -759,9 +760,8 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
       zIndex: marker.zIndex,
       markerId: marker.markerId.value,
       clusterManagerId: marker.clusterManagerId?.value,
-      isAdvanced: marker is AdvancedMarker,
       collisionBehavior: marker is AdvancedMarker
-          ? _platformMarkerCollisionBehaviorFromMarkerCollisionBehavior(
+          ? platformMarkerCollisionBehaviorFromMarkerCollisionBehavior(
               marker.collisionBehavior,
             )
           : PlatformMarkerCollisionBehavior.required,
@@ -874,6 +874,13 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
             cameraUpdate:
                 PlatformCameraUpdateScrollBy(dx: update.dx, dy: update.dy));
     }
+  }
+
+  PlatformMarkerType _platformMarkerTypeFromMarkerType(MarkerType markerType) {
+    return switch (markerType) {
+      MarkerType.legacy => PlatformMarkerType.legacy,
+      MarkerType.advanced => PlatformMarkerType.advanced,
+    };
   }
 
   /// Convert [MapBitmapScaling] from platform interface to [PlatformMapBitmapScaling] Pigeon.
@@ -1362,9 +1369,11 @@ PlatformPatternItem platformPatternItemFromPatternItem(PatternItem item) {
   return PlatformPatternItem(type: PlatformPatternItemType.dot);
 }
 
+/// Converts a MarkerCollisionBehavior to Pigeon's
+/// PlatformMarkerCollisionBehavior
 @visibleForTesting
 PlatformMarkerCollisionBehavior
-    _platformMarkerCollisionBehaviorFromMarkerCollisionBehavior(
+    platformMarkerCollisionBehaviorFromMarkerCollisionBehavior(
   MarkerCollisionBehavior markerCollisionBehavior,
 ) {
   switch (markerCollisionBehavior) {
