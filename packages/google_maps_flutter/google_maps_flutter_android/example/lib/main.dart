@@ -53,7 +53,7 @@ final List<GoogleMapExampleAppPage> _allPages = <GoogleMapExampleAppPage>[
   const LiteModePage(),
   const TileOverlayPage(),
   const ClusteringPage(),
-  const AdvancedMarkersClustering(),
+  const AdvancedMarkersClusteringPage(),
   const MapIdPage(),
 ];
 
