@@ -109,11 +109,6 @@ class AdvancedMarker extends Marker {
       }
     }
 
-    // Add a flag indicating that this is an advanced marker. This might be used
-    // by platform implementations to distinguish between legacy and advanced
-    // markers
-    addIfPresent('isAdvanced', true);
-
     addIfPresent('markerId', markerId.value);
     addIfPresent('alpha', alpha);
     addIfPresent('anchor', offsetToJson(anchor));

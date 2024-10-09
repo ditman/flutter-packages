@@ -260,7 +260,6 @@ class ExampleGoogleMap extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.mapId,
-    @Deprecated('cloudMapId is deprecated. Use mapId instead') this.cloudMapId,
     this.style,
   });
 
@@ -366,13 +365,6 @@ class ExampleGoogleMap extends StatefulWidget {
   /// See https://developers.google.com/maps/documentation/get-map-id
   /// for more details.
   final String? mapId;
-
-  /// Identifier that's associated with a specific cloud-based map style.
-  ///
-  /// See https://developers.google.com/maps/documentation/get-map-id
-  /// for more details.
-  @Deprecated('cloudMapId is deprecated. Use mapId instead')
-  final String? cloudMapId;
 
   /// The locally configured style for the map.
   final String? style;
@@ -582,7 +574,7 @@ MapConfiguration _configurationFromMapWidget(ExampleGoogleMap map) {
     indoorViewEnabled: map.indoorViewEnabled,
     trafficEnabled: map.trafficEnabled,
     buildingsEnabled: map.buildingsEnabled,
-    mapId: map.mapId ?? map.cloudMapId,
+    mapId: map.mapId,
     style: map.style,
   );
 }

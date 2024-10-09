@@ -445,7 +445,8 @@ typedef NS_ENUM(NSUInteger, FGMPlatformMapBitmapScaling) {
                  initialPolylines:(NSArray<FGMPlatformPolyline *> *)initialPolylines
                   initialHeatmaps:(NSArray<FGMPlatformHeatmap *> *)initialHeatmaps
               initialTileOverlays:(NSArray<FGMPlatformTileOverlay *> *)initialTileOverlays
-           initialClusterManagers:(NSArray<FGMPlatformClusterManager *> *)initialClusterManagers;
+           initialClusterManagers:(NSArray<FGMPlatformClusterManager *> *)initialClusterManagers
+                       markerType:(FGMPlatformMarkerType)markerType;
 @property(nonatomic, strong) FGMPlatformCameraPosition *initialCameraPosition;
 @property(nonatomic, strong) FGMPlatformMapConfiguration *mapConfiguration;
 @property(nonatomic, copy) NSArray<FGMPlatformCircle *> *initialCircles;
@@ -455,6 +456,7 @@ typedef NS_ENUM(NSUInteger, FGMPlatformMapBitmapScaling) {
 @property(nonatomic, copy) NSArray<FGMPlatformHeatmap *> *initialHeatmaps;
 @property(nonatomic, copy) NSArray<FGMPlatformTileOverlay *> *initialTileOverlays;
 @property(nonatomic, copy) NSArray<FGMPlatformClusterManager *> *initialClusterManagers;
+@property(nonatomic, assign) FGMPlatformMarkerType markerType;
 @end
 
 /// Pigeon equivalent of MapConfiguration.

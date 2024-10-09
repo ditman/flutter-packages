@@ -556,6 +556,7 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
       'circlesToAdd': serializeCircleSet(mapObjects.circles),
       'heatmapsToAdd': serializeHeatmapSet(mapObjects.heatmaps),
       'tileOverlaysToAdd': serializeTileOverlaySet(mapObjects.tileOverlays),
+      'markerType': widgetConfiguration.markerType.index,
     };
 
     if (defaultTargetPlatform == TargetPlatform.android) {

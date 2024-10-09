@@ -474,6 +474,8 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
       initialClusterManagers: mapObjects.clusterManagers
           .map(_platformClusterManagerFromClusterManager)
           .toList(),
+      markerType:
+          _platformMarkerTypeFromMarkerType(widgetConfiguration.markerType),
     );
 
     return UiKitView(
@@ -700,6 +702,14 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
       ClusterManager clusterManager) {
     return PlatformClusterManager(
         identifier: clusterManager.clusterManagerId.value);
+  }
+
+  static PlatformMarkerType _platformMarkerTypeFromMarkerType(
+      MarkerType markerType) {
+    return switch (markerType) {
+      MarkerType.legacy => PlatformMarkerType.legacy,
+      MarkerType.advanced => PlatformMarkerType.advanced,
+    };
   }
 
   static PlatformCameraUpdate _platformCameraUpdateFromCameraUpdate(
