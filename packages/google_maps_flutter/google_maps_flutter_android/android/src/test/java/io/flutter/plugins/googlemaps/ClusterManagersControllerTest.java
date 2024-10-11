@@ -26,6 +26,7 @@ import com.google.maps.android.clustering.algo.StaticCluster;
 import com.google.maps.android.collections.MarkerManager;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugins.googlemaps.Messages.MapsCallbackApi;
+import io.flutter.plugins.googlemaps.Messages.PlatformMarkerCollisionBehavior;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -100,8 +102,8 @@ public class ClusterManagersControllerTest {
     clusterManagersToAdd.add(initialClusterManager);
     controller.addClusterManagers(clusterManagersToAdd);
 
-    MarkerBuilder markerBuilder1 = new MarkerBuilder(markerId1, clusterManagerId);
-    MarkerBuilder markerBuilder2 = new MarkerBuilder(markerId2, clusterManagerId);
+    MarkerBuilder markerBuilder1 = new MarkerBuilder(markerId1, clusterManagerId, false);
+    MarkerBuilder markerBuilder2 = new MarkerBuilder(markerId2, clusterManagerId, false);
 
     final Messages.PlatformMarker markerData1 =
         createPlatformMarker(markerId1, location1, clusterManagerId);
@@ -140,11 +142,11 @@ public class ClusterManagersControllerTest {
 
     StaticCluster<MarkerBuilder> cluster = new StaticCluster<>(clusterPosition);
 
-    MarkerBuilder marker1 = new MarkerBuilder("m_1", clusterManagerId);
+    MarkerBuilder marker1 = new MarkerBuilder("m_1", clusterManagerId, false);
     marker1.setPosition(markerPosition1);
     cluster.add(marker1);
 
-    MarkerBuilder marker2 = new MarkerBuilder("m_2", clusterManagerId);
+    MarkerBuilder marker2 = new MarkerBuilder("m_2", clusterManagerId, false);
     marker2.setPosition(markerPosition2);
     cluster.add(marker2);
 
@@ -211,6 +213,7 @@ public class ClusterManagersControllerTest {
         .setClusterManagerId(clusterManagerId)
         .setAnchor(anchor)
         .setInfoWindow(new Messages.PlatformInfoWindow.Builder().setAnchor(anchor).build())
+        .setCollisionBehavior(PlatformMarkerCollisionBehavior.REQUIRED)
         .build();
   }
 }

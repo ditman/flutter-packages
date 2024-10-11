@@ -1037,7 +1037,11 @@ class PinConfig extends BitmapDescriptor {
     this.backgroundColor,
     this.borderColor,
     this.glyph,
-  }) : super._(const <Object>[]);
+  })  : assert(
+          backgroundColor != null || borderColor != null || glyph != null,
+          'Cannot create PinConfig with all parameters being null.',
+        ),
+        super._(const <Object>[]);
 
   /// The type of the MapBitmap object, used for the JSON serialization.
   static const String type = 'pinConfig';

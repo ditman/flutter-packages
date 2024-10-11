@@ -20,7 +20,7 @@ const LatLng _kInitialMapCenter = LatLng(0, 0);
 const double _kInitialZoomLevel = 5;
 const CameraPosition _kInitialCameraPosition =
     CameraPosition(target: _kInitialMapCenter, zoom: _kInitialZoomLevel);
-const String _kCloudMapId = '000000000000000'; // Dummy map ID.
+const String _kMapId = '000000000000000'; // Dummy map ID.
 
 void googleMapsTests() {
   GoogleMapsFlutterPlatform.instance.enableDebugInspection();
@@ -1260,7 +1260,7 @@ void googleMapsTests() {
   });
 
   testWidgets(
-    'testCloudMapId',
+    'testMapId',
     (WidgetTester tester) async {
       final Completer<int> mapIdCompleter = Completer<int>();
       final Key key = GlobalKey();
@@ -1274,7 +1274,7 @@ void googleMapsTests() {
             onMapCreated: (ExampleGoogleMapController controller) {
               mapIdCompleter.complete(controller.mapId);
             },
-            mapId: _kCloudMapId,
+            mapId: _kMapId,
           ),
         ),
       );

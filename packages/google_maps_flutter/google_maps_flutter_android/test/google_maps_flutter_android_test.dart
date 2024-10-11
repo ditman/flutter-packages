@@ -211,6 +211,18 @@ void main() {
     verify(api.clearTileCache(tileOverlayId));
   });
 
+  test('isAdvancedMarkersAvailable calls through', () async {
+    const int mapId = 1;
+    final (GoogleMapsFlutterAndroid maps, MockMapsApi api) =
+        setUpMockMap(mapId: mapId);
+    when(api.isAdvancedMarkersAvailable()).thenAnswer((_) async => true);
+
+    await maps.isAdvancedMarkersAvailable(mapId: mapId);
+    final bool isAdvancedMarkersAvailable =
+        await api.isAdvancedMarkersAvailable();
+    expect(isAdvancedMarkersAvailable, isTrue);
+  });
+
   test('updateMapConfiguration passes expected arguments', () async {
     const int mapId = 1;
     final (GoogleMapsFlutterAndroid maps, MockMapsApi api) =
@@ -447,6 +459,94 @@ void main() {
       expect(firstAdded.zIndex, object3.zIndex);
       expect(firstAdded.markerId, object3.markerId.value);
       expect(firstAdded.clusterManagerId, object3.clusterManagerId?.value);
+    }
+  });
+
+  test('updateMarkers passes expected arguments (AdvancedMarkers)', () async {
+    const int mapId = 1;
+    final (GoogleMapsFlutterAndroid maps, MockMapsApi api) =
+        setUpMockMap(mapId: mapId);
+
+    const AdvancedMarker object1 = AdvancedMarker(markerId: MarkerId('1'));
+    const AdvancedMarker object2old = AdvancedMarker(markerId: MarkerId('2'));
+    final AdvancedMarker object2new = object2old.copyWith(rotationParam: 42);
+    const AdvancedMarker object3 = AdvancedMarker(markerId: MarkerId('3'));
+    await maps.updateMarkers(
+        MarkerUpdates.from(
+          <AdvancedMarker>{object1, object2old},
+          <AdvancedMarker>{object2new, object3},
+        ),
+        mapId: mapId);
+
+    final VerificationResult verification =
+        verify(api.updateMarkers(captureAny, captureAny, captureAny));
+    final List<PlatformMarker?> toAdd =
+        verification.captured[0] as List<PlatformMarker?>;
+    final List<PlatformMarker?> toChange =
+        verification.captured[1] as List<PlatformMarker?>;
+    final List<String?> toRemove = verification.captured[2] as List<String?>;
+    // Object one should be removed.
+    expect(toRemove.length, 1);
+    expect(toRemove.first, object1.markerId.value);
+    // Object two should be changed.
+    {
+      expect(toChange.length, 1);
+      final List<Object?>? encoded = toChange.first?.encode() as List<Object?>?;
+      expect(encoded?[0], object2new.alpha);
+      final PlatformOffset? offset = encoded?[1] as PlatformOffset?;
+      expect(offset?.dx, object2new.anchor.dx);
+      expect(offset?.dy, object2new.anchor.dy);
+      expect(encoded?.getRange(2, 6).toList(), <Object?>[
+        object2new.consumeTapEvents,
+        object2new.draggable,
+        object2new.flat,
+        object2new.icon.toJson(),
+      ]);
+      final PlatformInfoWindow? window = encoded?[6] as PlatformInfoWindow?;
+      expect(window?.title, object2new.infoWindow.title);
+      expect(window?.snippet, object2new.infoWindow.snippet);
+      expect(window?.anchor.dx, object2new.infoWindow.anchor.dx);
+      expect(window?.anchor.dy, object2new.infoWindow.anchor.dy);
+      final PlatformLatLng? latLng = encoded?[7] as PlatformLatLng?;
+      expect(latLng?.latitude, object2new.position.latitude);
+      expect(latLng?.longitude, object2new.position.longitude);
+      expect(encoded?.getRange(8, 13), <Object?>[
+        object2new.rotation,
+        object2new.visible,
+        object2new.zIndex,
+        object2new.markerId.value,
+        object2new.clusterManagerId?.value,
+      ]);
+    }
+    // Object 3 should be added.
+    {
+      expect(toAdd.length, 1);
+      final List<Object?>? encoded = toAdd.first?.encode() as List<Object?>?;
+      expect(encoded?[0], object3.alpha);
+      final PlatformOffset? offset = encoded?[1] as PlatformOffset?;
+      expect(offset?.dx, object3.anchor.dx);
+      expect(offset?.dy, object3.anchor.dy);
+      expect(encoded?.getRange(2, 6).toList(), <Object?>[
+        object3.consumeTapEvents,
+        object3.draggable,
+        object3.flat,
+        object3.icon.toJson(),
+      ]);
+      final PlatformInfoWindow? window = encoded?[6] as PlatformInfoWindow?;
+      expect(window?.title, object3.infoWindow.title);
+      expect(window?.snippet, object3.infoWindow.snippet);
+      expect(window?.anchor.dx, object3.infoWindow.anchor.dx);
+      expect(window?.anchor.dy, object3.infoWindow.anchor.dy);
+      final PlatformLatLng? latLng = encoded?[7] as PlatformLatLng?;
+      expect(latLng?.latitude, object3.position.latitude);
+      expect(latLng?.longitude, object3.position.longitude);
+      expect(encoded?.getRange(8, 13), <Object?>[
+        object3.rotation,
+        object3.visible,
+        object3.zIndex,
+        object3.markerId.value,
+        object3.clusterManagerId?.value,
+      ]);
     }
   });
 
@@ -1075,7 +1175,9 @@ void main() {
           textDirection: TextDirection.ltr,
           markerType: MarkerType.legacy,
         ),
-        mapConfiguration: const MapConfiguration(mapId: cloudMapId)));
+        // Here deprecated cloudMapId is used to test that creation params have
+        // the correct mapId
+        mapConfiguration: const MapConfiguration(cloudMapId: cloudMapId)));
 
     expect(
       await passedCloudMapIdCompleter.future,
@@ -1083,4 +1185,91 @@ void main() {
       reason: 'Should pass cloudMapId on PlatformView creation message',
     );
   });
+
+  testWidgets('mapId is passed', (WidgetTester tester) async {
+    const String mapId = '000000000000000'; // Dummy map ID.
+    final Completer<String> passedMapIdCompleter = Completer<String>();
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      SystemChannels.platform_views,
+      (MethodCall methodCall) async {
+        if (methodCall.method == 'create') {
+          final Map<String, dynamic> args = Map<String, dynamic>.from(
+              methodCall.arguments as Map<dynamic, dynamic>);
+          if (args.containsKey('params')) {
+            final Uint8List paramsUint8List = args['params'] as Uint8List;
+            final ByteData byteData = ByteData.sublistView(paramsUint8List);
+            final PlatformMapViewCreationParams? creationParams =
+                MapsApi.pigeonChannelCodec.decodeMessage(byteData)
+                    as PlatformMapViewCreationParams?;
+            if (creationParams != null) {
+              final String? passedMapId = creationParams.mapConfiguration.mapId;
+              if (passedMapId != null) {
+                passedMapIdCompleter.complete(passedMapId);
+              }
+            }
+          }
+        }
+        return 0;
+      },
+    );
+
+    final GoogleMapsFlutterAndroid maps = GoogleMapsFlutterAndroid();
+
+    await tester.pumpWidget(maps.buildViewWithConfiguration(1, (int id) {},
+        widgetConfiguration: const MapWidgetConfiguration(
+          initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.legacy,
+        ),
+        mapConfiguration: const MapConfiguration(mapId: mapId)));
+
+    expect(
+      await passedMapIdCompleter.future,
+      mapId,
+      reason: 'Should pass mapId on PlatformView creation message',
+    );
+  });
+
+  test(
+    'Correct marker type is padded to platform view',
+    () async {
+      final GoogleMapsFlutterAndroid maps = GoogleMapsFlutterAndroid();
+      final Widget widget = maps.buildViewWithConfiguration(
+        1,
+        (int _) {},
+        widgetConfiguration: const MapWidgetConfiguration(
+          initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.advanced,
+        ),
+      );
+
+      expect(widget, isA<AndroidView>());
+      final dynamic creationParams = (widget as AndroidView).creationParams;
+      expect(creationParams, isA<PlatformMapViewCreationParams>());
+      expect(
+        (creationParams as PlatformMapViewCreationParams).markerType,
+        PlatformMarkerType.advanced,
+      );
+
+      final Widget widget2 = maps.buildViewWithConfiguration(
+        1,
+        (int _) {},
+        widgetConfiguration: const MapWidgetConfiguration(
+          initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.legacy,
+        ),
+      );
+      expect(widget2, isA<AndroidView>());
+      expect(
+        ((widget2 as AndroidView).creationParams
+                as PlatformMapViewCreationParams)
+            .markerType,
+        PlatformMarkerType.legacy,
+      );
+    },
+  );
 }
