@@ -180,9 +180,8 @@ class MarkersController {
   private void addMarker(@NonNull Messages.PlatformMarker marker) {
     String markerId = marker.getMarkerId();
     String clusterManagerId = marker.getClusterManagerId();
-    boolean isAdvancedMarker = markerType == PlatformMarkerType.ADVANCED;
     MarkerBuilder markerBuilder = new MarkerBuilder(markerId, clusterManagerId,
-        isAdvancedMarker);
+        markerType);
     Convert.interpretMarkerOptions(
         marker, markerBuilder, assetManager, density, bitmapDescriptorFactoryWrapper);
     addMarker(markerBuilder);

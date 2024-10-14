@@ -96,7 +96,8 @@ public class MarkersControllerTest {
     assetManager = ApplicationProvider.getApplicationContext().getAssets();
     context = ApplicationProvider.getApplicationContext();
     flutterApi = spy(new MapsCallbackApi(mock(BinaryMessenger.class)));
-    clusterManagersController = spy(new ClusterManagersController(flutterApi, context));
+    clusterManagersController = spy(
+        new ClusterManagersController(flutterApi, context, PlatformMarkerType.LEGACY));
     controller =
         new MarkersController(
             flutterApi,

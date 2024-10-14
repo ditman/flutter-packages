@@ -9,19 +9,20 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
+import io.flutter.plugins.googlemaps.Messages.PlatformMarkerType;
 
 class MarkerBuilder implements MarkerOptionsSink, ClusterItem {
   private final MarkerOptions markerOptions;
   private String clusterManagerId;
   private String markerId;
   private boolean consumeTapEvents;
-  final boolean isAdvanced;
 
-  MarkerBuilder(String markerId, String clusterManagerId, boolean isAdvanced) {
-    this.markerOptions = isAdvanced ? new AdvancedMarkerOptions() : new MarkerOptions();
+  MarkerBuilder(String markerId, String clusterManagerId, PlatformMarkerType markerType) {
+    this.markerOptions = markerType == PlatformMarkerType.ADVANCED
+        ? new AdvancedMarkerOptions()
+        : new MarkerOptions();
     this.markerId = markerId;
     this.clusterManagerId = clusterManagerId;
-    this.isAdvanced = isAdvanced;
   }
 
   MarkerOptions build() {

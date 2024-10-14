@@ -127,7 +127,7 @@ class GoogleMapController
     MapsInspectorApi.setUp(binaryMessenger, Integer.toString(id), this);
     AssetManager assetManager = context.getAssets();
     this.lifecycleProvider = lifecycleProvider;
-    this.clusterManagersController = new ClusterManagersController(flutterApi, context);
+    this.clusterManagersController = new ClusterManagersController(flutterApi, context, markerType);
     this.markersController =
         new MarkersController(
             flutterApi,
