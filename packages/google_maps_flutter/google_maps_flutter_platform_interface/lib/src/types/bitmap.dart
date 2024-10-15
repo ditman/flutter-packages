@@ -55,6 +55,8 @@ const double _naturalPixelRatio = 1.0;
 /// a default marker icon.
 /// Use the [BitmapDescriptor.defaultMarkerWithHue] to create a
 /// [BitmapDescriptor] for a default marker icon with a hue value.
+/// Use the [BitmapDescriptor.pinConfig] to create a custom icon for
+/// [AdvancedMarker].
 abstract class BitmapDescriptor {
   const BitmapDescriptor._();
 
@@ -211,6 +213,9 @@ abstract class BitmapDescriptor {
   /// Creates a BitmapDescriptor that refers to a colorization of the default
   /// marker image. For convenience, there is a predefined set of hue values.
   /// See e.g. [hueYellow].
+  ///
+  /// Doesn't work with [AdvancedMarker]s, [BitmapDescriptor.pinConfig] should
+  /// be used instead.
   static BitmapDescriptor defaultMarkerWithHue(double hue) {
     assert(0.0 <= hue && hue < 360.0);
     return DefaultMarker(hue: hue);
