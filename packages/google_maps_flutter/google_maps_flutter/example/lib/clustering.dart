@@ -234,8 +234,9 @@ class ClusteringBodyState extends State<ClusteringBody> {
         SizedBox(
           height: 300.0,
           child: GoogleMap(
-            markerType:
-                widget.mapId == null ? MarkerType.legacy : MarkerType.advanced,
+            markerType: widget.mapId != null
+                ? MarkerType.advancedMarker
+                : MarkerType.marker,
             mapId: widget.mapId,
             onMapCreated: _onMapCreated,
             initialCameraPosition: const CameraPosition(

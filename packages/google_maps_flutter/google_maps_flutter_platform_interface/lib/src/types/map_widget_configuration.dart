@@ -41,9 +41,10 @@ class MapWidgetConfiguration {
 
 /// Indicates the type of marker that map should use
 enum MarkerType {
-  /// Represents the default marker type, [Marker]
-  legacy,
+  /// Represents the default marker type, [Marker]. This marker type is
+  /// deprecated on the web
+  marker,
 
   /// Represents the advanced marker type, [AdvancedMarker]
-  advanced,
+  advancedMarker,
 }

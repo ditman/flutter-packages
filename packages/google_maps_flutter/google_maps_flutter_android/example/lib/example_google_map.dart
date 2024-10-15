@@ -250,7 +250,7 @@ class ExampleGoogleMap extends StatefulWidget {
     this.clusterManagers = const <ClusterManager>{},
     this.onCameraMoveStarted,
     this.tileOverlays = const <TileOverlay>{},
-    this.markerType = MarkerType.legacy,
+    this.markerType = MarkerType.marker,
     this.onCameraMove,
     this.onCameraIdle,
     this.onTap,

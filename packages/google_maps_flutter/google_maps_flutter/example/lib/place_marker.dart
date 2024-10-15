@@ -317,7 +317,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
             child: GoogleMap(
               mapId: mapId,
               markerType:
-                  mapId != null ? MarkerType.advanced : MarkerType.legacy,
+                  mapId != null ? MarkerType.advancedMarker : MarkerType.marker,
               onMapCreated: _onMapCreated,
               initialCameraPosition: const CameraPosition(
                 target: LatLng(-33.852, 151.211),

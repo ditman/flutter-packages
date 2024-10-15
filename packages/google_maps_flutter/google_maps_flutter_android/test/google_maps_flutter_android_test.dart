@@ -872,7 +872,7 @@ void main() {
         widgetConfiguration: const MapWidgetConfiguration(
           initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
           textDirection: TextDirection.ltr,
-          markerType: MarkerType.legacy,
+          markerType: MarkerType.marker,
         ),
       );
 
@@ -1116,7 +1116,7 @@ void main() {
         widgetConfiguration: const MapWidgetConfiguration(
           initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
           textDirection: TextDirection.ltr,
-          markerType: MarkerType.legacy,
+          markerType: MarkerType.marker,
         ));
 
     expect(widget, isA<PlatformViewLink>());
@@ -1131,7 +1131,7 @@ void main() {
       widgetConfiguration: const MapWidgetConfiguration(
         initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
         textDirection: TextDirection.ltr,
-        markerType: MarkerType.legacy,
+        markerType: MarkerType.marker,
       ),
     );
 
@@ -1173,7 +1173,7 @@ void main() {
         widgetConfiguration: const MapWidgetConfiguration(
           initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
           textDirection: TextDirection.ltr,
-          markerType: MarkerType.legacy,
+          markerType: MarkerType.marker,
         ),
         // Here deprecated cloudMapId is used to test that creation params have
         // the correct mapId
@@ -1221,7 +1221,7 @@ void main() {
         widgetConfiguration: const MapWidgetConfiguration(
           initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
           textDirection: TextDirection.ltr,
-          markerType: MarkerType.legacy,
+          markerType: MarkerType.marker,
         ),
         mapConfiguration: const MapConfiguration(mapId: mapId)));
 
@@ -1242,7 +1242,7 @@ void main() {
         widgetConfiguration: const MapWidgetConfiguration(
           initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
           textDirection: TextDirection.ltr,
-          markerType: MarkerType.advanced,
+          markerType: MarkerType.advancedMarker,
         ),
       );
 
@@ -1251,7 +1251,7 @@ void main() {
       expect(creationParams, isA<PlatformMapViewCreationParams>());
       expect(
         (creationParams as PlatformMapViewCreationParams).markerType,
-        PlatformMarkerType.advanced,
+        PlatformMarkerType.advancedMarker,
       );
 
       final Widget widget2 = maps.buildViewWithConfiguration(
@@ -1260,7 +1260,7 @@ void main() {
         widgetConfiguration: const MapWidgetConfiguration(
           initialCameraPosition: CameraPosition(target: LatLng(0, 0), zoom: 1),
           textDirection: TextDirection.ltr,
-          markerType: MarkerType.legacy,
+          markerType: MarkerType.marker,
         ),
       );
       expect(widget2, isA<AndroidView>());
@@ -1268,7 +1268,7 @@ void main() {
         ((widget2 as AndroidView).creationParams
                 as PlatformMapViewCreationParams)
             .markerType,
-        PlatformMarkerType.legacy,
+        PlatformMarkerType.marker,
       );
     },
   );

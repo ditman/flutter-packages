@@ -68,8 +68,7 @@ class ClusterManagersController<T> extends GeometryController {
     _clusterManagerIdToMarkerClusterer.remove(clusterManagerId);
   }
 
-  /// Adds given [gmaps.AdvancedMarkerElement] to the [MarkerClusterer] with
-  /// given [ClusterManagerId].
+  /// Adds given markers to the [MarkerClusterer] with given [ClusterManagerId].
   void addItem(
     ClusterManagerId clusterManagerId,
     T marker,
@@ -82,8 +81,8 @@ class ClusterManagersController<T> extends GeometryController {
     }
   }
 
-  /// Removes given [gmaps.AdvancedMarkerElement] from the [MarkerClusterer]
-  /// with given [ClusterManagerId].
+  /// Removes given marker from the [MarkerClusterer] with
+  /// given [ClusterManagerId].
   void removeItem(
     ClusterManagerId clusterManagerId,
     T? marker,

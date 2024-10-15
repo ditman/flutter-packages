@@ -129,7 +129,7 @@ class GoogleMap extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.mapId,
-    this.markerType = MarkerType.legacy,
+    this.markerType = MarkerType.marker,
     @Deprecated('cloudMapId is deprecated. Use mapId instead') this.cloudMapId,
   });
 

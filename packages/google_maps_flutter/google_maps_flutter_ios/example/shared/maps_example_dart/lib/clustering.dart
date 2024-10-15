@@ -234,8 +234,9 @@ class ClusteringBodyState extends State<ClusteringBody> {
           height: 300.0,
           child: ExampleGoogleMap(
             mapId: widget.mapId,
-            markerType:
-                widget.mapId != null ? MarkerType.advanced : MarkerType.legacy,
+            markerType: widget.mapId != null
+                ? MarkerType.advancedMarker
+                : MarkerType.marker,
             onMapCreated: _onMapCreated,
             initialCameraPosition: const CameraPosition(
               target: LatLng(-33.852, 151.25),

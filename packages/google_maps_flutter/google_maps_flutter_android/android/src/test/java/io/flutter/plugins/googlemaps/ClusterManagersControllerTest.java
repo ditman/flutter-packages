@@ -70,7 +70,7 @@ public class ClusterManagersControllerTest {
     context = ApplicationProvider.getApplicationContext();
     assetManager = context.getAssets();
     flutterApi = spy(new MapsCallbackApi(mock(BinaryMessenger.class)));
-    controller = spy(new ClusterManagersController(flutterApi, context, PlatformMarkerType.LEGACY));
+    controller = spy(new ClusterManagersController(flutterApi, context, PlatformMarkerType.MARKER));
     googleMap = mock(GoogleMap.class);
     markerManager = new MarkerManager(googleMap);
     controller.init(googleMap, markerManager);
@@ -107,9 +107,9 @@ public class ClusterManagersControllerTest {
     controller.addClusterManagers(clusterManagersToAdd);
 
     MarkerBuilder markerBuilder1 = new MarkerBuilder(markerId1, clusterManagerId,
-        PlatformMarkerType.LEGACY);
+        PlatformMarkerType.MARKER);
     MarkerBuilder markerBuilder2 = new MarkerBuilder(markerId2, clusterManagerId,
-        PlatformMarkerType.LEGACY);
+        PlatformMarkerType.MARKER);
 
     final Messages.PlatformMarker markerData1 =
         createPlatformMarker(markerId1, location1, clusterManagerId);
@@ -150,10 +150,10 @@ public class ClusterManagersControllerTest {
         .thenReturn(CameraPosition.builder().target(new LatLng(0, 0)).build());
 
     ClusterManagersController controller1 = spy(
-        new ClusterManagersController(flutterApi, context, PlatformMarkerType.LEGACY));
+        new ClusterManagersController(flutterApi, context, PlatformMarkerType.MARKER));
     controller1.init(googleMap, markerManager);
     ClusterManagersController controller2 = spy(
-        new ClusterManagersController(flutterApi, context, PlatformMarkerType.ADVANCED));
+        new ClusterManagersController(flutterApi, context, PlatformMarkerType.ADVANCED_MARKER));
     controller2.init(googleMap, markerManager);
 
     Messages.PlatformClusterManager initialClusterManager1 =
@@ -169,12 +169,12 @@ public class ClusterManagersControllerTest {
     controller2.addClusterManagers(clusterManagersToAdd2);
 
     MarkerBuilder markerBuilder1 = new MarkerBuilder(markerId1, clusterManagerId1,
-        PlatformMarkerType.LEGACY);
+        PlatformMarkerType.MARKER);
     markerBuilder1.setPosition(new LatLng(10.0, 20.0));
     controller1.addItem(markerBuilder1);
 
     MarkerBuilder markerBuilder2 = new MarkerBuilder(markerId2, clusterManagerId2,
-        PlatformMarkerType.ADVANCED);
+        PlatformMarkerType.ADVANCED_MARKER);
     markerBuilder2.setPosition(new LatLng(20.0, 10.0));
     controller2.addItem(markerBuilder2);
 
@@ -198,11 +198,11 @@ public class ClusterManagersControllerTest {
 
     StaticCluster<MarkerBuilder> cluster = new StaticCluster<>(clusterPosition);
 
-    MarkerBuilder marker1 = new MarkerBuilder("m_1", clusterManagerId, PlatformMarkerType.LEGACY);
+    MarkerBuilder marker1 = new MarkerBuilder("m_1", clusterManagerId, PlatformMarkerType.MARKER);
     marker1.setPosition(markerPosition1);
     cluster.add(marker1);
 
-    MarkerBuilder marker2 = new MarkerBuilder("m_2", clusterManagerId, PlatformMarkerType.LEGACY);
+    MarkerBuilder marker2 = new MarkerBuilder("m_2", clusterManagerId, PlatformMarkerType.MARKER);
     marker2.setPosition(markerPosition2);
     cluster.add(marker2);
 

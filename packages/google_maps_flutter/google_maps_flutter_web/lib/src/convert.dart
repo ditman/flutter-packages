@@ -271,13 +271,13 @@ gmaps.InfoWindowOptions? _infoWindowOptionsFromMarker(Marker marker) {
   // and the marker.infoWindow.anchor property.
 }
 
-// Attempts to extract a [gmaps.Size] from `iconConfig[sizeIndex]`.
+/// Attempts to extract a [gmaps.Size] from `iconConfig[sizeIndex]`.
 gmaps.Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
   final Size? size = _sizeFromIconConfig(iconConfig, sizeIndex);
   return size != null ? gmaps.Size(size.width, size.height) : null;
 }
 
-// Attempts to extract a [Size] from `iconConfig[sizeIndex]`.
+/// Attempts to extract a [Size] from `iconConfig[sizeIndex]`.
 Size? _sizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
   Size? size;
   if (iconConfig.length >= sizeIndex + 1) {

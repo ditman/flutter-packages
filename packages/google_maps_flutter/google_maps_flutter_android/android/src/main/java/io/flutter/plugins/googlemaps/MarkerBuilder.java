@@ -18,7 +18,7 @@ class MarkerBuilder implements MarkerOptionsSink, ClusterItem {
   private boolean consumeTapEvents;
 
   MarkerBuilder(String markerId, String clusterManagerId, PlatformMarkerType markerType) {
-    this.markerOptions = markerType == PlatformMarkerType.ADVANCED
+    this.markerOptions = markerType == PlatformMarkerType.ADVANCED_MARKER
         ? new AdvancedMarkerOptions()
         : new MarkerOptions();
     this.markerId = markerId;

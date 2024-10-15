@@ -65,7 +65,7 @@ public class GoogleMapControllerTest {
   public GoogleMapController getGoogleMapController() {
     GoogleMapController googleMapController =
         new GoogleMapController(0, context, mockMessenger, activity::getLifecycle, null,
-            PlatformMarkerType.LEGACY);
+            PlatformMarkerType.MARKER);
     googleMapController.init();
     return googleMapController;
   }
@@ -209,7 +209,7 @@ public class GoogleMapControllerTest {
   @Test
   public void OnClusterItemRenderedCallsMarkersController() {
     GoogleMapController googleMapController = getGoogleMapControllerWithMockedDependencies();
-    MarkerBuilder markerBuilder = new MarkerBuilder("m_1", "cm_1", PlatformMarkerType.LEGACY);
+    MarkerBuilder markerBuilder = new MarkerBuilder("m_1", "cm_1", PlatformMarkerType.MARKER);
     final Marker marker = mock(Marker.class);
     googleMapController.onClusterItemRendered(markerBuilder, marker);
     verify(mockMarkersController, times(1)).onClusterItemRendered(markerBuilder, marker);
@@ -218,7 +218,7 @@ public class GoogleMapControllerTest {
   @Test
   public void OnClusterItemClickCallsMarkersController() {
     GoogleMapController googleMapController = getGoogleMapControllerWithMockedDependencies();
-    MarkerBuilder markerBuilder = new MarkerBuilder("m_1", "cm_1", PlatformMarkerType.LEGACY);
+    MarkerBuilder markerBuilder = new MarkerBuilder("m_1", "cm_1", PlatformMarkerType.MARKER);
 
     googleMapController.onClusterItemClick(markerBuilder);
     verify(mockMarkersController, times(1)).onMarkerTap(markerBuilder.markerId());

@@ -122,7 +122,7 @@ class ClusterManagersController
     }
 
     final ClusterRenderer<MarkerBuilder> clusterRenderer =
-        markerType == PlatformMarkerType.ADVANCED
+        markerType == PlatformMarkerType.ADVANCED_MARKER
             ? new AdvancedMarkerClusterRenderer<>(context, googleMap, clusterManager, this)
             : new MarkerClusterRenderer<>(context, googleMap, clusterManager, this);
     clusterManager.setRenderer(clusterRenderer);

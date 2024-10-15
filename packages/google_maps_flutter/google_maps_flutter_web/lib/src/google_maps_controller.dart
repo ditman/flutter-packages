@@ -46,13 +46,13 @@ class GoogleMapController {
       assert(markerTypes.length == 1, 'All markers must be of the same type.');
 
       switch (widgetConfiguration.markerType) {
-        case MarkerType.legacy:
+        case MarkerType.marker:
           assert(
             markerTypes.first == Marker,
             'All markers must be of type Marker because '
             'widgetConfiguration.markerType is MarkerType.legacy',
           );
-        case MarkerType.advanced:
+        case MarkerType.advancedMarker:
           assert(
             markerTypes.first == AdvancedMarker,
             'All markers must be of type AdvancedMarker because '
@@ -64,21 +64,20 @@ class GoogleMapController {
     // Advanced and legacy markers are handled differently so markers controller
     // and cluster manager need be initialized with the correct marker type
     _clusterManagersController = switch (widgetConfiguration.markerType) {
-      MarkerType.legacy =>
+      MarkerType.marker =>
         ClusterManagersController<gmaps.Marker>(stream: _streamController),
-      MarkerType.advanced =>
+      MarkerType.advancedMarker =>
         ClusterManagersController<gmaps.AdvancedMarkerElement>(
             stream: _streamController),
     };
-
     _markersController = switch (widgetConfiguration.markerType) {
-      MarkerType.legacy => MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
+      MarkerType.marker => MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
           stream: _streamController,
           clusterManagersController: _clusterManagersController!
               as ClusterManagersController<gmaps.Marker>,
         ),
-      MarkerType.advanced => MarkersController<gmaps.AdvancedMarkerElement,
-            gmaps.AdvancedMarkerElementOptions>(
+      MarkerType.advancedMarker => MarkersController<
+            gmaps.AdvancedMarkerElement, gmaps.AdvancedMarkerElementOptions>(
           stream: _streamController,
           clusterManagersController: _clusterManagersController!
               as ClusterManagersController<gmaps.AdvancedMarkerElement>,

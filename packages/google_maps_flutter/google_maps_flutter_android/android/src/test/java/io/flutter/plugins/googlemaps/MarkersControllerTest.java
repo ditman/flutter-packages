@@ -97,7 +97,7 @@ public class MarkersControllerTest {
     context = ApplicationProvider.getApplicationContext();
     flutterApi = spy(new MapsCallbackApi(mock(BinaryMessenger.class)));
     clusterManagersController = spy(
-        new ClusterManagersController(flutterApi, context, PlatformMarkerType.LEGACY));
+        new ClusterManagersController(flutterApi, context, PlatformMarkerType.MARKER));
     controller =
         new MarkersController(
             flutterApi,
@@ -105,7 +105,7 @@ public class MarkersControllerTest {
             assetManager,
             density,
             bitmapDescriptorFactoryWrapper,
-            PlatformMarkerType.LEGACY);
+            PlatformMarkerType.MARKER);
     googleMap = mock(GoogleMap.class);
     markerManager = new MarkerManager(googleMap);
     markerCollection = markerManager.newCollection();

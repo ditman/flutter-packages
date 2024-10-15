@@ -87,8 +87,8 @@ class MarkerIconsBodyState extends State<MarkerIconsBody> {
               child: ExampleGoogleMap(
                 mapId: widget.mapId,
                 markerType: widget.mapId != null
-                    ? MarkerType.advanced
-                    : MarkerType.legacy,
+                    ? MarkerType.advancedMarker
+                    : MarkerType.marker,
                 initialCameraPosition: const CameraPosition(
                   target: _kMapCenter,
                   zoom: 7.0,

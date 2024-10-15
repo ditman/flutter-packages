@@ -35,6 +35,11 @@ typedef NS_ENUM(NSUInteger, FGMPlatformJointType) {
   FGMPlatformJointTypeRound = 2,
 };
 
+typedef NS_ENUM(NSUInteger, FGMPlatformMarkerType) {
+  FGMPlatformMarkerTypeMarker = 0,
+  FGMPlatformMarkerTypeAdvancedMarker = 1,
+};
+
 /// Wrapper for FGMPlatformJointType to allow for nullability.
 @interface FGMPlatformJointTypeBox : NSObject
 @property(nonatomic, assign) FGMPlatformJointType value;

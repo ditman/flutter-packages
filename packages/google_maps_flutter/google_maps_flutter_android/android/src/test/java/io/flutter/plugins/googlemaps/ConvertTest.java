@@ -106,11 +106,11 @@ public class ConvertTest {
 
     StaticCluster<MarkerBuilder> cluster = new StaticCluster<>(clusterPosition);
 
-    MarkerBuilder marker1 = new MarkerBuilder("m_1", clusterManagerId, PlatformMarkerType.LEGACY);
+    MarkerBuilder marker1 = new MarkerBuilder("m_1", clusterManagerId, PlatformMarkerType.MARKER);
     marker1.setPosition(markerPosition1);
     cluster.add(marker1);
 
-    MarkerBuilder marker2 = new MarkerBuilder("m_2", clusterManagerId, PlatformMarkerType.LEGACY);
+    MarkerBuilder marker2 = new MarkerBuilder("m_2", clusterManagerId, PlatformMarkerType.MARKER);
     marker2.setPosition(markerPosition2);
     cluster.add(marker2);
 

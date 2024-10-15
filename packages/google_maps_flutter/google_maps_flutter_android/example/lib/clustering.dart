@@ -240,8 +240,9 @@ class ClusteringBodyState extends State<ClusteringBody> {
         Expanded(
           child: ExampleGoogleMap(
             mapId: widget.mapId,
-            markerType:
-                widget.mapId != null ? MarkerType.advanced : MarkerType.legacy,
+            markerType: widget.mapId != null
+                ? MarkerType.advancedMarker
+                : MarkerType.marker,
             onMapCreated: _onMapCreated,
             initialCameraPosition: initialCameraPosition,
             markers: Set<Marker>.of(markers.values),

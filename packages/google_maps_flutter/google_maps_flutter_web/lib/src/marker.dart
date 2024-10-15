@@ -4,9 +4,13 @@
 
 part of '../google_maps_flutter_web.dart';
 
-/// The `MarkerController` class wraps a [gmaps.AdvancedMarkerElement], how it handles events, and its associated (optional) [gmaps.InfoWindow] widget.
+/// The `MarkerController` class wraps a [gmaps.AdvancedMarkerElement]
+/// or [gmaps.Marker], how it handles events, and its associated (optional)
+/// [gmaps.InfoWindow] widget.
 class MarkerController<T, O> {
-  /// Creates a `MarkerController`, which wraps a [gmaps.AdvancedMarkerElement] object, its `onTap`/`onDrag` behavior, and its associated [gmaps.InfoWindow].
+  /// Creates a `MarkerController`, which wraps a [gmaps.AdvancedMarkerElement]
+  /// or [gmaps.Marker] object, its `onTap`/`onDrag` behavior, and its
+  /// associated [gmaps.InfoWindow].
   MarkerController({
     required T marker,
     gmaps.InfoWindow? infoWindow,
@@ -62,14 +66,14 @@ class MarkerController<T, O> {
   /// Returns [ClusterManagerId] if marker belongs to cluster.
   ClusterManagerId? get clusterManagerId => _clusterManagerId;
 
-  /// Returns the [gmaps.AdvancedMarkerElement] associated to this controller.
+  /// Returns the marker associated to this controller.
   T? get marker => _marker;
 
   /// Returns the [gmaps.InfoWindow] associated to the marker.
   @visibleForTesting
   gmaps.InfoWindow? get infoWindow => _infoWindow;
 
-  /// Updates the options of the wrapped [gmaps.AdvancedMarkerElement] object.
+  /// Updates the options of the wrapped marker object.
   ///
   /// This cannot be called after [remove].
   void update(
@@ -102,7 +106,7 @@ class MarkerController<T, O> {
     }
   }
 
-  /// Disposes of the currently wrapped [gmaps.AdvancedMarkerElement].
+  /// Disposes of the currently wrapped marker object.
   void remove() {
     if (_marker != null) {
       _infoWindowShown = false;
@@ -216,6 +220,7 @@ class MarkerController<T, O> {
   }
 }
 
+/// Check marker type and call [legacy] or [advanced]
 void _doOnMarkerType({
   required dynamic marker,
   required void Function(gmaps.Marker marker) legacy,
@@ -233,6 +238,7 @@ void _doOnMarkerType({
   }
 }
 
+/// Check [marker] type and return result of [legacy] or [advanced] function
 R getOnMarkerType<R>({
   required dynamic marker,
   required R Function(gmaps.Marker marker) legacy,

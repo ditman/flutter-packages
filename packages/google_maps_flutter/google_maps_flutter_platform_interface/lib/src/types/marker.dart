@@ -119,6 +119,8 @@ class MarkerId extends MapsObjectId<Marker> {
 /// A marker icon is drawn oriented against the device's screen rather than
 /// the map's surface; that is, it will not necessarily change orientation
 /// due to map rotations, tilting, or zooming.
+///
+/// Deprecated on the web in favor of [AdvancedMarker].
 @immutable
 class Marker implements MapsObject<Marker> {
   /// Creates a set of marker configuration options.

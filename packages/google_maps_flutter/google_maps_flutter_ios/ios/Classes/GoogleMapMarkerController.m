@@ -476,7 +476,7 @@
   CLLocationCoordinate2D position = FGMGetCoordinateForPigeonLatLng(markerToAdd.position);
   NSString *markerIdentifier = markerToAdd.markerId;
   NSString *clusterManagerIdentifier = markerToAdd.clusterManagerId;
-    GMSMarker *marker = (self.markerType == FGMPlatformMarkerTypeAdvanced)
+  GMSMarker *marker = (self.markerType == FGMPlatformMarkerTypeAdvanced)
                           ? [GMSAdvancedMarker markerWithPosition:position]
                           : [GMSMarker markerWithPosition:position];
 

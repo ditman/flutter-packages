@@ -381,6 +381,7 @@ class PlatformMapViewCreationParams {
   final List<PlatformHeatmap> initialHeatmaps;
   final List<PlatformTileOverlay> initialTileOverlays;
   final List<PlatformClusterManager> initialClusterManagers;
+  final PlatformMarkerType markerType;
 }
 
 /// Pigeon equivalent of MapConfiguration.
