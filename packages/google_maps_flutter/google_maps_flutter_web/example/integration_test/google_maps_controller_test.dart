@@ -63,8 +63,10 @@ void main() {
         mapId: mapId,
         streamController: stream,
         widgetConfiguration: MapWidgetConfiguration(
-            initialCameraPosition: initialCameraPosition,
-            textDirection: TextDirection.ltr),
+          initialCameraPosition: initialCameraPosition,
+          textDirection: TextDirection.ltr,
+          markerType: MarkerType.legacy,
+        ),
         mapObjects: mapObjects,
         mapConfiguration: mapConfiguration,
       );
