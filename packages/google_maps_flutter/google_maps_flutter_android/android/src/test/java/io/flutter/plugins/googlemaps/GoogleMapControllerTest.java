@@ -64,8 +64,8 @@ public class GoogleMapControllerTest {
   // See getGoogleMapControllerWithMockedDependencies for version with dependency injections.
   public GoogleMapController getGoogleMapController() {
     GoogleMapController googleMapController =
-        new GoogleMapController(0, context, mockMessenger, activity::getLifecycle, null,
-            PlatformMarkerType.MARKER);
+        new GoogleMapController(
+            0, context, mockMessenger, activity::getLifecycle, null, PlatformMarkerType.MARKER);
     googleMapController.init();
     return googleMapController;
   }

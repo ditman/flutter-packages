@@ -35,8 +35,7 @@ class ClusterManagersController
         ClusterManager.OnClusterClickListener<MarkerBuilder> {
   @NonNull private final Context context;
 
-  @VisibleForTesting
-  @NonNull
+  @VisibleForTesting @NonNull
   protected final HashMap<String, ClusterManager<MarkerBuilder>> clusterManagerIdToManager;
 
   @NonNull private final MapsCallbackApi flutterApi;
@@ -54,8 +53,7 @@ class ClusterManagersController
   ClusterManagersController(
       @NonNull MapsCallbackApi flutterApi,
       @NonNull Context context,
-      @NonNull PlatformMarkerType markerType
-  ) {
+      @NonNull PlatformMarkerType markerType) {
     this.clusterManagerIdToManager = new HashMap<>();
     this.context = context;
     this.flutterApi = flutterApi;
@@ -109,10 +107,9 @@ class ClusterManagersController
   }
 
   /**
-   * Initialize cluster renderer if it hasn't been initialized before.
-   * ClusterManager uses default renderer which should be changed to (legacy) renderer or
-   * advanced renderer
-   **/
+   * Initialize cluster renderer if it hasn't been initialized before. ClusterManager uses default
+   * renderer which should be changed to (legacy) renderer or advanced renderer
+   */
   private void initializeRenderer(ClusterManager<MarkerBuilder> clusterManager) {
     final ClusterRenderer<MarkerBuilder> renderer = clusterManager.getRenderer();
     if (renderer.getClass() == MarkerClusterRenderer.class
@@ -261,8 +258,8 @@ class ClusterManagersController
 
   /** AdvancedMarkerClusterRenderer is a ClusterRenderer that supports AdvancedMarkers */
   @VisibleForTesting
-  static class AdvancedMarkerClusterRenderer<T extends MarkerBuilder> extends
-      DefaultAdvancedMarkersClusterRenderer<T> {
+  static class AdvancedMarkerClusterRenderer<T extends MarkerBuilder>
+      extends DefaultAdvancedMarkersClusterRenderer<T> {
 
     private final ClusterManagersController clusterManagersController;
 
@@ -270,8 +267,7 @@ class ClusterManagersController
         Context context,
         GoogleMap map,
         ClusterManager<T> clusterManager,
-        ClusterManagersController clusterManagersController
-    ) {
+        ClusterManagersController clusterManagersController) {
       super(context, map, clusterManager);
       this.clusterManagersController = clusterManagersController;
     }

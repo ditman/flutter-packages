@@ -338,14 +338,15 @@ public class ConvertTest {
 
   @Test
   public void GetBitmapFromPinConfig() {
-    Messages.PlatformBitmapPinConfig bitmap = new Messages.PlatformBitmapPinConfig.Builder()
-        .setBackgroundColor(0xFFFFFFL)
-        .setBorderColor(0xFFFFFFL)
-        .build();
+    Messages.PlatformBitmapPinConfig bitmap =
+        new Messages.PlatformBitmapPinConfig.Builder()
+            .setBackgroundColor(0xFFFFFFL)
+            .setBorderColor(0xFFFFFFL)
+            .build();
 
     when(bitmapDescriptorFactoryWrapper.fromPinConfig(any())).thenReturn(mockBitmapDescriptor);
-    BitmapDescriptor result = Convert.getBitmapFromPinConfig(bitmap, assetManager, 1f,
-        bitmapDescriptorFactoryWrapper);
+    BitmapDescriptor result =
+        Convert.getBitmapFromPinConfig(bitmap, assetManager, 1f, bitmapDescriptorFactoryWrapper);
     Assert.assertEquals(mockBitmapDescriptor, result);
   }
 

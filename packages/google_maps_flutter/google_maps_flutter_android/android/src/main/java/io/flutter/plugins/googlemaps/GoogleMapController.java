@@ -988,9 +988,9 @@ class GoogleMapController
   public @NonNull Boolean isAdvancedMarkersAvailable() {
     if (googleMap == null) {
       throw new FlutterError(
-          "GoogleMap uninitialized", "getMapCapabilities() called prior to map initialization",
-          null
-      );
+          "GoogleMap uninitialized",
+          "getMapCapabilities() called prior to map initialization",
+          null);
     }
     final MapCapabilities mapCapabilities = googleMap.getMapCapabilities();
     return mapCapabilities.isAdvancedMarkersAvailable();

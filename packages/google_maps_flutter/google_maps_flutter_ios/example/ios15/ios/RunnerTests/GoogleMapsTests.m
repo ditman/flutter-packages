@@ -104,7 +104,7 @@
                     initialHeatmaps:@[]
                 initialTileOverlays:@[]
              initialClusterManagers:@[]
-markerType:FGMPlatformMarkerTypeLegacy];
+                         markerType:FGMPlatformMarkerTypeLegacy];
 }
 
 @end

@@ -195,8 +195,7 @@ class Convert {
       Messages.PlatformBitmapPinConfig pinConfigBitmap,
       AssetManager assetManager,
       float density,
-      BitmapDescriptorFactoryWrapper bitmapDescriptorFactory
-  ) {
+      BitmapDescriptorFactoryWrapper bitmapDescriptorFactory) {
     try {
       final String backgroundColorKey = "backgroundColor";
       final String borderColorKey = "borderColor";
@@ -206,20 +205,23 @@ class Convert {
       final String glyphBitmapDescriptorKey = "glyphBitmapDescriptor";
 
       final Integer backgroundColor =
-          pinConfigBitmap.getBackgroundColor() != null ? toInt(pinConfigBitmap.getBackgroundColor())
+          pinConfigBitmap.getBackgroundColor() != null
+              ? toInt(pinConfigBitmap.getBackgroundColor())
               : null;
       final Integer borderColor =
           pinConfigBitmap.getBorderColor() != null ? toInt(pinConfigBitmap.getBorderColor()) : null;
       final String glyphText =
           pinConfigBitmap.getGlyphText() != null ? pinConfigBitmap.getGlyphText() : null;
       final Integer glyphTextColor =
-          pinConfigBitmap.getGlyphTextColor() != null ? toInt(pinConfigBitmap.getGlyphTextColor())
+          pinConfigBitmap.getGlyphTextColor() != null
+              ? toInt(pinConfigBitmap.getGlyphTextColor())
               : null;
       final Integer glyphColor =
           pinConfigBitmap.getGlyphColor() != null ? toInt(pinConfigBitmap.getGlyphColor()) : null;
-      final BitmapDescriptor glyphBitmapDescriptor = pinConfigBitmap.getGlyphBitmap() != null
-          ? toBitmapDescriptor(pinConfigBitmap.getGlyphBitmap(), assetManager, density)
-          : null;
+      final BitmapDescriptor glyphBitmapDescriptor =
+          pinConfigBitmap.getGlyphBitmap() != null
+              ? toBitmapDescriptor(pinConfigBitmap.getGlyphBitmap(), assetManager, density)
+              : null;
 
       final PinConfig.Builder pinConfigBuilder = PinConfig.builder();
       if (backgroundColor != null) {
@@ -232,9 +234,10 @@ class Convert {
 
       PinConfig.Glyph glyph = null;
       if (glyphText != null) {
-        glyph = glyphTextColor != null
-            ? new PinConfig.Glyph(glyphText, glyphTextColor)
-            : new PinConfig.Glyph(glyphText);
+        glyph =
+            glyphTextColor != null
+                ? new PinConfig.Glyph(glyphText, glyphTextColor)
+                : new PinConfig.Glyph(glyphText);
       } else if (glyphBitmapDescriptor != null) {
         glyph = new PinConfig.Glyph(glyphBitmapDescriptor);
       } else if (glyphColor != null) {
