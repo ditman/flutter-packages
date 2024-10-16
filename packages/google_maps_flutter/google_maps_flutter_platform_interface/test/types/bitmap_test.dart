@@ -757,6 +757,8 @@ void main() {
         ],
       );
     });
+  });
+
   test('mapBitmapScaling from String', () {
     expect(mapBitmapScalingFromString('auto'), MapBitmapScaling.auto);
     expect(mapBitmapScalingFromString('none'), MapBitmapScaling.none);

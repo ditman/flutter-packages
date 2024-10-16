@@ -48,9 +48,10 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
   // A helper text for Xcode UITests.
   String _onDragXcodeUITestHelperText = '';
 
-  // ignore: use_setters_to_change_properties
   void _onMapCreated(ExampleGoogleMapController controller) {
-    this.controller = controller;
+    setState(() {
+      this.controller = controller;
+    });
   }
 
   @override

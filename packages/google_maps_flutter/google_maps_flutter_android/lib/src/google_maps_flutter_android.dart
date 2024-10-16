@@ -951,6 +951,21 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
                 imagePixelRatio: bytes.imagePixelRatio,
                 width: bytes.width,
                 height: bytes.height));
+      case final PinConfig pinConfig:
+        final BitmapDescriptor? glyphBitmapDescriptor =
+            pinConfig.glyph?.bitmapDescriptor;
+        return PlatformBitmap(
+          bitmap: PlatformBitmapPinConfig(
+            backgroundColor: pinConfig.backgroundColor?.value,
+            borderColor: pinConfig.borderColor?.value,
+            glyphColor: pinConfig.glyph?.color?.value,
+            glyphText: pinConfig.glyph?.text,
+            glyphTextColor: pinConfig.glyph?.textColor?.value,
+            glyphBitmap: glyphBitmapDescriptor != null
+                ? platformBitmapFromBitmapDescriptor(glyphBitmapDescriptor)
+                : null,
+          ),
+        );
       default:
         throw ArgumentError(
             'Unrecognized type of bitmap ${bitmap.runtimeType}', 'bitmap');

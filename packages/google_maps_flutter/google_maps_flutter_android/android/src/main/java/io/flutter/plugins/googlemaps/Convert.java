@@ -117,6 +117,10 @@ class Convert {
       Messages.PlatformBitmapBytesMap typedBitmap = (Messages.PlatformBitmapBytesMap) bitmap;
       return getBitmapFromBytes(typedBitmap, density, wrapper);
     }
+    if (bitmap instanceof Messages.PlatformBitmapPinConfig) {
+      Messages.PlatformBitmapPinConfig pinConfigBitmap = (Messages.PlatformBitmapPinConfig) bitmap;
+      return getBitmapFromPinConfig(pinConfigBitmap, assetManager, density, wrapper);
+    }
     throw new IllegalArgumentException("PlatformBitmap did not contain a supported subtype.");
   }
 
@@ -188,7 +192,7 @@ class Convert {
   }
 
   public static BitmapDescriptor getBitmapFromPinConfig(
-      Map<?, ?> byteData,
+      Messages.PlatformBitmapPinConfig pinConfigBitmap,
       AssetManager assetManager,
       float density,
       BitmapDescriptorFactoryWrapper bitmapDescriptorFactory
@@ -202,17 +206,19 @@ class Convert {
       final String glyphBitmapDescriptorKey = "glyphBitmapDescriptor";
 
       final Integer backgroundColor =
-          byteData.containsKey(backgroundColorKey) ? toInt(byteData.get(backgroundColorKey)) : null;
+          pinConfigBitmap.getBackgroundColor() != null ? toInt(pinConfigBitmap.getBackgroundColor())
+              : null;
       final Integer borderColor =
-          byteData.containsKey(borderColorKey) ? toInt(byteData.get(borderColorKey)) : null;
+          pinConfigBitmap.getBorderColor() != null ? toInt(pinConfigBitmap.getBorderColor()) : null;
       final String glyphText =
-          byteData.containsKey(glyphTextKey) ? toString(byteData.get(glyphTextKey)) : null;
+          pinConfigBitmap.getGlyphText() != null ? pinConfigBitmap.getGlyphText() : null;
       final Integer glyphTextColor =
-          byteData.containsKey(glyphTextColorKey) ? toInt(byteData.get(glyphTextColorKey)) : null;
+          pinConfigBitmap.getGlyphTextColor() != null ? toInt(pinConfigBitmap.getGlyphTextColor())
+              : null;
       final Integer glyphColor =
-          byteData.containsKey(glyphColorKey) ? toInt(byteData.get(glyphColorKey)) : null;
-      final BitmapDescriptor glyphBitmapDescriptor = byteData.containsKey(glyphBitmapDescriptorKey)
-          ? toBitmapDescriptor(byteData.get(glyphBitmapDescriptorKey), assetManager, density)
+          pinConfigBitmap.getGlyphColor() != null ? toInt(pinConfigBitmap.getGlyphColor()) : null;
+      final BitmapDescriptor glyphBitmapDescriptor = pinConfigBitmap.getGlyphBitmap() != null
+          ? toBitmapDescriptor(pinConfigBitmap.getGlyphBitmap(), assetManager, density)
           : null;
 
       final PinConfig.Builder pinConfigBuilder = PinConfig.builder();

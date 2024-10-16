@@ -604,6 +604,25 @@ class PlatformBitmapBytesMap {
   final double? height;
 }
 
+class PlatformBitmapPinConfig {
+  PlatformBitmapPinConfig({
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.glyphColor,
+    required this.glyphBitmap,
+    required this.glyphText,
+    required this.glyphTextColor,
+  });
+
+  final int? backgroundColor;
+  final int? borderColor;
+  final int? glyphColor;
+  final PlatformBitmap? glyphBitmap;
+
+  final String? glyphText;
+  final int? glyphTextColor;
+}
+
 /// Interface for non-test interactions with the native SDK.
 ///
 /// For test-only state queries, see [MapsInspectorApi].
