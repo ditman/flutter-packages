@@ -82,8 +82,8 @@ class ScrollingMapBody extends StatelessWidget {
                         target: _center,
                         zoom: 11.0,
                       ),
-                      markers: <AdvancedMarker>{
-                        AdvancedMarker(
+                      markers: <Marker>{
+                        Marker(
                           markerId: const MarkerId('test_marker_id'),
                           position: LatLng(
                             _center.latitude,
