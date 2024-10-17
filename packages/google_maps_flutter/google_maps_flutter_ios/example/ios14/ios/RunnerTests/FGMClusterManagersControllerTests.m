@@ -36,7 +36,7 @@
                                     callbackHandler:handler
                           clusterManagersController:clusterManagersController
                                           registrar:registrar
-                                         markerType:FGMPlatformMarkerTypeLegacy];
+                                         markerType:FGMPlatformMarkerTypeMarker];
 
   // Add cluster managers.
   NSString *clusterManagerId = @"cm";
