@@ -729,14 +729,7 @@ void main() {
     });
 
     test('construct with glyph bitmap', () async {
-      const ImageConfiguration imageConfiguration = ImageConfiguration(
-        devicePixelRatio: 3,
-        size: Size(48, 56),
-      );
-      final BitmapDescriptor bitmap = await BitmapDescriptor.asset(
-        imageConfiguration,
-        'red_square.png',
-      );
+      const BitmapDescriptor bitmap = AssetBitmap(name: 'red_square.png');
       final PinConfig pinConfig = PinConfig(
         backgroundColor: Colors.black,
         borderColor: Colors.red,
