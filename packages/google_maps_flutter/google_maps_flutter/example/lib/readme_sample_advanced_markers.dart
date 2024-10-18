@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// #docregion AdvancedMarkersSample
 class AdvancedMarkersSample extends StatelessWidget {
   const AdvancedMarkersSample({super.key});
 
@@ -34,15 +33,16 @@ class AdvancedMarkersSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+// #docregion AdvancedMarkersSample
       body: GoogleMap(
         // Set your Map Id
         mapId: 'my-map-id',
 
         // Let map know that you're using Advanced Markers
         markerType: MarkerType.advancedMarker,
+// #enddocregion AdvancedMarkersSample
         initialCameraPosition: _kGooglePlex,
       ),
     );
   }
 }
-// #enddocregion AdvancedMarkersSample

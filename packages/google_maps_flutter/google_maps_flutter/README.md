@@ -128,14 +128,12 @@ in an unbounded widget will cause the application to throw a Flutter exception.
 
 <?code-excerpt "readme_sample_advanced_markers.dart (AdvancedMarkersSample)"?>
 ```dart
-GoogleMap(
+body: GoogleMap(
   // Set your Map Id
   mapId: 'my-map-id',
-  
+
   // Let map know that you're using Advanced Markers
   markerType: MarkerType.advancedMarker,
-  initialCameraPosition: _kGooglePlex,
-),
 ```
 
 ### Sample Usage
