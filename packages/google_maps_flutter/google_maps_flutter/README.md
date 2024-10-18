@@ -126,7 +126,7 @@ in an unbounded widget will cause the application to throw a Flutter exception.
 [Advanced Markers](https://developers.google.com/maps/documentation/javascript/advanced-markers/overview) are map markers that offer extra customization options. [Map Id](https://developers.google.com/maps/documentation/get-map-id) is required in order to use Advanced Markers:
 
 
-<?code-excerpt "readme_sample.dart (AdvancedMarkersSample)"?>
+<?code-excerpt "readme_sample_advanced_markers.dart (AdvancedMarkersSample)"?>
 ```dart
 GoogleMap(
   // Set your Map Id
