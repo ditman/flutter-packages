@@ -419,7 +419,7 @@ Future<Node?> _advancedMarkerIconFromBitmapDescriptor(
       if (glyph.text != null) {
         // Set glyph text and text color
         final web.Element element = document.createElement('p');
-        element.innerHTML = glyph.text!;
+        element.innerHTML = glyph.text!.toJS;
         if (glyph.textColor != null) {
           element.setAttribute(
             'style',
