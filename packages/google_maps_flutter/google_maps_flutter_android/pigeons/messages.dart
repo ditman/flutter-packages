@@ -428,13 +428,11 @@ class PlatformMapViewCreationParams {
   final List<PlatformHeatmap> initialHeatmaps;
   final List<PlatformTileOverlay> initialTileOverlays;
   final List<PlatformClusterManager> initialClusterManagers;
-  final PlatformMarkerType markerType;
+  fina PlatformMarkerType markerType;
 }
 
 enum PlatformMarkerType {
-  marker,
-  advancedMarker,
-}
+marker, advancedMarker,}
 
 /// Pigeon equivalent of MapConfiguration.
 class PlatformMapConfiguration {

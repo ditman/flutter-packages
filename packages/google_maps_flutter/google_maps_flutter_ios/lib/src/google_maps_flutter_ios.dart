@@ -704,6 +704,129 @@ class GoogleMapsFlutterIOS extends GoogleMapsFlutterPlatform {
         identifier: clusterManager.clusterManagerId.value);
   }
 
+  static PlatformCameraUpdate _platformCameraUpdateFromCameraUpdate(
+      CameraUpdate update) {
+    switch (update.updateType) {
+      case CameraUpdateType.newCameraPosition:
+        update as CameraUpdateNewCameraPosition;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateNewCameraPosition(
+                cameraPosition: _platformCameraPositionFromCameraPosition(
+                    update.cameraPosition)));
+      case CameraUpdateType.newLatLng:
+        update as CameraUpdateNewLatLng;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateNewLatLng(
+                latLng: _platformLatLngFromLatLng(update.latLng)));
+      case CameraUpdateType.newLatLngZoom:
+        update as CameraUpdateNewLatLngZoom;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateNewLatLngZoom(
+                latLng: _platformLatLngFromLatLng(update.latLng),
+                zoom: update.zoom));
+      case CameraUpdateType.newLatLngBounds:
+        update as CameraUpdateNewLatLngBounds;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateNewLatLngBounds(
+                bounds: _platformLatLngBoundsFromLatLngBounds(update.bounds)!,
+                padding: update.padding));
+      case CameraUpdateType.zoomTo:
+        update as CameraUpdateZoomTo;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateZoomTo(zoom: update.zoom));
+      case CameraUpdateType.zoomBy:
+        update as CameraUpdateZoomBy;
+        final Offset? focus = update.focus;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateZoomBy(
+                amount: update.amount,
+                focus: focus == null ? null : _platformPointFromOffset(focus)));
+      case CameraUpdateType.zoomIn:
+        update as CameraUpdateZoomIn;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateZoom(out: false));
+      case CameraUpdateType.zoomOut:
+        update as CameraUpdateZoomOut;
+        return PlatformCameraUpdate(
+            cameraUpdate: PlatformCameraUpdateZoom(out: true));
+      case CameraUpdateType.scrollBy:
+        update as CameraUpdateScrollBy;
+        return PlatformCameraUpdate(
+            cameraUpdate:
+                PlatformCameraUpdateScrollBy(dx: update.dx, dy: update.dy));
+    }
+  }
+
+  /// Converts [MapBitmapScaling] from platform interface to [PlatformMapBitmapScaling] Pigeon.
+  @visibleForTesting
+  static PlatformMapBitmapScaling platformMapBitmapScalingFromScaling(
+      MapBitmapScaling scaling) {
+    switch (scaling) {
+      case MapBitmapScaling.auto:
+        return PlatformMapBitmapScaling.auto;
+      case MapBitmapScaling.none:
+        return PlatformMapBitmapScaling.none;
+    }
+
+    // The enum comes from a different package, which could get a new value at
+    // any time, so provide a fallback that ensures this won't break when used
+    // with a version that contains new values. This is deliberately outside
+    // the switch rather than a `default` so that the linter will flag the
+    // switch as needing an update.
+    // ignore: dead_code
+    return PlatformMapBitmapScaling.auto;
+  }
+
+  /// Converts [BitmapDescriptor] from platform interface to [PlatformBitmap] pigeon.
+  @visibleForTesting
+  static PlatformBitmap platformBitmapFromBitmapDescriptor(
+      BitmapDescriptor bitmap) {
+    switch (bitmap) {
+      case final DefaultMarker marker:
+        return PlatformBitmap(
+            bitmap: PlatformBitmapDefaultMarker(hue: marker.hue?.toDouble()));
+      // Clients may still use this deprecated format, so it must be supported.
+      // ignore: deprecated_member_use
+      case final BytesBitmap bytes:
+        final Size? size = bytes.size;
+        return PlatformBitmap(
+            bitmap: PlatformBitmapBytes(
+                byteData: bytes.byteData,
+                size: (size == null) ? null : _platformSizeFromSize(size)));
+      case final AssetBitmap asset:
+        return PlatformBitmap(
+            bitmap: PlatformBitmapAsset(name: asset.name, pkg: asset.package));
+      // Clients may still use this deprecated format, so it must be supported.
+      // ignore: deprecated_member_use
+      case final AssetImageBitmap asset:
+        final Size? size = asset.size;
+        return PlatformBitmap(
+            bitmap: PlatformBitmapAssetImage(
+                name: asset.name,
+                scale: asset.scale,
+                size: (size == null) ? null : _platformSizeFromSize(size)));
+      case final AssetMapBitmap asset:
+        return PlatformBitmap(
+            bitmap: PlatformBitmapAssetMap(
+                assetName: asset.assetName,
+                bitmapScaling:
+                    platformMapBitmapScalingFromScaling(asset.bitmapScaling),
+                imagePixelRatio: asset.imagePixelRatio,
+                width: asset.width,
+                height: asset.height));
+      case final BytesMapBitmap bytes:
+        return PlatformBitmap(
+            bitmap: PlatformBitmapBytesMap(
+                byteData: bytes.byteData,
+                bitmapScaling:
+                    platformMapBitmapScalingFromScaling(bytes.bitmapScaling),
+                imagePixelRatio: bytes.imagePixelRatio,
+                width: bytes.width,
+                height: bytes.height));
+      default:
+        throw ArgumentError(
+            'Unrecognized type of bitmap ${bitmap.runtimeType}', 'bitmap');
+    }
   static PlatformMarkerType _platformMarkerTypeFromMarkerType(
       MarkerType markerType) {
     return switch (markerType) {

@@ -1161,7 +1161,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
                      indoorViewEnabled:(nullable NSNumber *)indoorViewEnabled
                         trafficEnabled:(nullable NSNumber *)trafficEnabled
                       buildingsEnabled:(nullable NSNumber *)buildingsEnabled
-                                 mapId:(nullable NSString *)mapId
+                            cloudMapId:(nullable NSString *)cloudMapId
                                  style:(nullable NSString *)style {
   FGMPlatformMapConfiguration *pigeonResult = [[FGMPlatformMapConfiguration alloc] init];
   pigeonResult.compassEnabled = compassEnabled;
@@ -1179,7 +1179,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   pigeonResult.indoorViewEnabled = indoorViewEnabled;
   pigeonResult.trafficEnabled = trafficEnabled;
   pigeonResult.buildingsEnabled = buildingsEnabled;
-  pigeonResult.mapId = mapId;
+  pigeonResult.cloudMapId = cloudMapId;
   pigeonResult.style = style;
   return pigeonResult;
 }
@@ -1200,7 +1200,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   pigeonResult.indoorViewEnabled = GetNullableObjectAtIndex(list, 12);
   pigeonResult.trafficEnabled = GetNullableObjectAtIndex(list, 13);
   pigeonResult.buildingsEnabled = GetNullableObjectAtIndex(list, 14);
-  pigeonResult.mapId = GetNullableObjectAtIndex(list, 15);
+  pigeonResult.cloudMapId = GetNullableObjectAtIndex(list, 15);
   pigeonResult.style = GetNullableObjectAtIndex(list, 16);
   return pigeonResult;
 }
@@ -1224,7 +1224,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
     self.indoorViewEnabled ?: [NSNull null],
     self.trafficEnabled ?: [NSNull null],
     self.buildingsEnabled ?: [NSNull null],
-    self.mapId ?: [NSNull null],
+    self.cloudMapId ?: [NSNull null],
     self.style ?: [NSNull null],
   ];
 }
@@ -2392,28 +2392,6 @@ void SetUpFGMMapsApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
         FlutterStandardTypedData *output = [api takeSnapshotWithError:&error];
-        callback(wrapResult(output, error));
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  /// Returns true if the map supports advanced markers
-  {
-    FlutterBasicMessageChannel *channel = [[FlutterBasicMessageChannel alloc]
-           initWithName:[NSString stringWithFormat:@"%@%@",
-                                                   @"dev.flutter.pigeon.google_maps_flutter_ios."
-                                                   @"MapsApi.isAdvancedMarkersAvailable",
-                                                   messageChannelSuffix]
-        binaryMessenger:binaryMessenger
-                  codec:FGMGetMessagesCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(isAdvancedMarkersAvailable:)],
-                @"FGMMapsApi api (%@) doesn't respond to @selector(isAdvancedMarkersAvailable:)",
-                api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        FlutterError *error;
-        NSNumber *output = [api isAdvancedMarkersAvailable:&error];
         callback(wrapResult(output, error));
       }];
     } else {
