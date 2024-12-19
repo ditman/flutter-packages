@@ -112,12 +112,6 @@ class ClusterManagersController
    */
   private void initializeRenderer(ClusterManager<MarkerBuilder> clusterManager) {
     final ClusterRenderer<MarkerBuilder> renderer = clusterManager.getRenderer();
-    if (renderer.getClass() == MarkerClusterRenderer.class
-        || renderer.getClass() == AdvancedMarkerClusterRenderer.class) {
-      // Renderer has already been initialized
-      return;
-    }
-
     final ClusterRenderer<MarkerBuilder> clusterRenderer =
         markerType == PlatformMarkerType.ADVANCED_MARKER
             ? new AdvancedMarkerClusterRenderer<>(context, googleMap, clusterManager, this)
