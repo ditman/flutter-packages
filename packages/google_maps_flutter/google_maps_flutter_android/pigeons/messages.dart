@@ -709,6 +709,10 @@ abstract class MapsApi {
   /// is no way to return failures from map initialization.
   bool didLastStyleSucceed();
 
+  /// Returns true if this map supports advanced markers.
+  ///
+  /// This allows checking if the map supports advanced markers before
+  /// attempting to use them.
   bool isAdvancedMarkersAvailable();
 
   /// Clears the cache of tiles previously requseted from the tile provider.

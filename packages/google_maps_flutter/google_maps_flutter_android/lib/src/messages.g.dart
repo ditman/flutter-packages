@@ -2383,6 +2383,10 @@ class MapsApi {
     }
   }
 
+  /// Returns true if this map supports advanced markers.
+  ///
+  /// This allows checking if the map supports advanced markers before
+  /// attempting to use them.
   Future<bool> isAdvancedMarkersAvailable() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.google_maps_flutter_android.MapsApi.isAdvancedMarkersAvailable$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(

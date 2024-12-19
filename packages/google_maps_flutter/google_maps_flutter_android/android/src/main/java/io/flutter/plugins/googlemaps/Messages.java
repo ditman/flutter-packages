@@ -6104,7 +6104,12 @@ public class Messages {
      */
     @NonNull 
     Boolean didLastStyleSucceed();
-
+    /**
+     * Returns true if this map supports advanced markers.
+     *
+     * This allows checking if the map supports advanced markers before
+     * attempting to use them.
+     */
     @NonNull 
     Boolean isAdvancedMarkersAvailable();
     /** Clears the cache of tiles previously requseted from the tile provider. */
