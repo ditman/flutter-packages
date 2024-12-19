@@ -632,6 +632,7 @@ MapConfiguration _configurationFromMapWidget(GoogleMap map) {
     indoorViewEnabled: map.indoorViewEnabled,
     trafficEnabled: map.trafficEnabled,
     buildingsEnabled: map.buildingsEnabled,
+    markerType: map.markerType,
     mapId: map.mapId,
     // A null style in the widget means no style, which is expressed as '' in
     // the configuration to distinguish from no change (null).
