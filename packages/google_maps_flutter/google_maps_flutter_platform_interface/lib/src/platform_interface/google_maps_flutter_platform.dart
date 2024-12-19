@@ -423,7 +423,6 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     // TODO(stuartmorgan): Replace with a structured type that's part of the
     // interface. See https://github.com/flutter/flutter/issues/70330.
     Map<String, dynamic> mapOptions = const <String, dynamic>{},
-    MarkerType markerType = MarkerType.marker,
   }) {
     throw UnimplementedError('buildView() has not been implemented.');
   }
@@ -450,7 +449,6 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     Set<Circle> circles = const <Circle>{},
     Set<TileOverlay> tileOverlays = const <TileOverlay>{},
     Map<String, dynamic> mapOptions = const <String, dynamic>{},
-    MarkerType markerType = MarkerType.marker,
   }) {
     return buildView(
       creationId,
@@ -463,7 +461,6 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
       tileOverlays: tileOverlays,
       gestureRecognizers: gestureRecognizers,
       mapOptions: mapOptions,
-      markerType: markerType,
     );
   }
 
@@ -487,7 +484,6 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
       tileOverlays: mapObjects.tileOverlays,
       gestureRecognizers: widgetConfiguration.gestureRecognizers,
       mapOptions: jsonForMapConfiguration(mapConfiguration),
-      markerType: widgetConfiguration.markerType,
     );
   }
 

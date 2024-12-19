@@ -60,5 +60,6 @@ Map<String, Object> jsonForMapConfiguration(MapConfiguration config) {
       'buildingsEnabled': config.buildingsEnabled!,
     if (config.mapId != null) 'mapId': config.mapId!,
     if (config.style != null) 'style': config.style!,
+    if (config.markerType != null) 'markerType': config.markerType!.index,
   };
 }

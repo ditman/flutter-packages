@@ -1127,7 +1127,7 @@ class TextGlyph extends AdvancedMarkerGlyph {
   /// Constructs a glyph with the specified [text] and [textColor].
   const TextGlyph({
     required this.text,
-    required this.textColor,
+    this.textColor,
   }) : super._();
 
   /// Text to be displayed in the glyph.

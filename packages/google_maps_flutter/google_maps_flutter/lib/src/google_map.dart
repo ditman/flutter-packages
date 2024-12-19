@@ -324,7 +324,18 @@ class GoogleMap extends StatefulWidget {
   /// for more details.
   final String? mapId;
 
-  /// Indicates whether map should use [AdvancedMarker]s or [Marker]s.
+  /// Indicates whether map uses [AdvancedMarker]s or [Marker]s.
+  ///
+  /// [AdvancedMarker] and [Marker]s classes might not be related to each other
+  /// in the platform implementation. It's important to set the correct
+  /// [MarkerType] so that the platform implementation can handle the markers:
+  /// * If [MarkerType.advancedMarker] is used, all markers must be of type
+  /// [AdvancedMarker].
+  /// * If [MarkerType.marker] is used, markers cannot be of type
+  /// [AdvancedMarker].
+  ///
+  /// While some features work with either type, using the incorrect type
+  /// may result in unexpected behavior.
   final MarkerType markerType;
 
   /// Creates a [State] for this [GoogleMap].
@@ -358,7 +369,6 @@ class _GoogleMapState extends State<GoogleMap> {
             TextDirection.ltr,
         initialCameraPosition: widget.initialCameraPosition,
         gestureRecognizers: widget.gestureRecognizers,
-        markerType: widget.markerType,
       ),
       mapObjects: MapObjects(
         markers: widget.markers,

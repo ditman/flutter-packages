@@ -45,33 +45,37 @@ class GoogleMapController {
     if (markerTypes.isNotEmpty) {
       assert(markerTypes.length == 1, 'All markers must be of the same type.');
 
-      switch (widgetConfiguration.markerType) {
+      switch (mapConfiguration.markerType) {
+        case null:
         case MarkerType.marker:
           assert(
             markerTypes.first == Marker,
             'All markers must be of type Marker because '
-            'widgetConfiguration.markerType is MarkerType.legacy',
+            'mapConfiguration.markerType is MarkerType.legacy',
           );
         case MarkerType.advancedMarker:
           assert(
             markerTypes.first == AdvancedMarker,
             'All markers must be of type AdvancedMarker because '
-            'widgetConfiguration.markerType is MarkerType.advanced',
+            'mapConfiguration.markerType is MarkerType.advanced',
           );
       }
     }
 
     // Advanced and legacy markers are handled differently so markers controller
     // and cluster manager need be initialized with the correct marker type.
-    _clusterManagersController = switch (widgetConfiguration.markerType) {
+    _clusterManagersController = switch (mapConfiguration.markerType) {
+      null ||
       MarkerType.marker =>
         ClusterManagersController<gmaps.Marker>(stream: _streamController),
       MarkerType.advancedMarker =>
         ClusterManagersController<gmaps.AdvancedMarkerElement>(
             stream: _streamController),
     };
-    _markersController = switch (widgetConfiguration.markerType) {
-      MarkerType.marker => MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
+    _markersController = switch (mapConfiguration.markerType) {
+      null ||
+      MarkerType.marker =>
+        MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
           stream: _streamController,
           clusterManagersController: _clusterManagersController!
               as ClusterManagersController<gmaps.Marker>,

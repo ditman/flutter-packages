@@ -54,7 +54,6 @@ void main() {
               widgetConfiguration: const MapWidgetConfiguration(
                 initialCameraPosition: initialCameraPosition,
                 textDirection: TextDirection.ltr,
-                markerType: MarkerType.marker,
               ),
               mapObjects: MapObjects(
                   clusterManagers: clusterManagers, markers: initialMarkers)));

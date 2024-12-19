@@ -39,6 +39,7 @@ class MapConfiguration {
     @Deprecated('cloudMapId is deprecated. Use mapId instead.')
     String? cloudMapId,
     this.style,
+    this.markerType,
   }) : mapId = mapId ?? cloudMapId;
 
   /// This setting controls how the API handles gestures on the map. Web only.
@@ -121,6 +122,13 @@ class MapConfiguration {
   /// To clear a previously set style, set this to an empty string.
   final String? style;
 
+  /// The type of marker that the map should use.
+  ///
+  /// Advanced and legacy markers could be handled differently by platform
+  /// implementations. This property indicates which type of marker should be
+  /// used.
+  final MarkerType? markerType;
+
   /// Returns a new options object containing only the values of this instance
   /// that are different from [other].
   MapConfiguration diffFrom(MapConfiguration other) {
@@ -183,6 +191,7 @@ class MapConfiguration {
           buildingsEnabled != other.buildingsEnabled ? buildingsEnabled : null,
       mapId: mapId != other.mapId ? mapId : null,
       style: style != other.style ? style : null,
+      markerType: markerType != other.markerType ? markerType : null,
     );
   }
 
@@ -216,6 +225,7 @@ class MapConfiguration {
       buildingsEnabled: diff.buildingsEnabled ?? buildingsEnabled,
       mapId: diff.mapId ?? mapId,
       style: diff.style ?? style,
+      markerType: diff.markerType ?? markerType,
     );
   }
 
@@ -242,7 +252,8 @@ class MapConfiguration {
       trafficEnabled == null &&
       buildingsEnabled == null &&
       mapId == null &&
-      style == null;
+      style == null &&
+      markerType == null;
 
   @override
   bool operator ==(Object other) {
@@ -274,7 +285,8 @@ class MapConfiguration {
         trafficEnabled == other.trafficEnabled &&
         buildingsEnabled == other.buildingsEnabled &&
         mapId == other.mapId &&
-        style == other.style;
+        style == other.style &&
+        markerType == other.markerType;
   }
 
   @override
@@ -301,5 +313,16 @@ class MapConfiguration {
         buildingsEnabled,
         mapId,
         style,
+        markerType,
       ]);
+}
+
+/// Indicates the type of marker that the map should use.
+enum MarkerType {
+  /// Represents the default marker type, [Marker]. This marker type is
+  /// deprecated on the web.
+  marker,
+
+  /// Represents the advanced marker type, [AdvancedMarker].
+  advancedMarker,
 }

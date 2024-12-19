@@ -997,7 +997,6 @@ void main() {
               initialCameraPosition:
                   CameraPosition(target: LatLng(0, 0), zoom: 1),
               textDirection: TextDirection.ltr,
-              markerType: MarkerType.marker,
             ),
             mapConfiguration: const MapConfiguration(mapId: cloudMapId))));
 

@@ -160,11 +160,7 @@ class Marker implements MapsObject<Marker> {
     this.onDrag,
     this.onDragStart,
     this.onDragEnd,
-  })  : assert(0.0 <= alpha && alpha <= 1.0),
-        assert(
-          icon is! PinConfig,
-          'Icon must not be a PinConfig. PinConfig is only supported by AdvancedMarker.',
-        );
+  }) : assert(0.0 <= alpha && alpha <= 1.0);
 
   /// Uniquely identifies a [Marker].
   final MarkerId markerId;

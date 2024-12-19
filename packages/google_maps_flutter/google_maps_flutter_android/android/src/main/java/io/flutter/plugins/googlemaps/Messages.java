@@ -3832,19 +3832,6 @@ public class Messages {
       this.initialClusterManagers = setterArg;
     }
 
-    private @NonNull PlatformMarkerType markerType;
-
-    public @NonNull PlatformMarkerType getMarkerType() {
-      return markerType;
-    }
-
-    public void setMarkerType(@NonNull PlatformMarkerType setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"markerType\" is null.");
-      }
-      this.markerType = setterArg;
-    }
-
     /** Constructor is non-public to enforce null safety; use Builder. */
     PlatformMapViewCreationParams() {}
 
@@ -3853,12 +3840,12 @@ public class Messages {
       if (this == o) { return true; }
       if (o == null || getClass() != o.getClass()) { return false; }
       PlatformMapViewCreationParams that = (PlatformMapViewCreationParams) o;
-      return initialCameraPosition.equals(that.initialCameraPosition) && mapConfiguration.equals(that.mapConfiguration) && initialCircles.equals(that.initialCircles) && initialMarkers.equals(that.initialMarkers) && initialPolygons.equals(that.initialPolygons) && initialPolylines.equals(that.initialPolylines) && initialHeatmaps.equals(that.initialHeatmaps) && initialTileOverlays.equals(that.initialTileOverlays) && initialClusterManagers.equals(that.initialClusterManagers) && markerType.equals(that.markerType);
+      return initialCameraPosition.equals(that.initialCameraPosition) && mapConfiguration.equals(that.mapConfiguration) && initialCircles.equals(that.initialCircles) && initialMarkers.equals(that.initialMarkers) && initialPolygons.equals(that.initialPolygons) && initialPolylines.equals(that.initialPolylines) && initialHeatmaps.equals(that.initialHeatmaps) && initialTileOverlays.equals(that.initialTileOverlays) && initialClusterManagers.equals(that.initialClusterManagers);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(initialCameraPosition, mapConfiguration, initialCircles, initialMarkers, initialPolygons, initialPolylines, initialHeatmaps, initialTileOverlays, initialClusterManagers, markerType);
+      return Objects.hash(initialCameraPosition, mapConfiguration, initialCircles, initialMarkers, initialPolygons, initialPolylines, initialHeatmaps, initialTileOverlays, initialClusterManagers);
     }
 
     public static final class Builder {
@@ -3935,14 +3922,6 @@ public class Messages {
         return this;
       }
 
-      private @Nullable PlatformMarkerType markerType;
-
-      @CanIgnoreReturnValue
-      public @NonNull Builder setMarkerType(@NonNull PlatformMarkerType setterArg) {
-        this.markerType = setterArg;
-        return this;
-      }
-
       public @NonNull PlatformMapViewCreationParams build() {
         PlatformMapViewCreationParams pigeonReturn = new PlatformMapViewCreationParams();
         pigeonReturn.setInitialCameraPosition(initialCameraPosition);
@@ -3954,14 +3933,13 @@ public class Messages {
         pigeonReturn.setInitialHeatmaps(initialHeatmaps);
         pigeonReturn.setInitialTileOverlays(initialTileOverlays);
         pigeonReturn.setInitialClusterManagers(initialClusterManagers);
-        pigeonReturn.setMarkerType(markerType);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<>(10);
+      ArrayList<Object> toListResult = new ArrayList<>(9);
       toListResult.add(initialCameraPosition);
       toListResult.add(mapConfiguration);
       toListResult.add(initialCircles);
@@ -3971,7 +3949,6 @@ public class Messages {
       toListResult.add(initialHeatmaps);
       toListResult.add(initialTileOverlays);
       toListResult.add(initialClusterManagers);
-      toListResult.add(markerType);
       return toListResult;
     }
 
@@ -3995,8 +3972,6 @@ public class Messages {
       pigeonResult.setInitialTileOverlays((List<PlatformTileOverlay>) initialTileOverlays);
       Object initialClusterManagers = pigeonVar_list.get(8);
       pigeonResult.setInitialClusterManagers((List<PlatformClusterManager>) initialClusterManagers);
-      Object markerType = pigeonVar_list.get(9);
-      pigeonResult.setMarkerType((PlatformMarkerType) markerType);
       return pigeonResult;
     }
   }
@@ -4187,6 +4162,16 @@ public class Messages {
       this.liteModeEnabled = setterArg;
     }
 
+    private @Nullable PlatformMarkerType markerType;
+
+    public @Nullable PlatformMarkerType getMarkerType() {
+      return markerType;
+    }
+
+    public void setMarkerType(@Nullable PlatformMarkerType setterArg) {
+      this.markerType = setterArg;
+    }
+
     private @Nullable String mapId;
 
     public @Nullable String getMapId() {
@@ -4212,12 +4197,12 @@ public class Messages {
       if (this == o) { return true; }
       if (o == null || getClass() != o.getClass()) { return false; }
       PlatformMapConfiguration that = (PlatformMapConfiguration) o;
-      return Objects.equals(compassEnabled, that.compassEnabled) && Objects.equals(cameraTargetBounds, that.cameraTargetBounds) && Objects.equals(mapType, that.mapType) && Objects.equals(minMaxZoomPreference, that.minMaxZoomPreference) && Objects.equals(mapToolbarEnabled, that.mapToolbarEnabled) && Objects.equals(rotateGesturesEnabled, that.rotateGesturesEnabled) && Objects.equals(scrollGesturesEnabled, that.scrollGesturesEnabled) && Objects.equals(tiltGesturesEnabled, that.tiltGesturesEnabled) && Objects.equals(trackCameraPosition, that.trackCameraPosition) && Objects.equals(zoomControlsEnabled, that.zoomControlsEnabled) && Objects.equals(zoomGesturesEnabled, that.zoomGesturesEnabled) && Objects.equals(myLocationEnabled, that.myLocationEnabled) && Objects.equals(myLocationButtonEnabled, that.myLocationButtonEnabled) && Objects.equals(padding, that.padding) && Objects.equals(indoorViewEnabled, that.indoorViewEnabled) && Objects.equals(trafficEnabled, that.trafficEnabled) && Objects.equals(buildingsEnabled, that.buildingsEnabled) && Objects.equals(liteModeEnabled, that.liteModeEnabled) && Objects.equals(mapId, that.mapId) && Objects.equals(style, that.style);
+      return Objects.equals(compassEnabled, that.compassEnabled) && Objects.equals(cameraTargetBounds, that.cameraTargetBounds) && Objects.equals(mapType, that.mapType) && Objects.equals(minMaxZoomPreference, that.minMaxZoomPreference) && Objects.equals(mapToolbarEnabled, that.mapToolbarEnabled) && Objects.equals(rotateGesturesEnabled, that.rotateGesturesEnabled) && Objects.equals(scrollGesturesEnabled, that.scrollGesturesEnabled) && Objects.equals(tiltGesturesEnabled, that.tiltGesturesEnabled) && Objects.equals(trackCameraPosition, that.trackCameraPosition) && Objects.equals(zoomControlsEnabled, that.zoomControlsEnabled) && Objects.equals(zoomGesturesEnabled, that.zoomGesturesEnabled) && Objects.equals(myLocationEnabled, that.myLocationEnabled) && Objects.equals(myLocationButtonEnabled, that.myLocationButtonEnabled) && Objects.equals(padding, that.padding) && Objects.equals(indoorViewEnabled, that.indoorViewEnabled) && Objects.equals(trafficEnabled, that.trafficEnabled) && Objects.equals(buildingsEnabled, that.buildingsEnabled) && Objects.equals(liteModeEnabled, that.liteModeEnabled) && Objects.equals(markerType, that.markerType) && Objects.equals(mapId, that.mapId) && Objects.equals(style, that.style);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(compassEnabled, cameraTargetBounds, mapType, minMaxZoomPreference, mapToolbarEnabled, rotateGesturesEnabled, scrollGesturesEnabled, tiltGesturesEnabled, trackCameraPosition, zoomControlsEnabled, zoomGesturesEnabled, myLocationEnabled, myLocationButtonEnabled, padding, indoorViewEnabled, trafficEnabled, buildingsEnabled, liteModeEnabled, mapId, style);
+      return Objects.hash(compassEnabled, cameraTargetBounds, mapType, minMaxZoomPreference, mapToolbarEnabled, rotateGesturesEnabled, scrollGesturesEnabled, tiltGesturesEnabled, trackCameraPosition, zoomControlsEnabled, zoomGesturesEnabled, myLocationEnabled, myLocationButtonEnabled, padding, indoorViewEnabled, trafficEnabled, buildingsEnabled, liteModeEnabled, markerType, mapId, style);
     }
 
     public static final class Builder {
@@ -4366,6 +4351,14 @@ public class Messages {
         return this;
       }
 
+      private @Nullable PlatformMarkerType markerType;
+
+      @CanIgnoreReturnValue
+      public @NonNull Builder setMarkerType(@Nullable PlatformMarkerType setterArg) {
+        this.markerType = setterArg;
+        return this;
+      }
+
       private @Nullable String mapId;
 
       @CanIgnoreReturnValue
@@ -4402,6 +4395,7 @@ public class Messages {
         pigeonReturn.setTrafficEnabled(trafficEnabled);
         pigeonReturn.setBuildingsEnabled(buildingsEnabled);
         pigeonReturn.setLiteModeEnabled(liteModeEnabled);
+        pigeonReturn.setMarkerType(markerType);
         pigeonReturn.setMapId(mapId);
         pigeonReturn.setStyle(style);
         return pigeonReturn;
@@ -4410,7 +4404,7 @@ public class Messages {
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<>(20);
+      ArrayList<Object> toListResult = new ArrayList<>(21);
       toListResult.add(compassEnabled);
       toListResult.add(cameraTargetBounds);
       toListResult.add(mapType);
@@ -4429,6 +4423,7 @@ public class Messages {
       toListResult.add(trafficEnabled);
       toListResult.add(buildingsEnabled);
       toListResult.add(liteModeEnabled);
+      toListResult.add(markerType);
       toListResult.add(mapId);
       toListResult.add(style);
       return toListResult;
@@ -4472,9 +4467,11 @@ public class Messages {
       pigeonResult.setBuildingsEnabled((Boolean) buildingsEnabled);
       Object liteModeEnabled = pigeonVar_list.get(17);
       pigeonResult.setLiteModeEnabled((Boolean) liteModeEnabled);
-      Object mapId = pigeonVar_list.get(18);
+      Object markerType = pigeonVar_list.get(18);
+      pigeonResult.setMarkerType((PlatformMarkerType) markerType);
+      Object mapId = pigeonVar_list.get(19);
       pigeonResult.setMapId((String) mapId);
-      Object style = pigeonVar_list.get(19);
+      Object style = pigeonVar_list.get(20);
       pigeonResult.setStyle((String) style);
       return pigeonResult;
     }

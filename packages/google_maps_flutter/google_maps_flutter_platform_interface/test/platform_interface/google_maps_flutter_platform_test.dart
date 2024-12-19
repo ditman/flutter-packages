@@ -77,7 +77,6 @@ void main() {
             widgetConfiguration: const MapWidgetConfiguration(
               initialCameraPosition: CameraPosition(target: LatLng(0.0, 0.0)),
               textDirection: TextDirection.ltr,
-              markerType: MarkerType.marker,
             ),
           ),
           isA<Text>(),

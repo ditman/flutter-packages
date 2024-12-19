@@ -416,7 +416,6 @@ class PlatformMapViewCreationParams {
     required this.initialHeatmaps,
     required this.initialTileOverlays,
     required this.initialClusterManagers,
-    required this.markerType,
   });
 
   final PlatformCameraPosition initialCameraPosition;
@@ -428,7 +427,6 @@ class PlatformMapViewCreationParams {
   final List<PlatformHeatmap> initialHeatmaps;
   final List<PlatformTileOverlay> initialTileOverlays;
   final List<PlatformClusterManager> initialClusterManagers;
-  final PlatformMarkerType markerType;
 }
 
 enum PlatformMarkerType {
@@ -457,6 +455,7 @@ class PlatformMapConfiguration {
     required this.trafficEnabled,
     required this.buildingsEnabled,
     required this.liteModeEnabled,
+    required this.markerType,
     required this.mapId,
     required this.style,
   });
@@ -479,6 +478,7 @@ class PlatformMapConfiguration {
   final bool? trafficEnabled;
   final bool? buildingsEnabled;
   final bool? liteModeEnabled;
+  final PlatformMarkerType? markerType;
   final String? mapId;
   final String? style;
 }
