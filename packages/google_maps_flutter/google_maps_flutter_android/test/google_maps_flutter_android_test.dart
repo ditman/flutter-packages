@@ -491,72 +491,58 @@ void main() {
     // Object two should be changed.
     {
       expect(toChange.length, 1);
-      final List<Object?>? encoded = toChange.first?.encode() as List<Object?>?;
-      expect(encoded?[0], object2new.alpha);
-      final PlatformDoublePair? offset = encoded?[1] as PlatformDoublePair?;
-      expect(offset?.x, object2new.anchor.dx);
-      expect(offset?.y, object2new.anchor.dy);
-      expect(encoded?.getRange(2, 5).toList(), <Object?>[
-        object2new.consumeTapEvents,
-        object2new.draggable,
-        object2new.flat,
-      ]);
+      final PlatformMarker firstChanged = toChange.first;
+      expect(firstChanged.alpha, object2new.alpha);
+      expect(firstChanged.anchor.x, object2new.anchor.dx);
+      expect(firstChanged.anchor.y, object2new.anchor.dy);
+      expect(firstChanged.consumeTapEvents, object2new.consumeTapEvents);
+      expect(firstChanged.draggable, object2new.draggable);
+      expect(firstChanged.flat, object2new.flat);
       expect(
-          (encoded?[5] as PlatformBitmap?)?.bitmap.runtimeType,
+          firstChanged.icon.bitmap.runtimeType,
           GoogleMapsFlutterAndroid.platformBitmapFromBitmapDescriptor(
                   object2new.icon)
               .bitmap
               .runtimeType);
-      final PlatformInfoWindow? window = encoded?[6] as PlatformInfoWindow?;
-      expect(window?.title, object2new.infoWindow.title);
-      expect(window?.snippet, object2new.infoWindow.snippet);
-      expect(window?.anchor.x, object2new.infoWindow.anchor.dx);
-      expect(window?.anchor.y, object2new.infoWindow.anchor.dy);
-      final PlatformLatLng? latLng = encoded?[7] as PlatformLatLng?;
-      expect(latLng?.latitude, object2new.position.latitude);
-      expect(latLng?.longitude, object2new.position.longitude);
-      expect(encoded?.getRange(8, 13), <Object?>[
-        object2new.rotation,
-        object2new.visible,
-        object2new.zIndex,
-        object2new.markerId.value,
-        object2new.clusterManagerId?.value,
-      ]);
+      expect(firstChanged.infoWindow.title, object2new.infoWindow.title);
+      expect(firstChanged.infoWindow.snippet, object2new.infoWindow.snippet);
+      expect(firstChanged.infoWindow.anchor.x, object2new.infoWindow.anchor.dx);
+      expect(firstChanged.infoWindow.anchor.y, object2new.infoWindow.anchor.dy);
+      expect(firstChanged.position.latitude, object2new.position.latitude);
+      expect(firstChanged.position.longitude, object2new.position.longitude);
+      expect(firstChanged.rotation, object2new.rotation);
+      expect(firstChanged.visible, object2new.visible);
+      expect(firstChanged.zIndex, object2new.zIndex);
+      expect(firstChanged.markerId, object2new.markerId.value);
+      expect(firstChanged.clusterManagerId, object2new.clusterManagerId?.value);
     }
     // Object 3 should be added.
     {
       expect(toAdd.length, 1);
-      final List<Object?>? encoded = toAdd.first?.encode() as List<Object?>?;
-      expect(encoded?[0], object3.alpha);
-      final PlatformDoublePair? offset = encoded?[1] as PlatformDoublePair?;
-      expect(offset?.x, object3.anchor.dx);
-      expect(offset?.y, object3.anchor.dy);
-      expect(encoded?.getRange(2, 5).toList(), <Object?>[
-        object3.consumeTapEvents,
-        object3.draggable,
-        object3.flat,
-      ]);
+      final PlatformMarker firstAdded = toAdd.first;
+      expect(firstAdded.alpha, object3.alpha);
+      expect(firstAdded.anchor.x, object3.anchor.dx);
+      expect(firstAdded.anchor.y, object3.anchor.dy);
+      expect(firstAdded.consumeTapEvents, object3.consumeTapEvents);
+      expect(firstAdded.draggable, object3.draggable);
+      expect(firstAdded.flat, object3.flat);
       expect(
-          (encoded?[5] as PlatformBitmap?)?.bitmap.runtimeType,
+          firstAdded.icon.bitmap.runtimeType,
           GoogleMapsFlutterAndroid.platformBitmapFromBitmapDescriptor(
                   object3.icon)
               .bitmap
               .runtimeType);
-      final PlatformInfoWindow? window = encoded?[6] as PlatformInfoWindow?;
-      expect(window?.title, object3.infoWindow.title);
-      expect(window?.snippet, object3.infoWindow.snippet);
-      expect(window?.anchor.x, object3.infoWindow.anchor.dx);
-      expect(window?.anchor.y, object3.infoWindow.anchor.dy);
-      final PlatformLatLng? latLng = encoded?[7] as PlatformLatLng?;
-      expect(latLng?.latitude, object3.position.latitude);
-      expect(latLng?.longitude, object3.position.longitude);
-      expect(encoded?.getRange(8, 13), <Object?>[
-        object3.rotation,
-        object3.visible,
-        object3.zIndex,
-        object3.markerId.value,
-        object3.clusterManagerId?.value,
-      ]);
+      expect(firstAdded.infoWindow.title, object3.infoWindow.title);
+      expect(firstAdded.infoWindow.snippet, object3.infoWindow.snippet);
+      expect(firstAdded.infoWindow.anchor.x, object3.infoWindow.anchor.dx);
+      expect(firstAdded.infoWindow.anchor.y, object3.infoWindow.anchor.dy);
+      expect(firstAdded.position.latitude, object3.position.latitude);
+      expect(firstAdded.position.longitude, object3.position.longitude);
+      expect(firstAdded.rotation, object3.rotation);
+      expect(firstAdded.visible, object3.visible);
+      expect(firstAdded.zIndex, object3.zIndex);
+      expect(firstAdded.markerId, object3.markerId.value);
+      expect(firstAdded.clusterManagerId, object3.clusterManagerId?.value);
     }
   });
 

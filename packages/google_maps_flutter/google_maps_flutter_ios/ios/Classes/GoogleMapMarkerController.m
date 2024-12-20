@@ -229,34 +229,29 @@
       }
     }
   } else if ([bitmap isKindOfClass:[FGMPlatformBitmapBytesMap class]]) {
-      FGMPlatformBitmapBytesMap *bitmapBytesMap = bitmap;
-      FlutterStandardTypedData *bytes = bitmapBytesMap.byteData;
-      
-      @try {
-          image = [UIImage imageWithData:bytes.data scale:screenScale];
-          if (bitmapBytesMap.bitmapScaling == FGMPlatformMapBitmapScalingAuto) {
-              NSNumber *width = bitmapBytesMap.width;
-              NSNumber *height = bitmapBytesMap.height;
-              
-              if (width || height) {
-                  // Before scaling the image, image must be in screenScale.
-                  image = [FLTGoogleMapMarkerController scaledImage:image withScale:screenScale];
-                  image = [FLTGoogleMapMarkerController scaledImage:image
-                                                          withWidth:width
-                                                             height:height
-                                                        screenScale:screenScale];
-              } else {
-                  image = [FLTGoogleMapMarkerController scaledImage:image
-                                                          withScale:bitmapBytesMap.imagePixelRatio];
-              }
-          } else {
-              // No scaling, load image from bytes without scale parameter.
-              image = [UIImage imageWithData:bytes.data];
-          }
-      } @catch (NSException *exception) {
-          @throw [NSException exceptionWithName:@"InvalidByteDescriptor"
-                                         reason:@"Unable to interpret bytes as a valid image."
-                                       userInfo:nil];
+    FGMPlatformBitmapBytesMap *bitmapBytesMap = bitmap;
+    FlutterStandardTypedData *bytes = bitmapBytesMap.byteData;
+
+    @try {
+      image = [UIImage imageWithData:bytes.data scale:screenScale];
+      if (bitmapBytesMap.bitmapScaling == FGMPlatformMapBitmapScalingAuto) {
+        NSNumber *width = bitmapBytesMap.width;
+        NSNumber *height = bitmapBytesMap.height;
+
+        if (width || height) {
+          // Before scaling the image, image must be in screenScale.
+          image = [FLTGoogleMapMarkerController scaledImage:image withScale:screenScale];
+          image = [FLTGoogleMapMarkerController scaledImage:image
+                                                  withWidth:width
+                                                     height:height
+                                                screenScale:screenScale];
+        } else {
+          image = [FLTGoogleMapMarkerController scaledImage:image
+                                                  withScale:bitmapBytesMap.imagePixelRatio];
+        }
+      } else {
+        // No scaling, load image from bytes without scale parameter.
+        image = [UIImage imageWithData:bytes.data];
       }
   } else if ([bitmap isKindOfClass:[FGMPlatformBitmapPinConfig class]]) {
       FGMPlatformBitmapPinConfig *pinConfig = bitmap;
