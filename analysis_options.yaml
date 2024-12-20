@@ -16,6 +16,8 @@ analyzer:
     # something (https://github.com/flutter/flutter/issues/143312)
     deprecated_member_use: ignore
     deprecated_member_use_from_same_package: ignore
+    # This came unexpectedly, fix the lints and remove this.
+    invalid_null_aware_operator: ignore
   exclude: # DIFFERENT FROM FLUTTER/FLUTTER
     # Ignore generated files
     - '**/*.g.dart'
