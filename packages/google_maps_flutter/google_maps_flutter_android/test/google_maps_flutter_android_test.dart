@@ -491,7 +491,7 @@ void main() {
     // Object two should be changed.
     {
       expect(toChange.length, 1);
-      final PlatformMarker firstChanged = toChange.first;
+      final PlatformMarker firstChanged = toChange.first!;
       expect(firstChanged.alpha, object2new.alpha);
       expect(firstChanged.anchor.x, object2new.anchor.dx);
       expect(firstChanged.anchor.y, object2new.anchor.dy);
@@ -519,7 +519,7 @@ void main() {
     // Object 3 should be added.
     {
       expect(toAdd.length, 1);
-      final PlatformMarker firstAdded = toAdd.first;
+      final PlatformMarker firstAdded = toAdd.first!;
       expect(firstAdded.alpha, object3.alpha);
       expect(firstAdded.anchor.x, object3.anchor.dx);
       expect(firstAdded.anchor.y, object3.anchor.dy);
