@@ -412,31 +412,30 @@ Future<Node?> _advancedMarkerIconFromBitmapDescriptor(
           : null;
 
     final AdvancedMarkerGlyph? glyph = bitmapDescriptor.glyph;
-    if (glyph != null) {
-      switch (glyph.runtimeType) {
-        case final CircleGlyph circleGlyph:
-          options.glyphColor = _getCssColor(circleGlyph.color);
-        case final TextGlyph textGlyph:
-          final web.Element element = document.createElement('p');
-          element.innerHTML = textGlyph.text.toJS;
-          if (textGlyph.textColor != null) {
-            element.setAttribute(
-              'style',
-              'color: ${_getCssColor(textGlyph.textColor!)}',
-            );
-          }
-          options.glyph = element;
-        case final BitmapGlyph bitmapGlyph:
-          final Node? glyphBitmap =
-              await _advancedMarkerIconFromBitmapDescriptor(
-            bitmapGlyph.bitmap,
-            // Always opaque, opacity is handled by the parent marker.
-            opacity: 1.0,
-            // Always visible, as the visibility is handled by the parent marker.
-            isVisible: true,
+    switch (glyph) {
+      case final CircleGlyph circleGlyph:
+        options.glyphColor = _getCssColor(circleGlyph.color);
+      case final TextGlyph textGlyph:
+        final web.Element element = document.createElement('p');
+        element.innerHTML = textGlyph.text.toJS;
+        if (textGlyph.textColor != null) {
+          element.setAttribute(
+            'style',
+            'color: ${_getCssColor(textGlyph.textColor!)}',
           );
-          options.glyph = glyphBitmap;
-      }
+        }
+        options.glyph = element;
+      case final BitmapGlyph bitmapGlyph:
+        final Node? glyphBitmap = await _advancedMarkerIconFromBitmapDescriptor(
+          bitmapGlyph.bitmap,
+          // Always opaque, opacity is handled by the parent marker.
+          opacity: 1.0,
+          // Always visible, as the visibility is handled by the parent marker.
+          isVisible: true,
+        );
+        options.glyph = glyphBitmap;
+      case null:
+        break;
     }
 
     final gmaps.PinElement pinElement = gmaps.PinElement(options);

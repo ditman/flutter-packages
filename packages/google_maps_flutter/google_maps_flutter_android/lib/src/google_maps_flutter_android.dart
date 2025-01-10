@@ -942,16 +942,16 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
         String? glyphText;
         Color? glyphTextColor;
         BitmapDescriptor? glyphBitmapDescriptor;
-        if (glyph != null) {
-          switch (glyph.runtimeType) {
-            case final CircleGlyph circleGlyph:
-              glyphColor = circleGlyph.color;
-            case final TextGlyph textGlyph:
-              glyphText = textGlyph.text;
-              glyphTextColor = textGlyph.textColor;
-            case final BitmapGlyph bitmapGlyph:
-              glyphBitmapDescriptor = bitmapGlyph.bitmap;
-          }
+        switch (glyph) {
+          case final CircleGlyph circleGlyph:
+            glyphColor = circleGlyph.color;
+          case final TextGlyph textGlyph:
+            glyphText = textGlyph.text;
+            glyphTextColor = textGlyph.textColor;
+          case final BitmapGlyph bitmapGlyph:
+            glyphBitmapDescriptor = bitmapGlyph.bitmap;
+          case null:
+            break;
         }
 
         return PlatformBitmap(

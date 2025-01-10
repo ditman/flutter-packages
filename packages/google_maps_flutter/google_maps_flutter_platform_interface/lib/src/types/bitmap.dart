@@ -1034,6 +1034,8 @@ class PinConfig extends BitmapDescriptor {
   ///
   /// The [glyph] parameter is used to define the glyph that is displayed on the
   /// pin marker.
+  ///
+  /// At least one of the parameters must not be null.
   const PinConfig({
     this.backgroundColor,
     this.borderColor,
@@ -1075,7 +1077,7 @@ class PinConfig extends BitmapDescriptor {
 }
 
 /// Defines a glyph (the element at the center of an [AdvancedMarker] icon).
-abstract class AdvancedMarkerGlyph extends BitmapDescriptor {
+sealed class AdvancedMarkerGlyph extends BitmapDescriptor {
   const AdvancedMarkerGlyph._() : super._();
 }
 
@@ -1102,6 +1104,9 @@ class CircleGlyph extends AdvancedMarkerGlyph {
 /// Defines a glyph instance with a specified bitmap.
 class BitmapGlyph extends AdvancedMarkerGlyph {
   /// Constructs a glyph with the specified [bitmap].
+  ///
+  /// [bitmap] is the image to be displayed in the center of the glyph. Must not
+  /// be an [AdvancedMarkerGlyph].
   const BitmapGlyph({
     required this.bitmap,
   })  : assert(
