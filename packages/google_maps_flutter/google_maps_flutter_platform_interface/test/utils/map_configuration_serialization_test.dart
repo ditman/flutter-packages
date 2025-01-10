@@ -78,4 +78,27 @@ void main() {
       'cloudMapId': _kCloudMapId,
     });
   });
+
+  test('mapId preferred over cloudMapId', () {
+    const MapConfiguration config = MapConfiguration(
+      mapId: 'map-id',
+      cloudMapId: 'cloud-map-id',
+    );
+    final Map<String, Object> json = jsonForMapConfiguration(config);
+    expect(json, <String, Object>{
+      'mapId': 'map-id',
+      'cloudMapId': 'map-id',
+    });
+  });
+
+  test('mapId falls back to cloudMapId', () {
+    const MapConfiguration config = MapConfiguration(
+      cloudMapId: 'cloud-map-id',
+    );
+    final Map<String, Object> json = jsonForMapConfiguration(config);
+    expect(json, <String, Object>{
+      'mapId': 'cloud-map-id',
+      'cloudMapId': 'cloud-map-id',
+    });
+  });
 }
