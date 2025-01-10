@@ -402,9 +402,7 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
 
   /// Returns true if [AdvancedMarker]s can be used with this map.
   Future<bool> isAdvancedMarkersAvailable({required int mapId}) async {
-    throw UnimplementedError(
-      'isAdvancedMarkersAvailable() has not been implemented.',
-    );
+    return false;
   }
 
   /// Returns a widget displaying the map view.
