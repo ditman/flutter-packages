@@ -129,6 +129,15 @@ class MapConfiguration {
   /// used.
   final MarkerType? markerType;
 
+  /// Identifier that's associated with a specific cloud-based map style.
+  ///
+  /// See https://developers.google.com/maps/documentation/get-map-id
+  /// for more details.
+  ///
+  /// Deprecated in favor of [mapId].
+  @Deprecated('cloudMapId is deprecated. Use mapId instead.')
+  String? get cloudMapId => mapId;
+
   /// Returns a new options object containing only the values of this instance
   /// that are different from [other].
   MapConfiguration diffFrom(MapConfiguration other) {
