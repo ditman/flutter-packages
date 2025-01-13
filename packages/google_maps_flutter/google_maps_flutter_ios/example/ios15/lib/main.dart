@@ -26,7 +26,8 @@ import 'package:maps_example_dart/scrolling_map.dart';
 import 'package:maps_example_dart/snapshot.dart';
 import 'package:maps_example_dart/tile_overlay.dart';
 
-/// Map ID is required for some examples to use advanced markers.
+/// Place your map ID here. Map ID is required for pages that use advanced
+/// markers.
 const String? _mapId = null;
 
 void main() {

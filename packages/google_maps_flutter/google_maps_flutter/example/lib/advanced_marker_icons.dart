@@ -32,7 +32,6 @@ class AdvancedMarkerIconsPage extends GoogleMapExampleAppPage {
 class _AdvancedMarkerIconsBody extends MarkerIconsBody {
   const _AdvancedMarkerIconsBody(this.mapId);
 
-  /// Map ID to use for the GoogleMap.
   @override
   final String? mapId;
 

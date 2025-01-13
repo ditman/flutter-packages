@@ -34,7 +34,6 @@ class AdvancedMarkersClustering extends GoogleMapExampleAppPage {
 class _AdvancedMarkerClusteringBody extends ClusteringBody {
   const _AdvancedMarkerClusteringBody(this.mapId);
 
-  /// Map ID to use for the GoogleMap.
   @override
   final String? mapId;
 

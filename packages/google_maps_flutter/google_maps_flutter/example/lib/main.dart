@@ -31,7 +31,8 @@ import 'scrolling_map.dart';
 import 'snapshot.dart';
 import 'tile_overlay.dart';
 
-/// Map ID is required for some examples to use advanced markers.
+/// Place your map ID here. Map ID is required for pages that use advanced
+/// markers.
 const String? _mapId = null;
 
 final List<GoogleMapExampleAppPage> _allPages = <GoogleMapExampleAppPage>[

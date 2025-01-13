@@ -25,13 +25,16 @@ class ClusteringPage extends GoogleMapExampleAppPage {
 /// Body of the clustering page.
 class ClusteringBody extends StatefulWidget {
   /// Default Constructor.
-  const ClusteringBody({super.key});
+  const ClusteringBody({
+    super.key,
+    this.mapId,
+  });
+
+  /// Map ID to use for the GoogleMap.
+  final String? mapId;
 
   @override
   State<StatefulWidget> createState() => ClusteringBodyState();
-
-  /// Map ID to use for the GoogleMap.
-  String? get mapId => null;
 
   /// Creates a marker that is later added to a cluster.
   Marker createMarker({

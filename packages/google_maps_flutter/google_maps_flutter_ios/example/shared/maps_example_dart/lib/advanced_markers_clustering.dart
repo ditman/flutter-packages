@@ -24,19 +24,13 @@ class AdvancedMarkersClusteringPage extends GoogleMapExampleAppPage {
 
   @override
   Widget build(BuildContext context) {
-    return _AdvancedMarkerClusteringBody(providedMapId: mapId);
+    return _AdvancedMarkerClusteringBody(mapId: mapId);
   }
 }
 
 /// Same as [ClusteringBody] but works with [AdvancedMarker].
 class _AdvancedMarkerClusteringBody extends ClusteringBody {
-  const _AdvancedMarkerClusteringBody({required this.providedMapId});
-
-  final String? providedMapId;
-
-  /// Returns the mapId to use for the GoogleMap
-  @override
-  String? get mapId => providedMapId;
+  const _AdvancedMarkerClusteringBody({required super.mapId});
 
   @override
   Marker createMarker({
