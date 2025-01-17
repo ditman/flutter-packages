@@ -123,12 +123,11 @@ void main() {
     );
 
     test(
-      'default implementation of isAdvancedMarkersAvailable throws Unimplemented Error',
+      'default implementation of isAdvancedMarkersAvailable returns false',
       () async {
         final GoogleMapsFlutterPlatform platform =
             BuildViewGoogleMapsFlutterPlatform();
-        expect(() => platform.isAdvancedMarkersAvailable(mapId: 0),
-            throwsUnimplementedError);
+        expect(await platform.isAdvancedMarkersAvailable(mapId: 0), isFalse);
       },
     );
   });
