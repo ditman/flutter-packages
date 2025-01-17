@@ -88,29 +88,25 @@ class AdvancedMarker extends Marker {
   /// Converts this object to something serializable in JSON.
   @override
   Object toJson() {
-    final Map<String, Object> json = <String, Object>{};
+    final String? clusterManagerIdValue = clusterManagerId?.value;
 
-    void addIfPresent(String fieldName, Object? value) {
-      if (value != null) {
-        json[fieldName] = value;
-      }
-    }
-
-    addIfPresent('markerId', markerId.value);
-    addIfPresent('alpha', alpha);
-    addIfPresent('anchor', _offsetToJson(anchor));
-    addIfPresent('consumeTapEvents', consumeTapEvents);
-    addIfPresent('draggable', draggable);
-    addIfPresent('flat', flat);
-    addIfPresent('icon', icon.toJson());
-    addIfPresent('infoWindow', infoWindow.toJson());
-    addIfPresent('position', position.toJson());
-    addIfPresent('rotation', rotation);
-    addIfPresent('visible', visible);
-    addIfPresent('zIndex', zIndex);
-    addIfPresent('clusterManagerId', clusterManagerId?.value);
-    addIfPresent('collisionBehavior', collisionBehavior.index);
-    return json;
+    return <String, Object>{
+      'markerId': markerId.value,
+      'alpha': alpha,
+      'consumeTapEvents': consumeTapEvents,
+      'draggable': draggable,
+      'flat': flat,
+      'icon': icon.toJson(),
+      'infoWindow': infoWindow.toJson(),
+      'position': position.toJson(),
+      'rotation': rotation,
+      'visible': visible,
+      'zIndex': zIndex,
+      'collisionBehavior': collisionBehavior.index,
+      'anchor': _offsetToJson(anchor),
+      if (clusterManagerIdValue != null)
+        'clusterManagerId': clusterManagerIdValue,
+    };
   }
 
   @override
