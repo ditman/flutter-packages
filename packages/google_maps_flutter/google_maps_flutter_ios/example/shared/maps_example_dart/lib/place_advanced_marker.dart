@@ -57,7 +57,7 @@ class _PlaceAdvancedMarkerBodyState extends PlaceMarkerBodyState {
   }
 
   @override
-  Marker copyWithSelectedStated(Marker marker, bool isSelected) {
+  Marker copyWithSelectedState(Marker marker, bool isSelected) {
     return marker.copyWith(
       iconParam: _getMarkerBitmapDescriptor(isSelected: isSelected),
     );

@@ -67,11 +67,11 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
           final Marker resetOld =
-              copyWithSelectedStated(markers[previousMarkerId]!, false);
+              copyWithSelectedState(markers[previousMarkerId]!, false);
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
-        final Marker newMarker = copyWithSelectedStated(tappedMarker, true);
+        final Marker newMarker = copyWithSelectedState(tappedMarker, true);
         markers[markerId] = newMarker;
 
         markerPosition = null;
@@ -295,7 +295,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
   }
 
   /// Performs customizations of the [marker] to mark it as selected or not.
-  Marker copyWithSelectedStated(Marker marker, bool isSelected) {
+  Marker copyWithSelectedState(Marker marker, bool isSelected) {
     return marker.copyWith(
       iconParam: isSelected
           ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
