@@ -273,29 +273,24 @@ gmaps.InfoWindowOptions? _infoWindowOptionsFromMarker(Marker marker) {
 
 // Attempts to extract a [gmaps.Size] from `iconConfig[sizeIndex]`.
 gmaps.Size? _gmSizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
-  final Size? size = _sizeFromIconConfig(iconConfig, sizeIndex);
-  return size != null ? gmaps.Size(size.width, size.height) : null;
-}
-
-// Attempts to extract a [Size] from `iconConfig[sizeIndex]`.
-Size? _sizeFromIconConfig(List<Object?> iconConfig, int sizeIndex) {
-  Size? size;
+  gmaps.Size? size;
   if (iconConfig.length >= sizeIndex + 1) {
     final List<Object?>? rawIconSize = iconConfig[sizeIndex] as List<Object?>?;
     if (rawIconSize != null) {
-      size = Size(
+      size = gmaps.Size(
         rawIconSize[0]! as double,
         rawIconSize[1]! as double,
       );
     }
   }
+
   return size;
 }
 
 // Sets the size and style of the [icon] element.
 void _setIconStyle({
   required web.Element icon,
-  required Size? size,
+  required gmaps.Size? size,
   required double? opacity,
   required bool? isVisible,
 }) {
@@ -314,7 +309,7 @@ void _setIconStyle({
 
 // Sets the size of the Google Maps icon.
 void _setIconSize({
-  required Size size,
+  required gmaps.Size size,
   required gmaps.Icon icon,
 }) {
   final gmaps.Size gmapsSize = gmaps.Size(size.width, size.height);
@@ -329,12 +324,12 @@ void _setIconSize({
 /// [imagePixelRatio] based on the actual size of the image fetched from the
 /// [url]. If only one of the dimensions is provided, the other is calculated to
 /// maintain the image's original aspect ratio.
-Future<Size?> _getBitmapSize(MapBitmap mapBitmap, String url) async {
+Future<gmaps.Size?> _getBitmapSize(MapBitmap mapBitmap, String url) async {
   final double? width = mapBitmap.width;
   final double? height = mapBitmap.height;
   if (width != null && height != null) {
     // If both, width and height are set, return the provided dimensions.
-    return Size(width, height);
+    return gmaps.Size(width, height);
   } else {
     assert(
         url.isNotEmpty, 'URL must not be empty when calculating dimensions.');
@@ -363,7 +358,7 @@ Future<Size?> _getBitmapSize(MapBitmap mapBitmap, String url) async {
     }
 
     // Return the calculated size.
-    return Size(targetWidth, targetHeight);
+    return gmaps.Size(targetWidth, targetHeight);
   }
 }
 
@@ -462,7 +457,7 @@ Future<Node?> _advancedMarkerIconFromBitmapDescriptor(
     final web.Element icon = document.createElement('img')
       ..setAttribute('src', url);
 
-    final Size? size = switch (bitmapDescriptor.bitmapScaling) {
+    final gmaps.Size? size = switch (bitmapDescriptor.bitmapScaling) {
       MapBitmapScaling.auto => await _getBitmapSize(bitmapDescriptor, url),
       MapBitmapScaling.none => null,
     };
@@ -485,7 +480,7 @@ Future<Node?> _advancedMarkerIconFromBitmapDescriptor(
         ui_web.assetManager.getAssetUrl(iconConfig[1]! as String),
       );
 
-    final Size? size = _sizeFromIconConfig(iconConfig, 3);
+    final gmaps.Size? size = _gmSizeFromIconConfig(iconConfig, 3);
     _setIconStyle(
         icon: icon, size: size, opacity: opacity, isVisible: isVisible);
     return icon;
@@ -507,7 +502,7 @@ Future<Node?> _advancedMarkerIconFromBitmapDescriptor(
     final web.Element icon = document.createElement('img')
       ..setAttribute('src', URL.createObjectURL(blob as JSObject));
 
-    final Size? size = _sizeFromIconConfig(iconConfig, 2);
+    final gmaps.Size? size = _gmSizeFromIconConfig(iconConfig, 2);
     _setIconStyle(
         size: size, icon: icon, opacity: opacity, isVisible: isVisible);
     return icon;
@@ -538,7 +533,7 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
 
     switch (bitmapDescriptor.bitmapScaling) {
       case MapBitmapScaling.auto:
-        final Size? size = await _getBitmapSize(bitmapDescriptor, url);
+        final gmaps.Size? size = await _getBitmapSize(bitmapDescriptor, url);
         if (size != null) {
           _setIconSize(size: size, icon: icon);
         }
