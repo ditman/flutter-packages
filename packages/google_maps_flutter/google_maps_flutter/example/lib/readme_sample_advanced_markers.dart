@@ -38,7 +38,7 @@ class AdvancedMarkersSample extends StatelessWidget {
         mapId: 'my-map-id',
 
         // Enable support for Advanced Markers.
-        markerType: MarkerType.advancedMarker,
+        markerType: GoogleMapMarkerType.advancedMarker,
 // #enddocregion AdvancedMarkersSample
         initialCameraPosition: _kGooglePlex,
       ),

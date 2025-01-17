@@ -83,6 +83,16 @@ class AndroidGoogleMapsFlutter {
   }
 }
 
+/// Indicates the type of marker that the map should use.
+enum GoogleMapMarkerType {
+  /// Represents the default marker type, [Marker]. This marker type is
+  /// deprecated on the web.
+  marker,
+
+  /// Represents the advanced marker type, [AdvancedMarker].
+  advancedMarker,
+}
+
 /// A widget which displays a map with data obtained from the Google Maps service.
 class GoogleMap extends StatefulWidget {
   /// Creates a widget displaying data from Google Maps services.
@@ -128,7 +138,7 @@ class GoogleMap extends StatefulWidget {
     this.onCameraIdle,
     this.onTap,
     this.onLongPress,
-    this.markerType = MarkerType.marker,
+    this.markerType = GoogleMapMarkerType.marker,
     String? mapId,
     @Deprecated('cloudMapId is deprecated. Use mapId instead.')
     String? cloudMapId,
@@ -336,7 +346,7 @@ class GoogleMap extends StatefulWidget {
   ///
   /// While some features work with either type, using the incorrect type
   /// may result in unexpected behavior.
-  final MarkerType markerType;
+  final GoogleMapMarkerType markerType;
 
   /// Creates a [State] for this [GoogleMap].
   @override
@@ -611,6 +621,11 @@ class _GoogleMapState extends State<GoogleMap> {
 
 /// Builds a [MapConfiguration] from the given [map].
 MapConfiguration _configurationFromMapWidget(GoogleMap map) {
+  final MarkerType mapConfigurationMarkerType = switch (map.markerType) {
+    GoogleMapMarkerType.marker => MarkerType.marker,
+    GoogleMapMarkerType.advancedMarker => MarkerType.advancedMarker,
+  };
+
   return MapConfiguration(
     webGestureHandling: map.webGestureHandling,
     compassEnabled: map.compassEnabled,
@@ -632,7 +647,7 @@ MapConfiguration _configurationFromMapWidget(GoogleMap map) {
     indoorViewEnabled: map.indoorViewEnabled,
     trafficEnabled: map.trafficEnabled,
     buildingsEnabled: map.buildingsEnabled,
-    markerType: map.markerType,
+    markerType: mapConfigurationMarkerType,
     mapId: map.mapId,
     // A null style in the widget means no style, which is expressed as '' in
     // the configuration to distinguish from no change (null).

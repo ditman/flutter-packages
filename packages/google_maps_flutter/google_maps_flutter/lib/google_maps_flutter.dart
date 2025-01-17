@@ -44,7 +44,6 @@ export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
         MapType,
         Marker,
         MarkerId,
-        MarkerType,
         MinMaxZoomPreference,
         PatternItem,
         Polygon,

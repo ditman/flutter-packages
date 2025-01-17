@@ -135,7 +135,7 @@ body: GoogleMap(
   mapId: 'my-map-id',
 
   // // Enable support for Advanced Markers.
-  markerType: MarkerType.advancedMarker,
+  markerType: GoogleMapMarkerType.advancedMarker,
 ```
 
 ### Sample Usage

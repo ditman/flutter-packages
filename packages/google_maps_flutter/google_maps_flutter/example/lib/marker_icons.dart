@@ -85,8 +85,8 @@ class MarkerIconsBodyState extends State<MarkerIconsBody> {
               height: 300.0,
               child: GoogleMap(
                 markerType: widget.mapId != null
-                    ? MarkerType.advancedMarker
-                    : MarkerType.marker,
+                    ? GoogleMapMarkerType.advancedMarker
+                    : GoogleMapMarkerType.marker,
                 mapId: widget.mapId,
                 initialCameraPosition: const CameraPosition(
                   target: _kMapCenter,
