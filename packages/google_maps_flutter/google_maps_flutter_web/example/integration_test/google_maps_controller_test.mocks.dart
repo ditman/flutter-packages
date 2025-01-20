@@ -3,15 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i6;
+import 'dart:async' as _i4;
 
-import 'package:google_maps/google_maps.dart' as _i4;
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'
     as _i3;
 import 'package:google_maps_flutter_web/google_maps_flutter_web.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-
-import 'google_maps_controller_test.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,6 +24,12 @@ import 'google_maps_controller_test.dart' as _i5;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeMarkerController_0<T, O> extends _i1.SmartFake
+    implements _i2.MarkerController<T, O> {
+  _FakeMarkerController_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [CirclesController].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -41,16 +44,7 @@ class MockCirclesController extends _i1.Mock implements _i2.CirclesController {
           as Map<_i3.CircleId, _i2.CircleController>);
 
   @override
-  _i4.Map get googleMap =>
-      (super.noSuchMethod(
-            Invocation.getter(#googleMap),
-            returnValue: _i5.mapShim(),
-            returnValueForMissingStub: _i5.mapShim(),
-          )
-          as _i4.Map);
-
-  @override
-  set googleMap(_i4.Map? _googleMap) => super.noSuchMethod(
+  set googleMap(dynamic _googleMap) => super.noSuchMethod(
     Invocation.setter(#googleMap, _googleMap),
     returnValueForMissingStub: null,
   );
@@ -90,7 +84,7 @@ class MockCirclesController extends _i1.Mock implements _i2.CirclesController {
       );
 
   @override
-  void bindToMap(int? mapId, _i4.Map? googleMap) => super.noSuchMethod(
+  void bindToMap(int? mapId, dynamic googleMap) => super.noSuchMethod(
     Invocation.method(#bindToMap, [mapId, googleMap]),
     returnValueForMissingStub: null,
   );
@@ -111,16 +105,7 @@ class MockHeatmapsController extends _i1.Mock
           as Map<_i3.HeatmapId, _i2.HeatmapController>);
 
   @override
-  _i4.Map get googleMap =>
-      (super.noSuchMethod(
-            Invocation.getter(#googleMap),
-            returnValue: _i5.mapShim(),
-            returnValueForMissingStub: _i5.mapShim(),
-          )
-          as _i4.Map);
-
-  @override
-  set googleMap(_i4.Map? _googleMap) => super.noSuchMethod(
+  set googleMap(dynamic _googleMap) => super.noSuchMethod(
     Invocation.setter(#googleMap, _googleMap),
     returnValueForMissingStub: null,
   );
@@ -160,7 +145,7 @@ class MockHeatmapsController extends _i1.Mock
       );
 
   @override
-  void bindToMap(int? mapId, _i4.Map? googleMap) => super.noSuchMethod(
+  void bindToMap(int? mapId, dynamic googleMap) => super.noSuchMethod(
     Invocation.method(#bindToMap, [mapId, googleMap]),
     returnValueForMissingStub: null,
   );
@@ -181,16 +166,7 @@ class MockPolygonsController extends _i1.Mock
           as Map<_i3.PolygonId, _i2.PolygonController>);
 
   @override
-  _i4.Map get googleMap =>
-      (super.noSuchMethod(
-            Invocation.getter(#googleMap),
-            returnValue: _i5.mapShim(),
-            returnValueForMissingStub: _i5.mapShim(),
-          )
-          as _i4.Map);
-
-  @override
-  set googleMap(_i4.Map? _googleMap) => super.noSuchMethod(
+  set googleMap(dynamic _googleMap) => super.noSuchMethod(
     Invocation.setter(#googleMap, _googleMap),
     returnValueForMissingStub: null,
   );
@@ -230,7 +206,7 @@ class MockPolygonsController extends _i1.Mock
       );
 
   @override
-  void bindToMap(int? mapId, _i4.Map? googleMap) => super.noSuchMethod(
+  void bindToMap(int? mapId, dynamic googleMap) => super.noSuchMethod(
     Invocation.method(#bindToMap, [mapId, googleMap]),
     returnValueForMissingStub: null,
   );
@@ -252,16 +228,7 @@ class MockPolylinesController extends _i1.Mock
           as Map<_i3.PolylineId, _i2.PolylineController>);
 
   @override
-  _i4.Map get googleMap =>
-      (super.noSuchMethod(
-            Invocation.getter(#googleMap),
-            returnValue: _i5.mapShim(),
-            returnValueForMissingStub: _i5.mapShim(),
-          )
-          as _i4.Map);
-
-  @override
-  set googleMap(_i4.Map? _googleMap) => super.noSuchMethod(
+  set googleMap(dynamic _googleMap) => super.noSuchMethod(
     Invocation.setter(#googleMap, _googleMap),
     returnValueForMissingStub: null,
   );
@@ -302,7 +269,7 @@ class MockPolylinesController extends _i1.Mock
       );
 
   @override
-  void bindToMap(int? mapId, _i4.Map? googleMap) => super.noSuchMethod(
+  void bindToMap(int? mapId, dynamic googleMap) => super.noSuchMethod(
     Invocation.method(#bindToMap, [mapId, googleMap]),
     returnValueForMissingStub: null,
   );
@@ -312,28 +279,20 @@ class MockPolylinesController extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMarkersController extends _i1.Mock
-    implements _i2.MarkersController<Object, Object> {
+    implements _i2.MarkersController<Object?, Object> {
   @override
-  Map<_i3.MarkerId, _i2.MarkerController<Object, Object>> get markers =>
+  Map<_i3.MarkerId, _i2.MarkerController<Object?, Object>> get markers =>
       (super.noSuchMethod(
             Invocation.getter(#markers),
-            returnValue: <_i3.MarkerId, _i2.MarkerController<Object, Object>>{},
+            returnValue:
+                <_i3.MarkerId, _i2.MarkerController<Object?, Object>>{},
             returnValueForMissingStub:
-                <_i3.MarkerId, _i2.MarkerController<Object, Object>>{},
+                <_i3.MarkerId, _i2.MarkerController<Object?, Object>>{},
           )
-          as Map<_i3.MarkerId, _i2.MarkerController<Object, Object>>);
+          as Map<_i3.MarkerId, _i2.MarkerController<Object?, Object>>);
 
   @override
-  _i4.Map get googleMap =>
-      (super.noSuchMethod(
-            Invocation.getter(#googleMap),
-            returnValue: _i5.mapShim(),
-            returnValueForMissingStub: _i5.mapShim(),
-          )
-          as _i4.Map);
-
-  @override
-  set googleMap(_i4.Map? _googleMap) => super.noSuchMethod(
+  set googleMap(dynamic _googleMap) => super.noSuchMethod(
     Invocation.setter(#googleMap, _googleMap),
     returnValueForMissingStub: null,
   );
@@ -354,22 +313,59 @@ class MockMarkersController extends _i1.Mock
   );
 
   @override
-  _i6.Future<void> addMarkers(Set<_i3.Marker>? markersToAdd) =>
+  _i4.Future<void> addMarkers(Set<_i3.Marker>? markersToAdd) =>
       (super.noSuchMethod(
             Invocation.method(#addMarkers, [markersToAdd]),
-            returnValue: _i6.Future<void>.value(),
-            returnValueForMissingStub: _i6.Future<void>.value(),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
           )
-          as _i6.Future<void>);
+          as _i4.Future<void>);
 
   @override
-  _i6.Future<void> changeMarkers(Set<_i3.Marker>? markersToChange) =>
+  _i4.Future<_i2.MarkerController<Object?, Object>> createMarkerController(
+    _i3.Marker? marker,
+    Object? currentMarker,
+    dynamic gmInfoWindow,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#createMarkerController, [
+              marker,
+              currentMarker,
+              gmInfoWindow,
+            ]),
+            returnValue:
+                _i4.Future<_i2.MarkerController<Object?, Object>>.value(
+                  _FakeMarkerController_0<Object?, Object>(
+                    this,
+                    Invocation.method(#createMarkerController, [
+                      marker,
+                      currentMarker,
+                      gmInfoWindow,
+                    ]),
+                  ),
+                ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.MarkerController<Object?, Object>>.value(
+                  _FakeMarkerController_0<Object?, Object>(
+                    this,
+                    Invocation.method(#createMarkerController, [
+                      marker,
+                      currentMarker,
+                      gmInfoWindow,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.MarkerController<Object?, Object>>);
+
+  @override
+  _i4.Future<void> changeMarkers(Set<_i3.Marker>? markersToChange) =>
       (super.noSuchMethod(
             Invocation.method(#changeMarkers, [markersToChange]),
-            returnValue: _i6.Future<void>.value(),
-            returnValueForMissingStub: _i6.Future<void>.value(),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
           )
-          as _i6.Future<void>);
+          as _i4.Future<void>);
 
   @override
   void removeMarkers(Set<_i3.MarkerId>? markerIdsToRemove) =>
@@ -400,7 +396,7 @@ class MockMarkersController extends _i1.Mock
           as bool);
 
   @override
-  void bindToMap(int? mapId, _i4.Map? googleMap) => super.noSuchMethod(
+  void bindToMap(int? mapId, dynamic googleMap) => super.noSuchMethod(
     Invocation.method(#bindToMap, [mapId, googleMap]),
     returnValueForMissingStub: null,
   );
@@ -412,16 +408,7 @@ class MockMarkersController extends _i1.Mock
 class MockTileOverlaysController extends _i1.Mock
     implements _i2.TileOverlaysController {
   @override
-  _i4.Map get googleMap =>
-      (super.noSuchMethod(
-            Invocation.getter(#googleMap),
-            returnValue: _i5.mapShim(),
-            returnValueForMissingStub: _i5.mapShim(),
-          )
-          as _i4.Map);
-
-  @override
-  set googleMap(_i4.Map? _googleMap) => super.noSuchMethod(
+  set googleMap(dynamic _googleMap) => super.noSuchMethod(
     Invocation.setter(#googleMap, _googleMap),
     returnValueForMissingStub: null,
   );
@@ -469,7 +456,7 @@ class MockTileOverlaysController extends _i1.Mock
   );
 
   @override
-  void bindToMap(int? mapId, _i4.Map? googleMap) => super.noSuchMethod(
+  void bindToMap(int? mapId, dynamic googleMap) => super.noSuchMethod(
     Invocation.method(#bindToMap, [mapId, googleMap]),
     returnValueForMissingStub: null,
   );

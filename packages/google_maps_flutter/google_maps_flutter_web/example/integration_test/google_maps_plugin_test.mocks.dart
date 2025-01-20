@@ -4,8 +4,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
+import 'dart:js_interop' as _i5;
 
-import 'package:google_maps/google_maps.dart' as _i5;
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'
     as _i2;
 import 'package:google_maps_flutter_web/google_maps_flutter_web.dart' as _i4;
@@ -110,24 +110,24 @@ class MockGoogleMapController extends _i1.Mock
           as bool);
 
   @override
-  List<_i5.MapTypeStyle> get styles =>
+  List<dynamic> get styles =>
       (super.noSuchMethod(
             Invocation.getter(#styles),
-            returnValue: <_i5.MapTypeStyle>[],
-            returnValueForMissingStub: <_i5.MapTypeStyle>[],
+            returnValue: <dynamic>[],
+            returnValueForMissingStub: <dynamic>[],
           )
-          as List<_i5.MapTypeStyle>);
+          as List<dynamic>);
 
   @override
   void debugSetOverrides({
     _i4.DebugCreateMapFunction? createMap,
     _i4.DebugSetOptionsFunction? setOptions,
-    _i4.MarkersController<Object, Object>? markers,
+    _i4.MarkersController<_i5.JSObject, Object>? markers,
     _i4.CirclesController? circles,
     _i4.HeatmapsController? heatmaps,
     _i4.PolygonsController? polygons,
     _i4.PolylinesController? polylines,
-    _i6.ClusterManagersController<Object>? clusterManagers,
+    _i6.ClusterManagersController<Object?>? clusterManagers,
     _i4.TileOverlaysController? tileOverlays,
   }) => super.noSuchMethod(
     Invocation.method(#debugSetOverrides, [], {
@@ -158,7 +158,7 @@ class MockGoogleMapController extends _i1.Mock
       );
 
   @override
-  void updateStyles(List<_i5.MapTypeStyle>? styles) => super.noSuchMethod(
+  void updateStyles(List<dynamic>? styles) => super.noSuchMethod(
     Invocation.method(#updateStyles, [styles]),
     returnValueForMissingStub: null,
   );

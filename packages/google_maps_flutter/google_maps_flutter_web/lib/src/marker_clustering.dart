@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:google_maps/google_maps.dart' as gmaps;
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
@@ -16,7 +17,7 @@ import 'types.dart';
 /// This class maps [ClusterManager] objects to javascript [MarkerClusterer]
 /// objects and provides an interface for adding and removing markers from
 /// clusters.
-class ClusterManagersController<T> extends GeometryController {
+class ClusterManagersController<T extends JSObject> extends GeometryController {
   /// Creates a new [ClusterManagersController] instance.
   ///
   /// The [stream] parameter is a required [StreamController] used for

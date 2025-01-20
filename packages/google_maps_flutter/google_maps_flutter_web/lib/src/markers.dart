@@ -10,7 +10,8 @@ part of '../google_maps_flutter_web.dart';
 /// legacy [gmaps.Marker] class.
 /// * [AdvancedMarkersController] implements the [MarkersController] for the
 /// advanced [gmaps.AdvancedMarkerElement] class.
-abstract class MarkersController<T, O> extends GeometryController {
+abstract class MarkersController<T extends JSObject, O>
+    extends GeometryController {
   /// Initialize the cache. The [StreamController] comes from the [GoogleMapController], and is shared with other controllers.
   MarkersController({
     required StreamController<MapEvent<Object?>> stream,

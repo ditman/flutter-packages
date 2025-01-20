@@ -171,8 +171,8 @@ class GoogleMapController {
   HeatmapsController? _heatmapsController;
   PolygonsController? _polygonsController;
   PolylinesController? _polylinesController;
-  MarkersController<Object, Object>? _markersController;
-  ClusterManagersController<Object>? _clusterManagersController;
+  MarkersController<Object?, Object>? _markersController;
+  ClusterManagersController<Object?>? _clusterManagersController;
   TileOverlaysController? _tileOverlaysController;
 
   // Keeps track if _attachGeometryControllers has been called or not.
@@ -183,7 +183,7 @@ class GoogleMapController {
 
   /// The ClusterManagersController of this Map. Only for integration testing.
   @visibleForTesting
-  ClusterManagersController<Object>? get clusterManagersController =>
+  ClusterManagersController<Object?>? get clusterManagersController =>
       _clusterManagersController;
 
   /// Overrides certain properties to install mocks defined during testing.
@@ -191,12 +191,12 @@ class GoogleMapController {
   void debugSetOverrides({
     DebugCreateMapFunction? createMap,
     DebugSetOptionsFunction? setOptions,
-    MarkersController<Object, Object>? markers,
+    MarkersController<Object?, Object>? markers,
     CirclesController? circles,
     HeatmapsController? heatmaps,
     PolygonsController? polygons,
     PolylinesController? polylines,
-    ClusterManagersController<Object>? clusterManagers,
+    ClusterManagersController<Object?>? clusterManagers,
     TileOverlaysController? tileOverlays,
   }) {
     _overrideCreateMap = createMap;
