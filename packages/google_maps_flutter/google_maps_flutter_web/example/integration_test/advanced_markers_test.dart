@@ -38,8 +38,7 @@ void main() {
       clusterManagersController =
           ClusterManagersController<gmaps.AdvancedMarkerElement>(
               stream: events);
-      controller = MarkersController<gmaps.AdvancedMarkerElement,
-          gmaps.AdvancedMarkerElementOptions>(
+      controller = AdvancedMarkersController(
         stream: events,
         clusterManagersController: clusterManagersController,
       );

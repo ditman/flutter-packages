@@ -73,17 +73,14 @@ class GoogleMapController {
             stream: _streamController),
     };
     _markersController = switch (mapConfiguration.markerType) {
-      null ||
-      MarkerType.marker =>
-        MarkersController<gmaps.Marker, gmaps.MarkerOptions>(
-          stream: _streamController,
+      null || MarkerType.marker => LegacyMarkersController(
+          stream: stream,
           clusterManagersController: _clusterManagersController!
               as ClusterManagersController<gmaps.Marker>,
         ),
-      MarkerType.advancedMarker => MarkersController<
-            gmaps.AdvancedMarkerElement, gmaps.AdvancedMarkerElementOptions>(
-          stream: _streamController,
-          clusterManagersController: _clusterManagersController!
+      MarkerType.advancedMarker => AdvancedMarkersController(
+          stream: stream,
+          clusterManagersController: clusterManagersController!
               as ClusterManagersController<gmaps.AdvancedMarkerElement>,
         ),
     };

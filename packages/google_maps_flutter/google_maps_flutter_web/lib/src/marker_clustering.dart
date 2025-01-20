@@ -133,7 +133,7 @@ class ClusterManagersController<T> extends GeometryController {
 
     final List<MarkerId> markerIds =
         markerClustererCluster.markers.map<MarkerId>((T marker) {
-      return getOnMarkerType(
+      return _getOnMarkerType(
         marker: marker,
         legacy: (gmaps.Marker marker) {
           return MarkerId((marker.get('markerId')! as JSString).toDart);
@@ -149,6 +149,24 @@ class ClusterManagersController<T> extends GeometryController {
       markerIds,
       position: position,
       bounds: bounds,
+    );
+  }
+}
+
+/// Check [marker] type and return result of [legacy] or [advanced].
+R _getOnMarkerType<R>({
+  required dynamic marker,
+  required R Function(gmaps.Marker marker) legacy,
+  required R Function(gmaps.AdvancedMarkerElement marker) advanced,
+}) {
+  final JSObject object = marker as JSObject;
+  if (object.isA<gmaps.Marker>()) {
+    return legacy(marker as gmaps.Marker);
+  } else if (object.isA<gmaps.AdvancedMarkerElement>()) {
+    return advanced(marker as gmaps.AdvancedMarkerElement);
+  } else {
+    throw ArgumentError(
+      'Must be either a gmaps.Marker or a gmaps.AdvancedMarkerElement',
     );
   }
 }

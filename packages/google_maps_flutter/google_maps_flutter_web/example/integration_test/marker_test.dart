@@ -53,8 +53,7 @@ void main() {
     });
 
     testWidgets('onTap gets called', (WidgetTester tester) async {
-      MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
-          marker: marker, onTap: onTap);
+      LegacyMarkerController(marker: marker, onTap: onTap);
 
       // Trigger a click event...
       gmaps.event.trigger(
@@ -68,8 +67,7 @@ void main() {
     });
 
     testWidgets('onDragStart gets called', (WidgetTester tester) async {
-      MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
-          marker: marker, onDragStart: onDragStart);
+      LegacyMarkerController(marker: marker, onDragStart: onDragStart);
 
       // Trigger a drag end event...
       gmaps.event.trigger(
@@ -82,8 +80,7 @@ void main() {
     });
 
     testWidgets('onDrag gets called', (WidgetTester tester) async {
-      MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
-          marker: marker, onDrag: onDrag);
+      LegacyMarkerController(marker: marker, onDrag: onDrag);
 
       // Trigger a drag end event...
       gmaps.event.trigger(
@@ -96,8 +93,7 @@ void main() {
     });
 
     testWidgets('onDragEnd gets called', (WidgetTester tester) async {
-      MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
-          marker: marker, onDragEnd: onDragEnd);
+      LegacyMarkerController(marker: marker, onDragEnd: onDragEnd);
 
       // Trigger a drag end event...
       gmaps.event.trigger(
@@ -110,8 +106,8 @@ void main() {
     });
 
     testWidgets('update', (WidgetTester tester) async {
-      final MarkerController<gmaps.Marker, gmaps.MarkerOptions> controller =
-          MarkerController<gmaps.Marker, gmaps.MarkerOptions>(marker: marker);
+      final LegacyMarkerController controller =
+          LegacyMarkerController(marker: marker);
       final gmaps.MarkerOptions options = gmaps.MarkerOptions()
         ..draggable = true
         ..position = gmaps.LatLng(42, 54);
@@ -127,8 +123,8 @@ void main() {
 
     testWidgets('infoWindow null, showInfoWindow.',
         (WidgetTester tester) async {
-      final MarkerController<gmaps.Marker, gmaps.MarkerOptions> controller =
-          MarkerController<gmaps.Marker, gmaps.MarkerOptions>(marker: marker);
+      final LegacyMarkerController controller =
+          LegacyMarkerController(marker: marker);
 
       controller.showInfoWindow();
 
@@ -139,8 +135,7 @@ void main() {
       final gmaps.InfoWindow infoWindow = gmaps.InfoWindow();
       final gmaps.Map map = gmaps.Map(createDivElement());
       marker.set('map', map);
-      final MarkerController<gmaps.Marker, gmaps.MarkerOptions> controller =
-          MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
+      final LegacyMarkerController controller = LegacyMarkerController(
         marker: marker,
         infoWindow: infoWindow,
       );
@@ -155,8 +150,7 @@ void main() {
       final gmaps.InfoWindow infoWindow = gmaps.InfoWindow();
       final gmaps.Map map = gmaps.Map(createDivElement());
       marker.set('map', map);
-      final MarkerController<gmaps.Marker, gmaps.MarkerOptions> controller =
-          MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
+      final LegacyMarkerController controller = LegacyMarkerController(
         marker: marker,
         infoWindow: infoWindow,
       );
@@ -168,14 +162,14 @@ void main() {
     });
 
     group('remove', () {
-      late MarkerController<gmaps.Marker, gmaps.MarkerOptions> controller;
+      late LegacyMarkerController controller;
 
       setUp(() {
         final gmaps.InfoWindow infoWindow = gmaps.InfoWindow();
         final gmaps.Map map = gmaps.Map(createDivElement());
         marker.set('map', map);
-        controller = MarkerController<gmaps.Marker, gmaps.MarkerOptions>(
-            marker: marker, infoWindow: infoWindow);
+        controller =
+            LegacyMarkerController(marker: marker, infoWindow: infoWindow);
       });
 
       testWidgets('drops gmaps instance', (WidgetTester tester) async {
