@@ -151,7 +151,7 @@ class LegacyMarkerController
   void remove() {
     if (_marker != null) {
       _infoWindowShown = false;
-      marker!.map = null;
+      _marker!.map = null;
       _marker = null;
     }
   }
@@ -160,7 +160,7 @@ class LegacyMarkerController
   void showInfoWindow() {
     assert(_marker != null, 'Cannot `showInfoWindow` on a `remove`d Marker.');
     if (_infoWindow != null) {
-      _infoWindow.open(marker!.map, marker);
+      _infoWindow.open(_marker!.map, _marker);
       _infoWindowShown = true;
     }
   }
@@ -169,7 +169,7 @@ class LegacyMarkerController
   void update(gmaps.MarkerOptions options,
       {web.HTMLElement? newInfoWindowContent}) {
     assert(_marker != null, 'Cannot `update` Marker after calling `remove`.');
-    marker!.options = options;
+    _marker!.options = options;
 
     if (_infoWindow != null && newInfoWindowContent != null) {
       _infoWindow.content = newInfoWindowContent;
@@ -234,8 +234,8 @@ class AdvancedMarkerController extends MarkerController<
     if (_marker != null) {
       _infoWindowShown = false;
 
-      marker!.remove();
-      marker!.map = null;
+      _marker!.remove();
+      _marker!.map = null;
       _marker = null;
     }
   }
@@ -245,7 +245,7 @@ class AdvancedMarkerController extends MarkerController<
     assert(_marker != null, 'Cannot `showInfoWindow` on a `remove`d Marker.');
 
     if (_infoWindow != null) {
-      _infoWindow.open(marker!.map, marker);
+      _infoWindow.open(_marker!.map, _marker);
       _infoWindowShown = true;
     }
   }
