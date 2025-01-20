@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:js_interop';
 
 import 'package:google_maps/google_maps.dart' as gmaps;
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
@@ -130,43 +129,14 @@ class ClusterManagersController<T> extends GeometryController {
     final LatLng position = gmLatLngToLatLng(markerClustererCluster.position);
     final LatLngBounds bounds =
         gmLatLngBoundsToLatLngBounds(markerClustererCluster.bounds!);
-
     final List<MarkerId> markerIds =
-        markerClustererCluster.markers.map<MarkerId>((T marker) {
-      return _getOnMarkerType(
-        marker: marker,
-        legacy: (gmaps.Marker marker) {
-          return MarkerId((marker.get('markerId')! as JSString).toDart);
-        },
-        advanced: (gmaps.AdvancedMarkerElement marker) {
-          return MarkerId((marker.getAttribute('id')! as JSString).toDart);
-        },
-      );
-    }).toList();
+        markerClustererCluster.markers.map<MarkerId>(getMarkerId).toList();
 
     return Cluster(
       clusterManagerId,
       markerIds,
       position: position,
       bounds: bounds,
-    );
-  }
-}
-
-/// Check [marker] type and return result of [legacy] or [advanced].
-R _getOnMarkerType<R>({
-  required Object? marker,
-  required R Function(gmaps.Marker marker) legacy,
-  required R Function(gmaps.AdvancedMarkerElement marker) advanced,
-}) {
-  final JSObject object = marker! as JSObject;
-  if (object.isA<gmaps.Marker>()) {
-    return legacy(marker as gmaps.Marker);
-  } else if (object.isA<gmaps.AdvancedMarkerElement>()) {
-    return advanced(marker as gmaps.AdvancedMarkerElement);
-  } else {
-    throw ArgumentError(
-      'Must be either a gmaps.Marker or a gmaps.AdvancedMarkerElement',
     );
   }
 }
