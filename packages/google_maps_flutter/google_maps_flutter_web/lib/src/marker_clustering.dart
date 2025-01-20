@@ -155,11 +155,11 @@ class ClusterManagersController<T> extends GeometryController {
 
 /// Check [marker] type and return result of [legacy] or [advanced].
 R _getOnMarkerType<R>({
-  required dynamic marker,
+  required Object? marker,
   required R Function(gmaps.Marker marker) legacy,
   required R Function(gmaps.AdvancedMarkerElement marker) advanced,
 }) {
-  final JSObject object = marker as JSObject;
+  final JSObject object = marker! as JSObject;
   if (object.isA<gmaps.Marker>()) {
     return legacy(marker as gmaps.Marker);
   } else if (object.isA<gmaps.AdvancedMarkerElement>()) {
