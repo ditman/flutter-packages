@@ -21,23 +21,19 @@ class PlaceMarkerPage extends GoogleMapExampleAppPage {
 
   @override
   Widget build(BuildContext context) {
-    return const PlaceMarkerBody();
+    return const _PlaceMarkerBody();
   }
 }
 
-class PlaceMarkerBody extends StatefulWidget {
-  const PlaceMarkerBody({super.key, this.mapId});
-
-  final String? mapId;
+class _PlaceMarkerBody extends StatefulWidget {
+  const _PlaceMarkerBody();
 
   @override
-  State<StatefulWidget> createState() => PlaceMarkerBodyState();
+  State<StatefulWidget> createState() => _PlaceMarkerBodyState();
 }
 
-typedef MarkerUpdateAction = Marker Function(Marker marker);
-
-class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
-  PlaceMarkerBodyState();
+class _PlaceMarkerBodyState extends State<_PlaceMarkerBody> {
+  _PlaceMarkerBodyState();
   static const LatLng center = LatLng(-33.86711, 151.1947171);
 
   ExampleGoogleMapController? controller;
@@ -140,7 +136,7 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
 
-    final Marker marker = createMarker(
+    final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(
         center.latitude + sin(_markerIdCounter * pi / 6.0) / 20.0,
@@ -291,27 +287,6 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     return BytesMapBitmap(bytes.buffer.asUint8List());
   }
 
-  /// Creates a marker with given parameters
-  Marker createMarker({
-    required MarkerId markerId,
-    required LatLng position,
-    required InfoWindow infoWindow,
-    required VoidCallback onTap,
-    required ValueChanged<LatLng>? onDragStart,
-    required ValueChanged<LatLng>? onDragEnd,
-    required ValueChanged<LatLng>? onDrag,
-  }) {
-    return Marker(
-      markerId: markerId,
-      position: position,
-      infoWindow: infoWindow,
-      onTap: onTap,
-      onDragStart: onDragStart,
-      onDrag: onDrag,
-      onDragEnd: onDragEnd,
-    );
-  }
-
   /// Performs customizations of the [marker] to mark it as selected or not.
   Marker copyWithSelectedState(Marker marker, bool isSelected) {
     return marker.copyWith(
@@ -321,9 +296,6 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     );
   }
 
-  /// Returns a header to be displayed above the map.
-  Widget getHeader() => const SizedBox.shrink();
-
   @override
   Widget build(BuildContext context) {
     final MarkerId? selectedId = selectedMarker;
@@ -332,12 +304,9 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          AdvancedMarkersCapabilityStatus(controller: controller),
           Expanded(
             child: ExampleGoogleMap(
-              mapId: widget.mapId,
-              markerType: widget.mapId != null
-                  ? MarkerType.advancedMarker
-                  : MarkerType.marker,
               onMapCreated: _onMapCreated,
               initialCameraPosition: const CameraPosition(
                 target: LatLng(-33.852, 151.211),
@@ -456,5 +425,64 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         ),
       ),
     ]);
+  }
+}
+
+/// Widget displaying the status of advanced markers capability check.
+class AdvancedMarkersCapabilityStatus extends StatefulWidget {
+  /// Default constructor.
+  const AdvancedMarkersCapabilityStatus({
+    super.key,
+    required this.controller,
+  });
+
+  /// Controller of the map to check for advanced markers capability.
+  final ExampleGoogleMapController? controller;
+
+  @override
+  State<AdvancedMarkersCapabilityStatus> createState() =>
+      _AdvancedMarkersCapabilityStatusState();
+}
+
+class _AdvancedMarkersCapabilityStatusState
+    extends State<AdvancedMarkersCapabilityStatus> {
+  /// Whether map supports advanced markers. Null indicates capability check
+  /// is in progress.
+  bool? _isAdvancedMarkersAvailable;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.controller != null) {
+      GoogleMapsFlutterPlatform.instance
+          .isAdvancedMarkersAvailable(mapId: widget.controller!.mapId)
+          .then((bool result) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            _isAdvancedMarkersAvailable = result;
+          });
+        });
+      });
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        switch (_isAdvancedMarkersAvailable) {
+          null => 'Checking map capabilities…',
+          true =>
+            'Map capabilities check result:\nthis map supports advanced markers',
+          false =>
+            "Map capabilities check result:\nthis map doesn't support advanced markers. Please check that map ID is provided and correct map renderer is used",
+        },
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: switch (_isAdvancedMarkersAvailable) {
+                true => Colors.green.shade700,
+                false => Colors.red,
+                null => Colors.black,
+              },
+            ),
+      ),
+    );
   }
 }

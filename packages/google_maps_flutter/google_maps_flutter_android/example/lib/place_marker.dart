@@ -21,27 +21,21 @@ class PlaceMarkerPage extends GoogleMapExampleAppPage {
 
   @override
   Widget build(BuildContext context) {
-    return const PlaceMarkerBody();
+    return const _PlaceMarkerBody();
   }
 }
 
-class PlaceMarkerBody extends StatefulWidget {
-  const PlaceMarkerBody({
-    super.key,
-    this.mapId,
-  });
-
-  /// Map ID to use for the GoogleMap.
-  final String? mapId;
+class _PlaceMarkerBody extends StatefulWidget {
+  const _PlaceMarkerBody();
 
   @override
-  State<StatefulWidget> createState() => PlaceMarkerBodyState();
+  State<StatefulWidget> createState() => _PlaceMarkerBodyState();
 }
 
 typedef MarkerUpdateAction = Marker Function(Marker marker);
 
-class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
-  PlaceMarkerBodyState();
+class _PlaceMarkerBodyState extends State<_PlaceMarkerBody> {
+  _PlaceMarkerBodyState();
   static const LatLng center = LatLng(-33.86711, 151.1947171);
 
   ExampleGoogleMapController? controller;
@@ -304,9 +298,6 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
     );
   }
 
-  /// Returns a header to be displayed above the map.
-  Widget getHeader() => const SizedBox.shrink();
-
   @override
   Widget build(BuildContext context) {
     final MarkerId? selectedId = selectedMarker;
@@ -315,13 +306,8 @@ class PlaceMarkerBodyState extends State<PlaceMarkerBody> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          getHeader(),
           Expanded(
             child: ExampleGoogleMap(
-              mapId: widget.mapId,
-              markerType: widget.mapId != null
-                  ? MarkerType.advancedMarker
-                  : MarkerType.marker,
               onMapCreated: _onMapCreated,
               initialCameraPosition: const CameraPosition(
                 target: LatLng(-33.852, 151.211),

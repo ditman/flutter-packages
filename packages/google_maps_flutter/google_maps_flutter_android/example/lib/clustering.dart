@@ -18,52 +18,23 @@ class ClusteringPage extends GoogleMapExampleAppPage {
 
   @override
   Widget build(BuildContext context) {
-    return const ClusteringBody();
+    return const _ClusteringBody();
   }
 }
 
 /// Body of the clustering page.
-class ClusteringBody extends StatefulWidget {
+class _ClusteringBody extends StatefulWidget {
   /// Default Constructor.
-  const ClusteringBody({super.key});
+  const _ClusteringBody();
 
   @override
-  State<StatefulWidget> createState() => ClusteringBodyState();
-
-  /// Creates a marker that is later added to a cluster
-  Marker createMarker(
-    MarkerId markerId,
-    ClusterManagerId clusterManagerId,
-    LatLng position,
-    InfoWindow infoWindow,
-    VoidCallback onTap,
-  ) {
-    return Marker(
-      markerId: markerId,
-      clusterManagerId: clusterManagerId,
-      position: position,
-      infoWindow: infoWindow,
-      onTap: onTap,
-    );
-  }
-
-  /// Returns selected or unselected state of the given [marker].
-  Marker copyWithSelectedState(Marker marker, bool isSelected) {
-    return marker.copyWith(
-      iconParam: isSelected
-          ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
-          : BitmapDescriptor.defaultMarker,
-    );
-  }
-
-  /// Returns the mapId to use for the GoogleMap
-  String? get mapId => null;
+  State<StatefulWidget> createState() => _ClusteringBodyState();
 }
 
 /// State of the clustering page.
-class ClusteringBodyState extends State<ClusteringBody> {
+class _ClusteringBodyState extends State<_ClusteringBody> {
   /// Default Constructor.
-  ClusteringBodyState();
+  _ClusteringBodyState();
 
   /// Starting point from where markers are added.
   static const LatLng center = LatLng(-33.86, 151.1547171);
@@ -131,12 +102,11 @@ class ClusteringBodyState extends State<ClusteringBody> {
         final MarkerId? previousMarkerId = selectedMarker;
         if (previousMarkerId != null && markers.containsKey(previousMarkerId)) {
           final Marker resetOld =
-              widget.copyWithSelectedState(markers[previousMarkerId]!, false);
+              copyWithSelectedState(markers[previousMarkerId]!, false);
           markers[previousMarkerId] = resetOld;
         }
         selectedMarker = markerId;
-        final Marker newMarker =
-            widget.copyWithSelectedState(tappedMarker, true);
+        final Marker newMarker = copyWithSelectedState(tappedMarker, true);
         markers[markerId] = newMarker;
       });
     }
@@ -191,15 +161,15 @@ class ClusteringBodyState extends State<ClusteringBody> {
       final double clusterManagerLongitudeOffset =
           clusterManagerIndex * _clusterManagerLongitudeOffset;
 
-      final Marker marker = widget.createMarker(
-        markerId,
-        clusterManager.clusterManagerId,
-        LatLng(
+      final Marker marker = Marker(
+        markerId: markerId,
+        clusterManagerId: clusterManager.clusterManagerId,
+        position: LatLng(
           center.latitude + _getRandomOffset(),
           center.longitude + _getRandomOffset() + clusterManagerLongitudeOffset,
         ),
-        InfoWindow(title: markerIdVal, snippet: '*'),
-        () => _onMarkerTapped(markerId),
+        infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+        onTap: () => _onMarkerTapped(markerId),
       );
       markers[markerId] = marker;
     }
@@ -231,6 +201,15 @@ class ClusteringBodyState extends State<ClusteringBody> {
     setState(() {});
   }
 
+  /// Returns selected or unselected state of the given [marker].
+  Marker copyWithSelectedState(Marker marker, bool isSelected) {
+    return marker.copyWith(
+      iconParam: isSelected
+          ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
+          : BitmapDescriptor.defaultMarker,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MarkerId? selectedId = selectedMarker;
@@ -240,10 +219,6 @@ class ClusteringBodyState extends State<ClusteringBody> {
       children: <Widget>[
         Expanded(
           child: ExampleGoogleMap(
-            mapId: widget.mapId,
-            markerType: widget.mapId != null
-                ? MarkerType.advancedMarker
-                : MarkerType.marker,
             onMapCreated: _onMapCreated,
             initialCameraPosition: initialCameraPosition,
             markers: Set<Marker>.of(markers.values),

@@ -18,40 +18,17 @@ class ClusteringPage extends GoogleMapExampleAppPage {
 
   @override
   Widget build(BuildContext context) {
-    return const ClusteringBody();
+    return const _ClusteringBody();
   }
 }
 
 /// Body of the clustering page.
-class ClusteringBody extends StatefulWidget {
+class _ClusteringBody extends StatefulWidget {
   /// Default Constructor.
-  const ClusteringBody({
-    super.key,
-    this.mapId,
-  });
-
-  /// Map ID to use for the GoogleMap.
-  final String? mapId;
+  const _ClusteringBody();
 
   @override
   State<StatefulWidget> createState() => ClusteringBodyState();
-
-  /// Creates a marker that is later added to a cluster.
-  Marker createMarker({
-    required MarkerId markerId,
-    required ClusterManagerId clusterManagerId,
-    required LatLng position,
-    required InfoWindow infoWindow,
-    required VoidCallback onTap,
-  }) {
-    return Marker(
-      markerId: markerId,
-      clusterManagerId: clusterManagerId,
-      position: position,
-      infoWindow: infoWindow,
-      onTap: onTap,
-    );
-  }
 
   /// Returns selected or unselected state of the given [marker].
   Marker copyWithSelectedState(Marker marker, bool isSelected) {
@@ -64,7 +41,7 @@ class ClusteringBody extends StatefulWidget {
 }
 
 /// State of the clustering page.
-class ClusteringBodyState extends State<ClusteringBody> {
+class ClusteringBodyState extends State<_ClusteringBody> {
   /// Default Constructor.
   ClusteringBodyState();
 
@@ -188,7 +165,7 @@ class ClusteringBodyState extends State<ClusteringBody> {
       final double clusterManagerLongitudeOffset =
           clusterManagerIndex * _clusterManagerLongitudeOffset;
 
-      final Marker marker = widget.createMarker(
+      final Marker marker = Marker(
         clusterManagerId: clusterManager.clusterManagerId,
         markerId: markerId,
         position: LatLng(
@@ -237,10 +214,6 @@ class ClusteringBodyState extends State<ClusteringBody> {
         SizedBox(
           height: 300.0,
           child: ExampleGoogleMap(
-            mapId: widget.mapId,
-            markerType: widget.mapId != null
-                ? MarkerType.advancedMarker
-                : MarkerType.marker,
             onMapCreated: _onMapCreated,
             initialCameraPosition: const CameraPosition(
               target: LatLng(-33.852, 151.25),
